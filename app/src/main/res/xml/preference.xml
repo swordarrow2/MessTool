@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="基本">
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="opendraw"
+            android:title="启动时打开滑动菜单" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="showSJF"
+            android:summary="重启生效"
+            android:title="显示SJF" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="exitsettings"
+            android:summary="System.exit(0)可以彻底关闭软件"
+            android:title="使用System.exit(0)代替finish()" />
+        <ListPreference
+            android:defaultValue="蓝"
+            android:dialogTitle="选择颜色"
+            android:entries="@array/color_list"
+            android:entryValues="@array/color_list"
+            android:key="theme"
+            android:summary="重启生效"
+            android:title="导航栏颜色" />
+        <CheckBoxPreference
+            android:key="show_group_name"
+            android:summaryOff="隐藏"
+            android:summaryOn="显示"
+            android:title="显示或隐藏分组名，重启生效" />
+        <PreferenceScreen
+            android:summary="重启生效"
+            android:title="显示在菜单的功能">
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="GROUP_PICTURE"
+                android:summaryOff="否"
+                android:summaryOn="是"
+                android:title="显示图片相关功能" />
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="GROUP_VIDEO"
+                android:summaryOff="否"
+                android:summaryOn="是"
+                android:title="显示视频相关功能" />
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="GROUP_AUDIO"
+                android:summaryOff="否"
+                android:summaryOn="是"
+                android:title="显示音频相关功能" />
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="GROUP_ELECTRONIC"
+                android:summaryOff="否"
+                android:summaryOn="是"
+                android:title="显示电路相关功能" />
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="GROUP_BOX_ARRAY"
+                android:summaryOff="否"
+                android:summaryOn="是"
+                android:title="显示储物盒相关功能" />
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="GROUP_DEVELOPING"
+                android:summaryOff="否"
+                android:summaryOn="是"
+                android:title="显示正在开发的功能" />
+        </PreferenceScreen>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Pixiv下载">
+        <PreferenceScreen android:title="pixiv下载器设置">
+            <Preference android:title="登录Pixiv">
+                <intent
+                    android:targetClass="com.meng.toolset.mediatool.picture.pixiv.LoginPixivActivity"
+                    android:targetPackage="com.meng.toolset.mediatool" />
+            </Preference>
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="bigpicture"
+                android:summaryOff="否"
+                android:summaryOn="是"
+                android:title="静态图下载原图" />
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="bigpicturegif"
+                android:summaryOff="否"
+                android:summaryOn="是"
+                android:title="GIF下载大图" />
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="deleteZipAfterMakeGif"
+                android:summaryOff="否"
+                android:summaryOn="是"
+                android:title="生成GIF后删除zip压缩包" />
+            <EditTextPreference
+                android:dialogTitle="线程越多对系统资源要求越高"
+                android:key="threads"
+                android:title="下载线程数" />
+        </PreferenceScreen>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="调试">
+
+        <PreferenceScreen
+            android:summary="不知道作用的话不要修改"
+            android:title="奇怪的设置">
+
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="debugLog"
+                android:title="保存调试信息" />
+
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="netLog"
+                android:summary="保存在SD卡/sjfLogNetwork.log"
+                android:title="记录网络日志" />
+
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="debugMode"
+                android:summary="未完成的功能和测试模块也会显示出来,重启生效"
+                android:title="调试模式" />
+        </PreferenceScreen>
+    </PreferenceCategory>
+    <!--<CheckBoxPreference
+    android:defaultValue="false"
+    android:key="useTimeStamp"
+    android:summaryOff="使用具体时间"
+    android:summaryOn="使用时间戳"
+    android:title="使用时间戳为图片文件命名" />-->
+
+</PreferenceScreen>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+    <TextView
+        android:text="P"
+        android:paddingStart="10dp"
+        android:id="@+id/pid_simulatorTextView_out"
+        android:layout_width="fill_parent"
+		android:layout_height="wrap_content"/>
+    
+	<TextView
+		android:text="P"
+		android:paddingStart="10dp"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"/>
+
+	<SeekBar
+		android:id="@+id/pid_simulatorSeekBar_P"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:max="10"/>
+
+	<TextView
+		android:text="I"
+		android:paddingStart="10dp"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"/>
+
+	<SeekBar
+		android:id="@+id/pid_simulatorSeekBar_I"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:max="10"/>
+
+	<TextView
+		android:text="D"
+		android:paddingStart="10dp"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"/>
+
+	<SeekBar
+		android:id="@+id/pid_simulatorSeekBar_D"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:max="10"/>
+
+	<TextView
+		android:text="expect"
+		android:paddingStart="10dp"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"/>
+
+	<SeekBar
+		android:id="@+id/pid_simulatorSeekBar_expect"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:max="131072"/>
+
+	<TextView
+		android:text="actual"
+		android:paddingStart="10dp"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"/>
+
+	<SeekBar
+		android:id="@+id/pid_simulatorSeekBar_actual"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:max="131072"/>
+
+</LinearLayout>
+

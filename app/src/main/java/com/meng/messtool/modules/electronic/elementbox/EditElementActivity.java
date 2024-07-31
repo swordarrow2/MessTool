@@ -3,10 +3,10 @@ package com.meng.messtool.modules.electronic.elementbox;
 import android.app.*;
 import android.content.*;
 import android.graphics.*;
-import android.media.*;
 import android.os.*;
 import android.support.annotation.*;
 import android.support.design.widget.*;
+import android.text.*;
 import android.view.*;
 import android.widget.*;
 
@@ -24,6 +24,7 @@ import java.io.*;
 public class EditElementActivity extends BaseActivity implements View.OnClickListener {
 
     private ScrollView scrollView;
+    private LinearLayout linearLayout;
     private MDEditText et_name;
     private MDEditText et_print;
     private MDEditText et_brand;
@@ -47,7 +48,39 @@ public class EditElementActivity extends BaseActivity implements View.OnClickLis
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.function_electronic_add_element);
+        initView();
+        initData();
+    }
+
+    private void initData() {
+        if (addMode) {
+            element = new Element(0, null, null, null, null, null, null, null, 0, null, null);
+        } else {
+            element = (Element) AppStack.pop();
+            et_name.setEnabled(false);
+            et_name.setText(element._name);
+            et_print.setText(element._print);
+            et_brand.setText(element._brand);
+            et_describe.setText(element._describe);
+            et_package.setText(element._package);
+            et_slot_id.setText(element._slot_id);
+            et_shop_name.setText(element._shop_name);
+            et_id_in_shop.setText(element._id_in_shop);
+            et_count.setText(String.valueOf(element._rest));
+            image = element._picture;
+            if (element._picture != null) {
+                imageView.setImageBitmap(BitmapFactory.decodeByteArray(element._picture, 0, element._picture.length));
+            }
+            if (guessNeedAutoFix()) {
+                auto.performClick();
+                showToast("正在自动填充");
+            }
+        }
+    }
+
+    private void initView() {
         scrollView = (ScrollView) findViewById(R.id.add_element_scrollview);
+        linearLayout = (LinearLayout) findViewById(R.id.add_element_rootlayout);
         et_name = (MDEditText) findViewById(R.id.add_elementEditText_name);
         et_print = (MDEditText) findViewById(R.id.add_elementEditText_print);
         et_brand = (MDEditText) findViewById(R.id.add_elementEditText_brand);
@@ -63,32 +96,38 @@ public class EditElementActivity extends BaseActivity implements View.OnClickLis
         auto = (ImageButton) findViewById(R.id.add_element_auto_button);
         ok = (Button) findViewById(R.id.add_elementButton_save);
         addMode = getIntent().getBooleanExtra("addMode", true);
-        if (addMode) {
-            element = new Element(0, null, null, null, null, null, null, null, 0, null, null);
-        } else {
-            element = (Element) AppStack.pop();
-            et_name.setEnabled(false);
-            et_name.setText(element._name);
-            et_print.setText(element._print);
-            et_brand.setText(element._brand);
-            et_describe.setText(element._describe);
-            et_package.setText(element._package);
-            et_slot_id.setText(element._slot_id);
-            et_shop_name.setText(element._shop_name);
-            et_id_in_shop.setText(element._id_in_shop);
-            et_count.setText(String.valueOf(element._rest));
-            if (element._shop_name.equals("lcsc")) {
-                auto.setVisibility(View.VISIBLE);
-                auto.setOnClickListener(this);
-            }
-            image = element._picture;
-            if (element._picture != null) {
-                imageView.setImageBitmap(BitmapFactory.decodeByteArray(element._picture, 0, element._picture.length));
-            }
-        }
         scan.setOnClickListener(this);
+        auto.setOnClickListener(this);
         selectImage.setOnClickListener(this);
         ok.setOnClickListener(this);
+        et_shop_name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if ("lcsc".equals(s.toString())) {
+                    auto.setVisibility(View.VISIBLE);
+                } else {
+                    auto.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    private boolean guessNeedAutoFix() {
+        if ("lcsc".equals(et_shop_name.getString()) && !StringUtil.isBlank(et_id_in_shop.getString()) && StringUtil.isBlank(et_describe.getString())) {
+            return true;
+        }
+//        if(){}
+        return false;
     }
 
     @Override
@@ -228,9 +267,10 @@ public class EditElementActivity extends BaseActivity implements View.OnClickLis
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case Constant.REQUEST_CODE_SELECT_FILE:
-                    if (data.getData() != null) {
-                        callBack.accept(AndroidContent.absolutePathFromUri(this, data.getData()));
+                    if (data.getData() == null) {
+                        break;
                     }
+                    callBack.accept(AndroidContent.absolutePathFromUri(this, data.getData()));
                     break;
                 case Constant.REQUEST_CODE_SCAN_BARCODE:
                     callBack.accept(data.getStringExtra("result"));
@@ -247,7 +287,7 @@ public class EditElementActivity extends BaseActivity implements View.OnClickLis
 
             @Override
             public void run() {
-                Snackbar.make(scrollView, msg, 5000)
+                Snackbar.make(linearLayout, msg, 2000)
                         .setAction("查看全文", getLines(msg) < 2 && msg.length() < 40 ? null : new View.OnClickListener() {
 
                             @Override
@@ -260,8 +300,7 @@ public class EditElementActivity extends BaseActivity implements View.OnClickLis
                                         AndroidContent.copyToClipboard(msg);
                                         showToast("复制成功");
                                     }
-                                })
-                                        .setPositiveButton("确定", null).show();
+                                }).setPositiveButton("确定", null).show();
                             }
                         }).show();
             }

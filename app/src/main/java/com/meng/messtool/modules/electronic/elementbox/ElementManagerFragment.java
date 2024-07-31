@@ -2,6 +2,7 @@ package com.meng.messtool.modules.electronic.elementbox;
 
 import android.app.*;
 import android.content.*;
+import android.graphics.*;
 import android.os.*;
 import android.support.annotation.*;
 import android.view.*;
@@ -60,7 +61,46 @@ public class ElementManagerFragment extends BaseFragment implements View.OnClick
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         switch (parent.getId()) {
             case R.id.function_electronic_main_list:
-
+                Element element = eLementAdapter.getItem(position);
+                ScrollView scrollview = (ScrollView) getActivity().getLayoutInflater().inflate(R.layout.function_electronic_show_element, null);
+                LinearLayout linearlayout = (LinearLayout) scrollview.getChildAt(0);
+                for (int i = 0; i < linearlayout.getChildCount(); i++) {
+                    linearlayout.getChildAt(i).setEnabled(false);
+                }
+                MDEditText et_name;
+                MDEditText et_print;
+                MDEditText et_brand;
+                MDEditText et_describe;
+                MDEditText et_package;
+                MDEditText et_slot_id;
+                MDEditText et_shop_name;
+                MDEditText et_id_in_shop;
+                MDEditText et_count;
+                ImageView imageView;
+                et_name = (MDEditText) scrollview.findViewById(R.id.add_elementEditText_name);
+                et_print = (MDEditText) scrollview.findViewById(R.id.add_elementEditText_print);
+                et_brand = (MDEditText) scrollview.findViewById(R.id.add_elementEditText_brand);
+                et_describe = (MDEditText) scrollview.findViewById(R.id.add_elementEditText_describe);
+                et_package = (MDEditText) scrollview.findViewById(R.id.add_elementEditText_package);
+                et_slot_id = (MDEditText) scrollview.findViewById(R.id.add_elementEditText_slot_id);
+                et_shop_name = (MDEditText) scrollview.findViewById(R.id.add_elementEditText_shop_name);
+                et_id_in_shop = (MDEditText) scrollview.findViewById(R.id.add_elementEditText_id_in_shop);
+                et_count = (MDEditText) scrollview.findViewById(R.id.add_elementEditText_count);
+                imageView = (ImageView) scrollview.findViewById(R.id.add_element_thumbnail);
+                et_name.setText(element._name);
+                et_print.setText(element._print);
+                et_brand.setText(element._brand);
+                et_describe.setText(element._describe);
+                et_package.setText(element._package);
+                et_slot_id.setText(element._slot_id);
+                et_shop_name.setText(element._shop_name);
+                et_id_in_shop.setText(element._id_in_shop);
+                et_count.setText(String.valueOf(element._rest));
+                if (element._picture != null) {
+                    imageView.setImageBitmap(BitmapFactory.decodeByteArray(element._picture, 0, element._picture.length));
+                }
+                new AlertDialog.Builder(getActivity()).setIcon(R.mipmap.ic_launcher).setView(scrollview)
+                        .setTitle("详细内容").setPositiveButton("确定", null).show();
                 break;
         }
     }

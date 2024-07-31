@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ran="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/add_element_scrollview"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.meng.tools.MaterialDesign.MDEditText
+            android:id="@+id/add_elementEditText_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            ran:hint="型号" />
+
+        <com.meng.tools.MaterialDesign.MDEditText
+            android:id="@+id/add_elementEditText_print"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            ran:hint="丝印" />
+
+        <com.meng.tools.MaterialDesign.MDEditText
+            android:id="@+id/add_elementEditText_brand"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            ran:hint="品牌" />
+
+        <com.meng.tools.MaterialDesign.MDEditText
+            android:id="@+id/add_elementEditText_describe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            ran:hint="描述" />
+
+        <com.meng.tools.MaterialDesign.MDEditText
+            android:id="@+id/add_elementEditText_package"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            ran:hint="封装" />
+
+        <com.meng.tools.MaterialDesign.MDEditText
+            android:id="@+id/add_elementEditText_slot_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            ran:hint="元件盒位置" />
+
+        <com.meng.tools.MaterialDesign.MDEditText
+            android:id="@+id/add_elementEditText_shop_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            ran:hint="商店名" />
+
+        <com.meng.tools.MaterialDesign.MDEditText
+            android:id="@+id/add_elementEditText_id_in_shop"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            ran:hint="商店内代号" />
+
+        <com.meng.tools.MaterialDesign.MDEditText
+            android:id="@+id/add_elementEditText_count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            ran:hint="数量" />
+
+        <ImageView
+            android:id="@+id/add_element_thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:gravity="end"
+            android:scaleType="centerCrop" />
+
+    </LinearLayout>
+
+</ScrollView>
+

@@ -1,11 +1,10 @@
-package com.meng.messtool.database;
+package com.meng.messtool;
 
 import android.content.*;
 import android.database.*;
 import android.database.sqlite.*;
 import android.util.*;
 
-import com.meng.messtool.*;
 import com.meng.tools.*;
 
 import java.util.*;
@@ -32,12 +31,13 @@ public class DebugDataBase extends AbstractDatabaseHelper {
         return instance;
     }
 
+    @Override
     public void init(Context context) {
+        super.init(context);
         if (sqLiteOpenHelper != null) {
             throw new IllegalStateException("dbHelper has already init.");
         }
-        regist();
-        sqLiteOpenHelper = new SQLiteOpenHelper(context, FileTool.getAppFile(FunctionSavePath.database, TABLE_NAME, ".db").getAbsolutePath(), null, DATABASE_VERSION) {
+        sqLiteOpenHelper = new SQLiteOpenHelper(context, FileTool.getAppFile(FunctionSavePath.database, TABLE_NAME, "db").getAbsolutePath(), null, DATABASE_VERSION) {
             @Override
             public void onCreate(SQLiteDatabase db) {
                 db.execSQL("create table if not exists " + TABLE_NAME + "( _id integer primary key autoincrement , _time long, _op varchar(512))");

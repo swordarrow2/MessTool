@@ -13,5 +13,6 @@ public class Constant {
     public static final int REQUEST_CODE_CHECK_TTS = 3;
     public static final int REQUEST_CODE_SCAN_BARCODE = 4;
     public static final int REQUEST_CODE_EDIT_ELEMENT = 5;
+    public static final int REQUEST_CODE_REQUEST_PERMISSION = 6;
 
 }

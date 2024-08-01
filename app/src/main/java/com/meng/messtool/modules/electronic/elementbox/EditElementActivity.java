@@ -5,7 +5,6 @@ import android.content.*;
 import android.graphics.*;
 import android.os.*;
 import android.support.annotation.*;
-import android.support.design.widget.*;
 import android.text.*;
 import android.view.*;
 import android.widget.*;
@@ -24,7 +23,6 @@ import java.io.*;
 public class EditElementActivity extends BaseActivity implements View.OnClickListener {
 
     private ScrollView scrollView;
-    private LinearLayout linearLayout;
     private MDEditText et_name;
     private MDEditText et_print;
     private MDEditText et_brand;
@@ -80,7 +78,6 @@ public class EditElementActivity extends BaseActivity implements View.OnClickLis
 
     private void initView() {
         scrollView = (ScrollView) findViewById(R.id.add_element_scrollview);
-        linearLayout = (LinearLayout) findViewById(R.id.add_element_rootlayout);
         et_name = (MDEditText) findViewById(R.id.add_elementEditText_name);
         et_print = (MDEditText) findViewById(R.id.add_elementEditText_print);
         et_brand = (MDEditText) findViewById(R.id.add_elementEditText_brand);
@@ -280,40 +277,5 @@ public class EditElementActivity extends BaseActivity implements View.OnClickLis
             MainActivity.instance.showToast("取消操作");
         }
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    private void showToast(final String msg) {
-        runOnUiThread(new Runnable() {
-
-            @Override
-            public void run() {
-                Snackbar.make(linearLayout, msg, 2000)
-                        .setAction("查看全文", getLines(msg) < 2 && msg.length() < 40 ? null : new View.OnClickListener() {
-
-                            @Override
-                            public void onClick(View v) {
-                                new AlertDialog.Builder(EditElementActivity.this).setIcon(R.mipmap.ic_launcher)
-                                        .setTitle("全文").setMessage(msg).setNegativeButton("复制", new DialogInterface.OnClickListener() {
-
-                                    @Override
-                                    public void onClick(DialogInterface p1, int p2) {
-                                        AndroidContent.copyToClipboard(msg);
-                                        showToast("复制成功");
-                                    }
-                                }).setPositiveButton("确定", null).show();
-                            }
-                        }).show();
-            }
-        });
-    }
-
-    private int getLines(String s) {
-        int l = 0;
-        for (char c : s.toCharArray()) {
-            if (c == '\n') {
-                ++l;
-            }
-        }
-        return l;
     }
 }

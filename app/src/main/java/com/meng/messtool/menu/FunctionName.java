@@ -7,6 +7,7 @@ import android.widget.*;
 
 import com.meng.messtool.*;
 import com.meng.messtool.modules.audio.*;
+import com.meng.messtool.modules.electronic.*;
 import com.meng.messtool.modules.electronic.calculate.*;
 import com.meng.messtool.modules.electronic.elementbox.*;
 import com.meng.messtool.modules.electronic.usbserial.*;

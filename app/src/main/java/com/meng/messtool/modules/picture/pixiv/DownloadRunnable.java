@@ -163,7 +163,7 @@ class DownloadRunnable implements Runnable {
             registImage(file.getAbsolutePath());
         }
         taskState = TaskState.end;
-        PixivDataBase.getInstance().deleteFailed(picUrl);
+        PixivDatabase.getInstance().deleteFailed(picUrl);
         downloadEnd();
     }
 

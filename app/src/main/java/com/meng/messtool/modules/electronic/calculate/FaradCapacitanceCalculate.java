@@ -7,8 +7,6 @@ import com.meng.messtool.customview.*;
 
 import java.util.*;
 
-import static com.meng.messtool.ApplicationHolder.*;
-
 public class FaradCapacitanceCalculate extends BaseDcdcCalculate implements OnClickListener {
     private MengEditText si;
     private MengEditText st;

@@ -1,4 +1,4 @@
-package com.meng.messtool.modules.electronic.calculate;
+package com.meng.messtool.modules.electronic;
 
 import android.os.*;
 import android.view.*;

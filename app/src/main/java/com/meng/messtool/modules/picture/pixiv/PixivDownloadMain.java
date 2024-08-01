@@ -24,8 +24,6 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.regex.*;
 
-import static com.meng.messtool.ApplicationHolder.*;
-
 public class PixivDownloadMain extends BaseFragment {
 
     public EditText editTextURL;
@@ -43,7 +41,7 @@ public class PixivDownloadMain extends BaseFragment {
     private FloatingButton fabAddMine;
     private FloatingButton fabAddPixiv;
     private ArrayAdapter likeAdapter;
-    private PixivDataBase database;
+    private PixivDatabase database;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -53,8 +51,8 @@ public class PixivDownloadMain extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        PixivDataBase.getInstance().init(getActivity());
-        database = PixivDataBase.getInstance();
+        PixivDatabase.getInstance().init(getActivity());
+        database = PixivDatabase.getInstance();
         database.init(getActivity());
         return inflater.inflate(R.layout.function_picture_pixiv_download, container, false);
     }

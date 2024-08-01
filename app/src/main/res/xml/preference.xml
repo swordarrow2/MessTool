@@ -8,10 +8,10 @@
             android:key="opendraw"
             android:title="启动时打开滑动菜单" />
         <CheckBoxPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="showSJF"
             android:summary="重启生效"
-            android:title="显示SJF" />
+            android:title="显示Header" />
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="exitsettings"
@@ -125,7 +125,7 @@
             <CheckBoxPreference
                 android:defaultValue="false"
                 android:key="debugMode"
-                android:summary="未完成的功能和测试模块也会显示出来,重启生效"
+                android:summary="重启生效"
                 android:title="调试模式" />
         </PreferenceScreen>
     </PreferenceCategory>

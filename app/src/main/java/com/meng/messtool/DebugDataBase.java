@@ -35,7 +35,7 @@ public class DebugDataBase extends AbstractDatabaseHelper {
     public void init(Context context) {
         super.init(context);
         if (sqLiteOpenHelper != null) {
-            throw new IllegalStateException("dbHelper has already init.");
+            Debuger.addLog(TAG, "dbHelper has already init.");
         }
         sqLiteOpenHelper = new SQLiteOpenHelper(context, FileTool.getAppFile(FunctionSavePath.database, TABLE_NAME, "db").getAbsolutePath(), null, DATABASE_VERSION) {
             @Override

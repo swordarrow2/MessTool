@@ -9,24 +9,24 @@ import com.meng.tools.*;
 
 import java.util.*;
 
-class PixivDataBase extends AbstractDatabaseHelper {
+class PixivDatabase extends AbstractDatabaseHelper {
 
     /*
      *@author 清梦
      *@date 2024-07-01 15:54:50
      */
-    public static final String TAG = "PixivDataBase";
+    public static final String TAG = "PixivDatabase";
     private final String DATABASE_NAME = "pixiv_record";
     private final int DATABASE_VERSION = 1;
     private final String TABLE_NAME = "op_log";
 
-    private static PixivDataBase instance;
+    private static PixivDatabase instance;
 
     private SQLiteOpenHelper sqLiteOpenHelper;
 
-    public static PixivDataBase getInstance() {
+    public static PixivDatabase getInstance() {
         if (instance == null) {
-            instance = new PixivDataBase();
+            instance = new PixivDatabase();
         }
         return instance;
     }
@@ -35,7 +35,7 @@ class PixivDataBase extends AbstractDatabaseHelper {
     public void init(Context context) {
         super.init(context);
         if (sqLiteOpenHelper != null) {
-            throw new IllegalStateException("dbHelper has already init.");
+            Debuger.addLog(TAG, "dbHelper has already init.");
         }
         sqLiteOpenHelper = new SQLiteOpenHelper(context, FileTool.getAppFile(FunctionSavePath.database, DATABASE_NAME, "db").getAbsolutePath(), null, DATABASE_VERSION) {
             @Override

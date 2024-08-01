@@ -10,10 +10,12 @@ import android.widget.*;
 import com.meng.messtool.*;
 import com.meng.tools.*;
 
+import static com.meng.messtool.ApplicationHolder.*;
+
 public class WallpaperMain extends BaseFragment {
-    
+
     private VideoWallpaper mVideoWallpaper = new VideoWallpaper();
-    private Button select,silence,voice;
+    private Button select, silence, voice;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -29,7 +31,7 @@ public class WallpaperMain extends BaseFragment {
         select.setOnClickListener(onclick);
     }
 
-    OnClickListener onclick = new OnClickListener(){
+    OnClickListener onclick = new OnClickListener() {
 
         @Override
         public void onClick(View p1) {
@@ -38,10 +40,10 @@ public class WallpaperMain extends BaseFragment {
                     selectVideo();
                     break;
                 case R.id.wallpaper_mainButtonsilence:
-                    VideoWallpaper.setVoiceSilence(MainActivity.instance);
+                    VideoWallpaper.setVoiceSilence(getActivity());
                     break;
                 case R.id.wallpaper_mainButtonvoice:
-                    VideoWallpaper.setVoiceNormal(MainActivity.instance);
+                    VideoWallpaper.setVoiceNormal(getActivity());
                     break;
             }
         }
@@ -53,13 +55,13 @@ public class WallpaperMain extends BaseFragment {
             if (requestCode == Constant.REQUEST_CODE_SELECT_FILE) {
                 final String path = AndroidContent.absolutePathFromUri(getActivity(), data.getData());
                 if (path == null) {
-                    MainActivity.instance.showToast("选择视频出错");
+                    showToast("选择视频出错");
                     return;
                 }
-                mVideoWallpaper.setToWallPaper(MainActivity.instance, path);
+                mVideoWallpaper.setToWallPaper(getActivity(), path);
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
-            MainActivity.instance.showToast("取消选择视频");
+            showToast("取消选择视频");
         } else {
             selectImage();
         }

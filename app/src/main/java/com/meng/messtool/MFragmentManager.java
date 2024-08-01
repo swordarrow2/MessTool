@@ -7,6 +7,8 @@ import com.meng.tools.app.*;
 
 import java.util.*;
 
+import static com.meng.messtool.ApplicationHolder.*;
+
 public class MFragmentManager {
 
     /*
@@ -60,7 +62,7 @@ public class MFragmentManager {
                 fragments.put(c.getName(), frag);
                 transaction.add(R.id.fragment, frag);
             } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-                MainActivity.instance.showToast("发生错误：" + e.toString());
+                showToast("发生错误：" + e.toString());
                 Debuger.addLog(TAG, e.toString());
                 ExceptionCatcher.getInstance().uncaughtException(Thread.currentThread(), e);
             }
@@ -68,7 +70,10 @@ public class MFragmentManager {
         current = frag;
         hideFragment();
         transaction.show(frag);
-        MainActivity.instance.setTitle(frag.getTitle());
+        BaseActivity activity = ApplicationHolder.getActivity();
+        if (activity != null) {
+            activity.setTitle(frag.getTitle());
+        }
         transaction.commit();
         frag.onResume();
     }

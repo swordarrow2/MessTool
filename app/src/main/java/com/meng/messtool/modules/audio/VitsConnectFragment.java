@@ -8,16 +8,19 @@ import android.view.*;
 import android.view.View.*;
 import android.widget.*;
 
-import com.meng.messtool.task.*;
-import com.meng.messtool.customview.*;
 import com.meng.messtool.*;
+import com.meng.messtool.customview.*;
+import com.meng.messtool.task.*;
 import com.meng.tools.*;
 import com.meng.tools.MaterialDesign.*;
 import com.meng.tools.app.*;
 import com.meng.tools.hash.*;
+
 import java.io.*;
 import java.net.*;
 import java.util.*;
+
+import static com.meng.messtool.ApplicationHolder.*;
 
 public class VitsConnectFragment extends BaseFragment implements OnClickListener {
 
@@ -67,11 +70,12 @@ public class VitsConnectFragment extends BaseFragment implements OnClickListener
             @Override
             public void run() {
                 final VitsTtsBean vitsTtsBean = GSON.fromJson(MNetwork.httpGet("https://www.纯度.site/models"), VitsTtsBean.class);
-                MainActivity.instance.runOnUiThread(new Runnable() {
+                final BaseActivity activity = ApplicationHolder.getActivity();
+                activity.runOnUiThread(new Runnable() {
 
                     @Override
                     public void run() {
-                        spCharaId.setAdapter(new ArrayAdapter<String>(MainActivity.instance, android.R.layout.simple_list_item_1, vitsTtsBean.models));
+                        spCharaId.setAdapter(new ArrayAdapter<String>(activity, android.R.layout.simple_list_item_1, vitsTtsBean.models));
                         for (int i = 0; i < vitsTtsBean.models.size(); i++) {
                             if (vitsTtsBean.models.get(i).contains("素裳")) {
                                 spCharaId.setSelection(i);
@@ -121,9 +125,9 @@ public class VitsConnectFragment extends BaseFragment implements OnClickListener
                     setStatus("正在连接");
                     long fileLength = -1;
                     String fileUrl = String.format("https://www.xn--wxtz62e.site/run?text=%s&id_speaker=%s",
-                    //&length=%s&noice=%s&noicew=%s",
-                    URLEncoder.encode(content), id, length, noice, noicew);
-                    MainActivity.instance.showToast(fileUrl);
+                            //&length=%s&noice=%s&noicew=%s",
+                            URLEncoder.encode(content), id, length, noice, noicew);
+                    showToast(fileUrl);
                     if (true) {
                         //  return;
                     }
@@ -157,7 +161,7 @@ public class VitsConnectFragment extends BaseFragment implements OnClickListener
                     }
                 } catch (Exception e) {
                     setStatus("合成失败");
-                    MainActivity.instance.showToast(e.toString());
+                    showToast(e.toString());
                 }
             }
         }.setTitle("VITS声音合成:" + spCharaId.getSelectedItem().toString()).start();

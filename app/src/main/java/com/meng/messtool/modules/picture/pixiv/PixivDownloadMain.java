@@ -5,16 +5,18 @@ import android.graphics.*;
 import android.os.*;
 import android.support.v7.app.*;
 import android.view.*;
+import android.view.View.*;
 import android.widget.*;
 import android.widget.AdapterView.*;
 
 import com.google.gson.*;
 import com.google.gson.internal.*;
-import com.meng.messtool.customview.*;
 import com.meng.messtool.*;
 import com.meng.tools.*;
 import com.meng.tools.MaterialDesign.*;
 import com.meng.tools.app.*;
+
+import org.jsoup.*;
 
 import java.io.*;
 import java.net.*;
@@ -22,9 +24,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.regex.*;
 
-import org.jsoup.*;
-
-import android.view.View.OnClickListener;
+import static com.meng.messtool.ApplicationHolder.*;
 
 public class PixivDownloadMain extends BaseFragment {
 
@@ -94,7 +94,7 @@ public class PixivDownloadMain extends BaseFragment {
                             @Override
                             public void onClick(DialogInterface p11, int p2) {
                                 createDownloadTask(p1.getItemAtPosition(p3).toString());
-                                MainActivity.instance.showToast("正在读取信息");
+                                showToast("正在读取信息");
                                 fabStartDownload.setShowProgressBackground(true);
                                 fabStartDownload.setIndeterminate(true);
                             }
@@ -208,13 +208,13 @@ public class PixivDownloadMain extends BaseFragment {
                     }
                     //  likeAdapter.notifyDataSetChanged();
                     //	  editTextURL.setText("");
-                    MainActivity.instance.showToast("添加成功");
+                    showToast("添加成功");
                     likeAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, likeJavaBean.info);
                     likeList.setAdapter(likeAdapter);
                     menuStar.close(true);
                     break;
                 case R.id.fab_add_pixiv:
-                    MainActivity.instance.showToast("有待填坑");
+                    showToast("有待填坑");
                     /*  new Thread(new Runnable() {
 
 					 @Override
@@ -235,10 +235,10 @@ public class PixivDownloadMain extends BaseFragment {
         String text = editTextURL.getText().toString();
         //	  editTextURL.setText("");
         if (text.equals("")) {
-            MainActivity.instance.showToast("ID不能为空");
+            showToast("ID不能为空");
             return;
         }
-        MainActivity.instance.showToast("正在读取信息");
+        showToast("正在读取信息");
         fabStartDownload.setShowProgressBackground(true);
         fabStartDownload.setIndeterminate(true);
         if (checkBoxIsUID.isChecked()) {
@@ -294,7 +294,7 @@ public class PixivDownloadMain extends BaseFragment {
                     }
                 });
                 if (pictureInfoJavaBean == null) {
-                    MainActivity.instance.showToast("未获取到有效的图片信息");
+                    showToast("未获取到有效的图片信息");
                     return;
                 }
                 getActivity().runOnUiThread(
@@ -304,7 +304,7 @@ public class PixivDownloadMain extends BaseFragment {
                             public void run() {
                                 if (pictureInfoJavaBean.isAnimPicture) {
                                     if (pictureInfoJavaBean.animPicJavaBean.error.equals("true")) {
-                                        MainActivity.instance.showToast("动态图信息读取错误");
+                                        showToast("动态图信息读取错误");
                                         return;
                                     }
                                     PixivProgressBar pixivProgressBar = new PixivProgressBar(getActivity());
@@ -324,7 +324,7 @@ public class PixivDownloadMain extends BaseFragment {
                                             taskLinearLayout.addView(pixivProgressBar);
                                         }
                                     } else {
-                                        MainActivity.instance.showToast("图片信息读取错误");
+                                        showToast("图片信息读取错误");
                                     }
                                 }
                             }
@@ -349,7 +349,7 @@ public class PixivDownloadMain extends BaseFragment {
                             }
                         } catch (InterruptedException e) {
                             e.printStackTrace();
-                            MainActivity.instance.showToast(e.toString());
+                            showToast(e.toString());
 //					  if (getAllPaint(text).body.illusts instanceof ArrayList) {
 //						  for (Object o : (ArrayList) (getAllPaint(text).body.illusts)) {
 //
@@ -372,7 +372,7 @@ public class PixivDownloadMain extends BaseFragment {
             return getBitmapFromNetwork(picUrl);
         } catch (IOException e) {
             e.printStackTrace();
-            //       MainActivity.instance.showToast(e.toString());
+            //       showToast(e.toString());
             return null;
         }
     }
@@ -389,7 +389,7 @@ public class PixivDownloadMain extends BaseFragment {
 
         HttpURLConnection conn = null;
         try {
-            MainActivity.instance.showToast("start");
+            showToast("start");
             String Strurl = "https://www.pixiv.net/ajax/illusts/bookmarks/add";
             URL url = new URL(Strurl);
             conn = (HttpURLConnection) url.openConnection();
@@ -431,16 +431,16 @@ public class PixivDownloadMain extends BaseFragment {
                     resultData.append(inputLine).append("\n");
                 }
 
-                MainActivity.instance.showToast(resultData.toString());
+                showToast(resultData.toString());
                 //      backcontent= URLDecoder.decode(backcontent,"UTF-8");
                 //     Log.i("PostGetUtil",backcontent);
                 in.close();
             } else {
-                MainActivity.instance.showToast("post请求失败:" + conn.getResponseCode());
+                showToast("post请求失败:" + conn.getResponseCode());
             }
 
         } catch (Exception e) {
-            MainActivity.instance.showToast(e.toString());
+            showToast(e.toString());
             e.printStackTrace();
         } finally {
             conn.disconnect();
@@ -474,9 +474,9 @@ public class PixivDownloadMain extends BaseFragment {
 		 connection.ignoreContentType(true).method(Connection.Method.POST);
 		 try {
 		 Connection.Response response = connection.execute();
-		 MainActivity.instance.showToast(response.body());
+		 showToast(response.body());
 		 } catch (IOException e) {
-		 MainActivity.instance.showToast(e.toString());
+		 showToast(e.toString());
 		 e.printStackTrace();
 		 }*/
     }
@@ -492,7 +492,7 @@ public class PixivDownloadMain extends BaseFragment {
 	 return getBitmapFromNetwork(picUrl.replace("\\", ""));
 	 } catch (IOException e) {
 	 e.printStackTrace();
-	 //        MainActivity.instance.showToast(e.toString());
+	 //        showToast(e.toString());
 	 return null;
 	 }
 	 }*/
@@ -532,8 +532,8 @@ public class PixivDownloadMain extends BaseFragment {
                     break;
             }
         } catch (Exception e) {
-            MainActivity.instance.showToast(getActivity().getString(R.string.maybe_need_login));
-            MainActivity.instance.showToast(e.toString());
+            showToast(getActivity().getString(R.string.maybe_need_login));
+            showToast(e.toString());
             getActivity().startActivity(new Intent(getActivity(), LoginPixivActivity.class));
         }
         return pijb;
@@ -561,7 +561,7 @@ public class PixivDownloadMain extends BaseFragment {
             //		Thread.sleep(2900);
             //       LogTool.i(response.body());
         } catch (Exception e) {
-            MainActivity.instance.showToast(e.toString());
+            showToast(e.toString());
             return null;
         }
         return response.body();
@@ -569,7 +569,7 @@ public class PixivDownloadMain extends BaseFragment {
 
     public Map<String, String> cookieToMap(String value) {
         if (value == null) {
-            MainActivity.instance.showToast("请先登录");
+            showToast("请先登录");
             getActivity().startActivity(new Intent(getActivity(), LoginPixivActivity.class));
             return null;
         }

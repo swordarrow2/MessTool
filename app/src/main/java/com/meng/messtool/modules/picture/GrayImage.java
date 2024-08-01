@@ -8,10 +8,13 @@ import android.os.*;
 import android.view.*;
 import android.widget.*;
 
-import com.meng.messtool.task.*;
 import com.meng.messtool.*;
+import com.meng.messtool.task.*;
 import com.meng.tools.*;
+
 import java.io.*;
+
+import static com.meng.messtool.ApplicationHolder.*;
 
 public class GrayImage extends BaseFragment implements View.OnClickListener {
 
@@ -47,7 +50,7 @@ public class GrayImage extends BaseFragment implements View.OnClickListener {
                 try {
                     generate(path);
                 } catch (IOException e) {
-                    MainActivity.instance.showToast(e.toString());
+                    showToast(e.toString());
                 }
                 break;
         }
@@ -61,13 +64,13 @@ public class GrayImage extends BaseFragment implements View.OnClickListener {
                 imageView.setImageBitmap(BitmapFactory.decodeFile(path));
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
-            MainActivity.instance.showToast("取消选择图片");
+            showToast("取消选择图片");
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void generate(final String path) throws IOException {
-        MainActivity.instance.showToast("开始转换");
+        showToast("开始转换");
         final FileTool.FileType type = FileTool.getFileType(new File(path)).describe;
         if (type == FileTool.FileType.gif_87a || type == FileTool.FileType.gif_89a) {
 
@@ -80,7 +83,7 @@ public class GrayImage extends BaseFragment implements View.OnClickListener {
                         FileInputStream fis = new FileInputStream(path);
                         int statusCode = gifDecoder.read(fis, fis.available());
                         if (statusCode != 0) {
-                            MainActivity.instance.showToast("读取发生错误:" + path);
+                            showToast("读取发生错误:" + path);
                             return;
                         }
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -104,9 +107,9 @@ public class GrayImage extends BaseFragment implements View.OnClickListener {
                         baos.close();
                         fos.close();
                         getActivity().getApplicationContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(outputFile)));
-                        MainActivity.instance.showToast("已保存至" + outputFile.getAbsolutePath());
+                        showToast("已保存至" + outputFile.getAbsolutePath());
                     } catch (Exception e) {
-                        MainActivity.instance.showToast(e.toString());
+                        showToast(e.toString());
                     }
                 }
             }.setTitle("转换灰度图").setStatus("正在进行").start();
@@ -115,9 +118,9 @@ public class GrayImage extends BaseFragment implements View.OnClickListener {
             bo.inMutable = true;
             final Bitmap grayBitmap = encode(BitmapFactory.decodeFile(path, bo));
             String s = FileTool.saveToFile(FileTool.getAppFile(FunctionSavePath.gray8picture, FileTool.FileType.png), grayBitmap);
-            MainActivity.instance.showToast("已保存至" + s);
+            showToast("已保存至" + s);
             getActivity().getApplicationContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(s))));
-            MainActivity.instance.runOnUiThread(new Runnable() {
+            getActivity().runOnUiThread(new Runnable() {
 
                 @Override
                 public void run() {

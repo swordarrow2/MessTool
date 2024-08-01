@@ -9,11 +9,14 @@ import android.view.*;
 import android.view.View.*;
 import android.widget.*;
 
-import com.meng.messtool.customview.*;
 import com.meng.messtool.*;
+import com.meng.messtool.customview.*;
 import com.meng.tools.*;
 import com.meng.tools.MaterialDesign.*;
+
 import java.io.*;
+
+import static com.meng.messtool.ApplicationHolder.*;
 
 public class BarcodeAwesomeGif extends BaseFragment {
 
@@ -63,7 +66,7 @@ public class BarcodeAwesomeGif extends BaseFragment {
                 case R.id.gif_arb_qr_checkbox_autocolor:
                     mColorBar.setVisibility(isChecked ? View.GONE : View.VISIBLE);
                     if (!isChecked) {
-                        MainActivity.instance.showToast("如果颜色搭配不合理,二维码将会难以识别");
+                        showToast("如果颜色搭配不合理,二维码将会难以识别");
                     }
                     break;
             }
@@ -78,7 +81,7 @@ public class BarcodeAwesomeGif extends BaseFragment {
                     break;
                 case R.id.gif_arb_qr_button_encode_gif:
                     if (coding) {
-                        MainActivity.instance.showToast("正在执行操作");
+                        showToast("正在执行操作");
                     } else {
                         btnSelectImage.setEnabled(false);
                         encodeGIF(strSelectedGifPath);
@@ -101,7 +104,7 @@ public class BarcodeAwesomeGif extends BaseFragment {
                     int statusCode = 0;
                     statusCode = gifDecoder.read(fis, fis.available());
                     if (statusCode != 0) {
-                        MainActivity.instance.showToast("读取出错:" + oldGifPath);
+                        showToast("读取出错:" + oldGifPath);
                         return;
                     }
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -124,9 +127,9 @@ public class BarcodeAwesomeGif extends BaseFragment {
                     baos.close();
                     fos.close();
                     getActivity().getApplicationContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(outputFile)));
-                    MainActivity.instance.showToast("完成 : " + outputFile.getAbsolutePath());
+                    showToast("完成 : " + outputFile.getAbsolutePath());
                 } catch (Exception e) {
-                    MainActivity.instance.showToast(e.toString());
+                    showToast(e.toString());
                 }
                 coding = false;
                 System.gc();
@@ -162,7 +165,7 @@ public class BarcodeAwesomeGif extends BaseFragment {
             public void run() {
                 if (p == 100) {
                     pbCodingProgress.setVisibility(View.GONE);
-                    MainActivity.instance.showToast("完成");
+                    showToast("完成");
                 } else {
                     pbCodingProgress.setProgress(p);
                     if (pbCodingProgress.getVisibility() == View.GONE) {
@@ -178,16 +181,16 @@ public class BarcodeAwesomeGif extends BaseFragment {
         if (requestCode == Constant.REQUEST_CODE_SELECT_FILE && resultCode == Activity.RESULT_OK && data.getData() != null) {
             try {
                 if (coding) {
-                    MainActivity.instance.showToast("正在执行操作");
+                    showToast("正在执行操作");
                 } else {
                     strSelectedGifPath = AndroidContent.absolutePathFromUri(getActivity().getApplicationContext(), data.getData());
                     tvImagePath.setText(strSelectedGifPath);
                 }
             } catch (Exception e) {
-                MainActivity.instance.showToast(e.toString());
+                showToast(e.toString());
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
-            MainActivity.instance.showToast("用户取消了操作");
+            showToast("用户取消了操作");
         } else {
             selectImage();
         }

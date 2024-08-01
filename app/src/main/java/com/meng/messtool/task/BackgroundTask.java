@@ -57,7 +57,7 @@ public abstract class BackgroundTask implements Runnable {
 
     public BackgroundTask setProgress(final int progress) {
         this.progress = progress;
-        MainActivity.instance.runOnUiThread(new Runnable() {
+        ApplicationHolder.getActivity().runOnUiThread(new Runnable() {
 
             @Override
             public void run() {
@@ -78,7 +78,7 @@ public abstract class BackgroundTask implements Runnable {
     public abstract void run();
 
     public void start() {
-        MainActivity.instance.runOnUiThread(new Runnable() {
+        ApplicationHolder.getActivity().runOnUiThread(new Runnable() {
 
             @Override
             public void run() {

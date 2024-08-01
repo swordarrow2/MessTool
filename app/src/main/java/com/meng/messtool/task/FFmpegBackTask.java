@@ -2,13 +2,17 @@ package com.meng.messtool.task;
 
 import android.os.*;
 import android.widget.*;
+
 import com.meng.messtool.*;
 import com.meng.tools.app.*;
+
 import java.io.*;
 import java.nio.charset.*;
 import java.util.*;
 
 import java.lang.Process;
+
+import static com.meng.messtool.ApplicationHolder.showToast;
 
 public class FFmpegBackTask extends BackgroundTask {
 
@@ -37,7 +41,7 @@ public class FFmpegBackTask extends BackgroundTask {
             ps = new PrintStream(new FileOutputStream(logF));
             pse = new PrintStream(new FileOutputStream(logFe));
         } catch (FileNotFoundException e) {
-            MainActivity.instance.showToast("log文件创建失败", e.toString());
+            showToast("log文件创建失败", e.toString());
         }
     }
 
@@ -87,7 +91,7 @@ public class FFmpegBackTask extends BackgroundTask {
 
     private void print(final String s) throws IOException {
         if (tvLog != null) {
-            MainActivity.instance.runOnUiThread(new Runnable() {
+            ApplicationHolder.getActivity().runOnUiThread(new Runnable() {
 
                 @Override
                 public void run() {
@@ -104,7 +108,7 @@ public class FFmpegBackTask extends BackgroundTask {
 
     private void printE(final String s) throws IOException {
         if (tvLog != null) {
-            MainActivity.instance.runOnUiThread(new Runnable() {
+            ApplicationHolder.getActivity().runOnUiThread(new Runnable() {
 
                 @Override
                 public void run() {

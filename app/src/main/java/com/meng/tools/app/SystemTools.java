@@ -3,11 +3,13 @@ package com.meng.tools.app;
 import android.content.*;
 import android.net.*;
 import android.os.*;
+
 import com.meng.messtool.*;
+
 import java.text.*;
 import java.util.*;
 
-import static android.content.Context.VIBRATOR_SERVICE;
+import static android.content.Context.*;
 
 /**
  * Created by SJF on 2024/6/29.
@@ -15,7 +17,7 @@ import static android.content.Context.VIBRATOR_SERVICE;
 
 public class SystemTools {
     public static boolean isUsingWifi() {
-        return ((ConnectivityManager) MainActivity.instance.getSystemService(Context.CONNECTIVITY_SERVICE)).getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected();
+        return ((ConnectivityManager) ApplicationHolder.getActivity().getSystemService(Context.CONNECTIVITY_SERVICE)).getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected();
     }
 
     public static String getTime() {

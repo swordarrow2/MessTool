@@ -2,9 +2,12 @@ package com.meng.messtool.modules.electronic.calculate;
 
 import android.view.*;
 import android.view.View.*;
+
 import com.meng.messtool.customview.*;
-import com.meng.messtool.*;
+
 import java.util.*;
+
+import static com.meng.messtool.ApplicationHolder.*;
 
 public class BuckInductSelect extends BaseDcdcCalculate implements OnClickListener {
 
@@ -31,7 +34,7 @@ public class BuckInductSelect extends BaseDcdcCalculate implements OnClickListen
             double[] resultRange = calculateL(vi.getDouble(), vo.getDouble(), vd.getDouble(), io.getDouble(), f.getDouble() * 1000);
             setResult(String.format(Locale.CHINA, "合适的感值:%.2fuH~%.2fuH", resultRange[1] * 1000000, resultRange[0] * 1000000));
         } catch (NumberFormatException e) {
-            MainActivity.instance.showToast("请输入正确的数字");
+            showToast("请输入正确的数字");
         }
     }
 

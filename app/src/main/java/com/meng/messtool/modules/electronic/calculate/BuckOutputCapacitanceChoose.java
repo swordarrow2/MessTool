@@ -2,9 +2,12 @@ package com.meng.messtool.modules.electronic.calculate;
 
 import android.view.*;
 import android.view.View.*;
+
 import com.meng.messtool.customview.*;
-import com.meng.messtool.*;
+
 import java.util.*;
+
+import static com.meng.messtool.ApplicationHolder.*;
 
 public class BuckOutputCapacitanceChoose extends BaseDcdcCalculate implements OnClickListener {
 
@@ -41,7 +44,7 @@ public class BuckOutputCapacitanceChoose extends BaseDcdcCalculate implements On
             double esr = getEsr(deltaV, f, l, vi, vd, vo);
             setResult(String.format(Locale.CHINA, "使用陶瓷电容:容量不小于:%fuF\n使用电解电容:ESR不大于%fmΩ", Ci * 1000000, esr * 1000));
         } catch (NumberFormatException e) {
-            MainActivity.instance.showToast("请输入正确的数字");
+            showToast("请输入正确的数字");
         }
     }
 

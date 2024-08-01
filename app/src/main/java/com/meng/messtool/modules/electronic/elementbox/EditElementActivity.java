@@ -274,7 +274,7 @@ public class EditElementActivity extends BaseActivity implements View.OnClickLis
                     break;
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
-            MainActivity.instance.showToast("取消操作");
+            showToast("取消操作");
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

@@ -8,6 +8,8 @@ import com.meng.messtool.*;
 
 import android.widget.*;
 
+import static com.meng.messtool.ApplicationHolder.showToast;
+
 public class FcConfig extends BaseFragment {
 
     /*
@@ -38,6 +40,6 @@ public class FcConfig extends BaseFragment {
         h.receivers.put("EP1 2400 RX", new FcConfigHelper.Receiver("EP1 2400 RX", "CRSF"));
         h.receivers.put("EP2 2400 RX", new FcConfigHelper.Receiver("EP2 2400 RX", "CRSF"));
         String json = GSON.toJson(h);
-        MainActivity.instance.showToast(FileTool.saveToFile(FileTool.getAppFile("fc/", "fc_test.json"), json));
+        showToast(FileTool.saveToFile(FileTool.getAppFile("fc/", "fc_test.json"), json));
     }
 }

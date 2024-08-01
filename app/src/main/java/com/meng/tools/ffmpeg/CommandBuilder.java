@@ -1,13 +1,14 @@
 package com.meng.tools.ffmpeg;
 
 import com.meng.messtool.*;
+
 import java.io.*;
 
 public class CommandBuilder {
 
     private File input;
     private File output;
-    protected StringBuilder builder = new StringBuilder(MainActivity.instance.getFilesDir().getAbsolutePath() + File.separator + "ffmpeg");
+    protected StringBuilder builder = new StringBuilder(ApplicationHolder.getActivity().getFilesDir().getAbsolutePath() + File.separator + "ffmpeg");
 //        -L license
 //        -h 帮助
 //        -fromats 显示可用的格式，编解码的，协议的。。。

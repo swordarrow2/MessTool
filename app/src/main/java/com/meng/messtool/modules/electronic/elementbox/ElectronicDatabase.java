@@ -11,6 +11,8 @@ import com.meng.tools.*;
 import java.io.*;
 import java.util.*;
 
+import static com.meng.messtool.ApplicationHolder.*;
+
 class ElectronicDatabase extends AbstractDatabaseHelper {
 
     /*
@@ -83,7 +85,7 @@ class ElectronicDatabase extends AbstractDatabaseHelper {
         Cursor cursor = db.rawQuery(String.format("select * from %s where _name = '%s' and _id_in_shop = '%s'", TABLE_DATA_MAIN, element._name, element._id_in_shop), null);
         if (cursor.getCount() > 0) {
             cursor.close();
-            MainActivity.instance.showToast("已经添加过" + element.toString());
+            showToast("已经添加过" + element.toString());
             return false;
         }
         ContentValues cv = new ContentValues();
@@ -99,7 +101,7 @@ class ElectronicDatabase extends AbstractDatabaseHelper {
         cv.put("_brand", element._brand);
 
         if (element._picture != null && element._picture.length > 1_048_576) {
-            MainActivity.instance.showToast(String.format(Locale.CHINA, "picture too large %dB,compress.", element._picture.length));
+            showToast(String.format(Locale.CHINA, "picture too large %dB,compress.", element._picture.length));
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             Bitmap bitmap = BitmapFactory.decodeByteArray(element._picture, 0, element._picture.length);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);
@@ -250,7 +252,7 @@ class ElectronicDatabase extends AbstractDatabaseHelper {
 
 
         if (element._picture != null && element._picture.length > 1_048_576) {
-            MainActivity.instance.showToast("picture too large " + element._picture.length + "B,compress.");
+            showToast("picture too large " + element._picture.length + "B,compress.");
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             Bitmap bitmap = BitmapFactory.decodeByteArray(element._picture, 0, element._picture.length);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);

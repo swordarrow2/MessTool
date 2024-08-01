@@ -1,9 +1,12 @@
 package com.meng.tools.ffmpeg;
 
 import android.content.*;
-import com.meng.messtool.*;
+
 import com.meng.tools.*;
+
 import java.io.*;
+
+import static com.meng.messtool.ApplicationHolder.*;
 
 public class FFmpeg {
 
@@ -19,7 +22,7 @@ public class FFmpeg {
         if (ffmpegFile.canExecute()) {
             return;
         }
-        MainActivity.instance.showToast("FFmpeg is not executable, trying to make it executable ...");
+        showToast("FFmpeg is not executable, trying to make it executable ...");
         if (ffmpegFile.setExecutable(true)) {
             return;
         }

@@ -8,12 +8,16 @@ import android.os.*;
 import android.view.*;
 import android.view.View.*;
 import android.widget.*;
+
 import com.google.zxing.*;
-import com.meng.messtool.customview.*;
 import com.meng.messtool.*;
+import com.meng.messtool.customview.*;
 import com.meng.tools.*;
 import com.meng.tools.MaterialDesign.*;
+
 import java.io.*;
+
+import static com.meng.messtool.ApplicationHolder.*;
 
 public class BarcodeNormal extends BaseFragment {
     private ScrollView scrollView;
@@ -54,7 +58,7 @@ public class BarcodeNormal extends BaseFragment {
 
             @Override
             public void onClick(View p1) {
-                MainActivity.instance.showToast(getResources().getString(R.string.format_tip));
+                showToast(getResources().getString(R.string.format_tip));
             }
         });
         ((Button) view.findViewById(R.id.qr_ButtonSelectImage)).setOnClickListener(click);
@@ -65,7 +69,9 @@ public class BarcodeNormal extends BaseFragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mColorBar.setVisibility(isChecked ? View.GONE : View.VISIBLE);
-                if (!isChecked) MainActivity.instance.showToast("如果颜色搭配不合理,二维码将会难以识别");
+                if (!isChecked) {
+                    showToast("如果颜色搭配不合理,二维码将会难以识别");
+                }
             }
         });
 
@@ -108,10 +114,10 @@ public class BarcodeNormal extends BaseFragment {
 
                     }
                     if (s == null) {
-                        MainActivity.instance.showToast("保存出错");
+                        showToast("保存出错");
                         break;
                     }
-                    MainActivity.instance.showToast("已保存至" + s);
+                    showToast("已保存至" + s);
                     getActivity().getApplicationContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(s))));//更新图库
                     break;
             }
@@ -171,7 +177,7 @@ public class BarcodeNormal extends BaseFragment {
                 }
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
-            MainActivity.instance.showToast("取消选择图片");
+            showToast("取消选择图片");
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

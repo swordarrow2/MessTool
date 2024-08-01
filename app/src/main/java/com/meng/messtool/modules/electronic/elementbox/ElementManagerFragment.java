@@ -12,6 +12,8 @@ import com.meng.messtool.*;
 import com.meng.tools.*;
 import com.meng.tools.MaterialDesign.*;
 
+import static com.meng.messtool.ApplicationHolder.*;
+
 /*
  *@author 清梦
  *@date 2024-07-28 20:08:30
@@ -129,24 +131,24 @@ public class ElementManagerFragment extends BaseFragment implements View.OnClick
                         if (!su) {
                             element._rest += dataBase.getElement(element._name)._rest;
                             dataBase.updateELement(element);
-                            MainActivity.instance.showToast("仅更新数量");
+                            showToast("仅更新数量");
                         }
                         dataBase.addUse(new Use(0,
                                 dataBase.getElement(element._name)._id,
                                 element._rest,
                                 "lcsc",
                                 System.currentTimeMillis()));
-                        MainActivity.instance.showToast("添加成功");
+                        showToast("添加成功");
                     } else {
                         dataBase.updateELement(element);
-                        MainActivity.instance.showToast("更新成功");
+                        showToast("更新成功");
                     }
                     eLementAdapter.cleanThumb(element);
                     eLementAdapter.notifyDataSetChanged();
                     break;
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
-            MainActivity.instance.showToast("取消操作");
+            showToast("取消操作");
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

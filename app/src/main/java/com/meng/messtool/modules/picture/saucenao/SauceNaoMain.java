@@ -11,11 +11,15 @@ import android.widget.*;
 import android.widget.AdapterView.*;
 
 import com.meng.messtool.*;
+import com.meng.messtool.modules.picture.pixiv.*;
 import com.meng.tools.*;
 import com.meng.tools.MaterialDesign.*;
-import com.meng.messtool.modules.picture.pixiv.*;
-import java.io.*;
+
 import org.jsoup.*;
+
+import java.io.*;
+
+import static com.meng.messtool.ApplicationHolder.*;
 
 public class SauceNaoMain extends BaseFragment {
     private FloatingButton mFabSelect;
@@ -35,17 +39,17 @@ public class SauceNaoMain extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         mFabSelect = (FloatingButton) view.findViewById(R.id.fab_select);
         listView = (ListView) view.findViewById(R.id.list);
-		//      spinner=(Spinner)view.findViewById(R.id.spinner_simple);
+        //      spinner=(Spinner)view.findViewById(R.id.spinner_simple);
         mFabSelect.setOnClickListener(onClickListener);
         mFabSelect.hide(false);
         new Handler().postDelayed(new Runnable() {
-				@Override
-				public void run() {
-					mFabSelect.show(true);
-					mFabSelect.setShowAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.show_from_bottom));
-					mFabSelect.setHideAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.hide_to_bottom));
-				}
-			}, 450);
+            @Override
+            public void run() {
+                mFabSelect.show(true);
+                mFabSelect.setShowAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.show_from_bottom));
+                mFabSelect.setHideAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.hide_to_bottom));
+            }
+        }, 450);
 		/*       String[] spinnerItems =getResources().getStringArray(R.array.databases_entries);
 		 String[] spinnerItems2 =getResources().getStringArray(R.array.databases_values);
 		 //自定义选择填充后的字体样式
@@ -55,7 +59,7 @@ public class SauceNaoMain extends BaseFragment {
 
 		 @Override
 		 public void onItemSelected(AdapterView<?> p1, View p2, int p3, long p4) {
-		 MainActivity.instance.showToast(p1.getItemAtPosition(p3));
+		 showToast(p1.getItemAtPosition(p3));
 		 }
 
 		 @Override
@@ -65,34 +69,34 @@ public class SauceNaoMain extends BaseFragment {
 		 });*/
         listView.setOnItemClickListener(new OnItemClickListener() {
 
-				@Override
-				public void onItemClick(AdapterView<?> p1, View p2, int p3, long p4) {
-					final PicResults.Result result = (PicResults.Result) p1.getItemAtPosition(p3);
-					ListView urlSelect = new ListView(getActivity());
-					urlSelect.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, result.mExtUrls));
-					urlSelect.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> p1, View p2, int p3, long p4) {
+                final PicResults.Result result = (PicResults.Result) p1.getItemAtPosition(p3);
+                ListView urlSelect = new ListView(getActivity());
+                urlSelect.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, result.mExtUrls));
+                urlSelect.setOnItemClickListener(new OnItemClickListener() {
 
-							@Override
-							public void onItemClick(final AdapterView<?> p1, View p2, final int p3, long p4) {
-								String url = (String) p1.getItemAtPosition(p3);
-								if (url.contains("illust_id")) {
-									MFragmentManager.getInstance().showFragment(PixivDownloadMain.class);
-									MFragmentManager.getInstance().getFragment(PixivDownloadMain.class).editTextURL.setText(url);
-								} else {
-									ClipboardManager clipboardManager = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-									ClipData clipData = ClipData.newPlainText("text", url);
-									clipboardManager.setPrimaryClip(clipData);
-									MainActivity.instance.showToast("已复制到剪贴板");
-								}
-								alertDialog.dismiss();
-							}
-						});
-					alertDialog = new AlertDialog.Builder(getActivity())
+                    @Override
+                    public void onItemClick(final AdapterView<?> p1, View p2, final int p3, long p4) {
+                        String url = (String) p1.getItemAtPosition(p3);
+                        if (url.contains("illust_id")) {
+                            MFragmentManager.getInstance().showFragment(PixivDownloadMain.class);
+                            MFragmentManager.getInstance().getFragment(PixivDownloadMain.class).editTextURL.setText(url);
+                        } else {
+                            ClipboardManager clipboardManager = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                            ClipData clipData = ClipData.newPlainText("text", url);
+                            clipboardManager.setPrimaryClip(clipData);
+                            showToast("已复制到剪贴板");
+                        }
+                        alertDialog.dismiss();
+                    }
+                });
+                alertDialog = new AlertDialog.Builder(getActivity())
                         .setView(urlSelect)
                         .setTitle("这是一个标题")
                         .setNegativeButton("我好了", null).show();
-				}
-			});
+            }
+        });
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -135,7 +139,7 @@ public class SauceNaoMain extends BaseFragment {
 				 Bitmap bmp = bundle.getParcelable("data");
 				 if (bmp == null) {
 				 mFabSelect.hideProgress();
-				 MainActivity.instance.showToast("选择图片出错");
+				 showToast("选择图片出错");
 				 running = false;
 				 }
 				 */
@@ -151,44 +155,44 @@ public class SauceNaoMain extends BaseFragment {
 				 } catch (IOException e) {
 				 mFabSelect.hideProgress();
 				 running = false;
-				 MainActivity.instance.showToast("裁剪图片出错");
+				 showToast("裁剪图片出错");
 				 }
-				 MainActivity.instance.showToast("图片添加成功");
+				 showToast("图片添加成功");
 				 */
                 mFabSelect.setImageResource(R.drawable.ic_progress);
                 new Thread(new Runnable() {
-						@Override
-						public void run() {
-							FileInputStream fInputStream;
-							try {
-								fInputStream = new FileInputStream(uploadBmpAbsPath);
-								Connection.Response response = Jsoup.connect("https://saucenao.com/search.php?db=" + 999)
+                    @Override
+                    public void run() {
+                        FileInputStream fInputStream;
+                        try {
+                            fInputStream = new FileInputStream(uploadBmpAbsPath);
+                            Connection.Response response = Jsoup.connect("https://saucenao.com/search.php?db=" + 999)
                                     .timeout(60000).data("file", "image.png", fInputStream).method(Connection.Method.POST).execute();
-								if (response.statusCode() != 200) {
-									running = false;
-									MainActivity.instance.showToast("发生错误" + response.statusCode());
-									return;
-								}
-								PicResults mResults = new PicResults(Jsoup.parse(response.body()));
-								final ResultAdapter resultAdapter = new ResultAdapter(getActivity(), mResults.getResults());
-								getActivity().runOnUiThread(new Runnable() {
-										@Override
-										public void run() {
-											mFabSelect.setImageResource(R.drawable.fab_add);
-											listView.setAdapter(resultAdapter);
-											mFabSelect.hideProgress();
-											running = false;
-										}
-									});
-							} catch (Exception e) {
-								MainActivity.instance.showToast(e.toString());
-							}
-						}
-					}).start();
+                            if (response.statusCode() != 200) {
+                                running = false;
+                                showToast("发生错误" + response.statusCode());
+                                return;
+                            }
+                            PicResults mResults = new PicResults(Jsoup.parse(response.body()));
+                            final ResultAdapter resultAdapter = new ResultAdapter(getActivity(), mResults.getResults());
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mFabSelect.setImageResource(R.drawable.fab_add);
+                                    listView.setAdapter(resultAdapter);
+                                    mFabSelect.hideProgress();
+                                    running = false;
+                                }
+                            });
+                        } catch (Exception e) {
+                            showToast(e.toString());
+                        }
+                    }
+                }).start();
             } else {
                 mFabSelect.hideProgress();
                 mFabSelect.setImageResource(R.drawable.ic_progress);
-                MainActivity.instance.showToast("取消了选择图片");
+                showToast("取消了选择图片");
                 running = false;
             }
             //	  }
@@ -196,7 +200,7 @@ public class SauceNaoMain extends BaseFragment {
             mFabSelect.hideProgress();
             mFabSelect.setImageResource(R.drawable.ic_progress);
             running = false;
-            MainActivity.instance.showToast("取消选择图片");
+            showToast("取消选择图片");
         } else {
             selectImage();
         }

@@ -5,7 +5,6 @@ import android.graphics.*;
 import android.net.*;
 import android.widget.*;
 
-import com.meng.messtool.customview.*;
 import com.meng.messtool.*;
 import com.meng.tools.*;
 import com.meng.tools.app.*;
@@ -15,6 +14,8 @@ import java.net.*;
 import java.text.*;
 import java.util.*;
 import java.util.zip.*;
+
+import static com.meng.messtool.ApplicationHolder.*;
 
 class DownloadRunnable implements Runnable {
 
@@ -80,9 +81,9 @@ class DownloadRunnable implements Runnable {
             taskState = TaskState.downloading;
             if (file.exists()) {
                 if (file.length() == imageSize) {
-                    MainActivity.instance.showToast(mengProgressBar.context.getString(R.string.file_exist) + file.getName());
+                    showToast(mengProgressBar.context.getString(R.string.file_exist) + file.getName());
                 } else {
-                    MainActivity.instance.showToast(mengProgressBar.context.getString(R.string.file_exist) + "但似乎并不完整，正在重新下载");
+                    showToast(mengProgressBar.context.getString(R.string.file_exist) + "但似乎并不完整，正在重新下载");
                     InputStream is = connection.getInputStream();
                     taskState = TaskState.downloading;
                     if (is != null) {
@@ -112,7 +113,7 @@ class DownloadRunnable implements Runnable {
             connection.disconnect();
         } catch (Exception e) {
             e.printStackTrace();
-            MainActivity.instance.showToast("下载异常" + e.toString());
+            showToast("下载异常" + e.toString());
             downloadEnd();
             return;
         }
@@ -149,12 +150,12 @@ class DownloadRunnable implements Runnable {
                 fos.close();
                 registImage(outputFile.getAbsolutePath());
             } catch (Exception e) {
-                MainActivity.instance.showToast("生成gif出错");
+                showToast("生成gif出错");
                 downloadEnd();
                 return;
             }
             filesNow = 0;
-            MainActivity.instance.showToast(zipName + ".gif" + "完成");
+            showToast(zipName + ".gif" + "完成");
             if (SharedPreferenceHelper.isDeleteZipAfterGenenalGif()) {
                 file.delete();
             }

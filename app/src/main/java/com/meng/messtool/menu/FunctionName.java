@@ -5,21 +5,21 @@ import android.content.*;
 import android.view.*;
 import android.widget.*;
 
-import com.meng.messtool.modules.electronic.elementbox.*;
-import com.meng.messtool.modules.electronic.usbserial.*;
-import com.meng.messtool.modules.ffmpeg.*;
-import com.meng.messtool.modules.fpvtool.*;
-import com.meng.messtool.tester.*;
 import com.meng.messtool.*;
 import com.meng.messtool.modules.audio.*;
 import com.meng.messtool.modules.boxarray.*;
 import com.meng.messtool.modules.electronic.calculate.*;
+import com.meng.messtool.modules.electronic.elementbox.*;
+import com.meng.messtool.modules.electronic.usbserial.*;
+import com.meng.messtool.modules.ffmpeg.*;
+import com.meng.messtool.modules.fpvtool.*;
 import com.meng.messtool.modules.picture.*;
 import com.meng.messtool.modules.picture.barcode.*;
 import com.meng.messtool.modules.picture.gif.*;
 import com.meng.messtool.modules.picture.pixiv.*;
 import com.meng.messtool.modules.picture.saucenao.*;
 import com.meng.messtool.modules.wallpaper.*;
+import com.meng.messtool.tester.*;
 
 public enum FunctionName {
 
@@ -38,15 +38,14 @@ public enum FunctionName {
 
         @Override
         public void run() {
-            ListView lv = new ListView(MainActivity.instance);
-            final AlertDialog ad = new AlertDialog.Builder(MainActivity.instance).setTitle("选择操作").setView(lv).show();
-            lv.setAdapter(new ArrayAdapter<String>(MainActivity.instance, android.R.layout.simple_list_item_1, MainActivity.instance.getResources().getStringArray(R.array.create_type)));
+            ListView lv = new ListView(ApplicationHolder.getActivity());
+            final AlertDialog ad = new AlertDialog.Builder(ApplicationHolder.getActivity()).setTitle("选择操作").setView(lv).show();
+            lv.setAdapter(new ArrayAdapter<String>(ApplicationHolder.getActivity(), android.R.layout.simple_list_item_1, ApplicationHolder.getActivity().getResources().getStringArray(R.array.create_type)));
             lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override
                 public void onItemClick(AdapterView<?> p1, View p2, int p3, long p4) {
                     ad.dismiss();
-                    MainActivity.instance.openLeftDrawer();
                     switch (p3) {
                         case 0:
                             MFragmentManager.getInstance().showFragment(BarcodeNormal.class);
@@ -65,8 +64,8 @@ public enum FunctionName {
                             break;
                         case 5:
 //                            MFragmentManager.getInstance().showFragment(BarcodeReaderCamera.class);
-                            Intent intent = new Intent(MainActivity.instance, ReadBarcodeCameraActivity.class);
-                            MainActivity.instance.startActivity(intent);
+                            Intent intent = new Intent(ApplicationHolder.getActivity(), ReadBarcodeCameraActivity.class);
+                            ApplicationHolder.getActivity().startActivity(intent);
                             break;
                         case 6:
                             MFragmentManager.getInstance().showFragment(BarcodeReaderGallery.class);
@@ -96,9 +95,9 @@ public enum FunctionName {
 
         @Override
         public void run() {
-            ListView dcdcList = new ListView(MainActivity.instance);
-            dcdcList.setAdapter(new ArrayAdapter<String>(MainActivity.instance, android.R.layout.simple_list_item_1, MainActivity.instance.getResources().getStringArray(R.array.dcdc_cal_type)));
-            final AlertDialog dcdcDialog = new AlertDialog.Builder(MainActivity.instance).setTitle("选择操作").setView(dcdcList).show();
+            ListView dcdcList = new ListView(ApplicationHolder.getActivity());
+            dcdcList.setAdapter(new ArrayAdapter<String>(ApplicationHolder.getActivity(), android.R.layout.simple_list_item_1, ApplicationHolder.getActivity().getResources().getStringArray(R.array.dcdc_cal_type)));
+            final AlertDialog dcdcDialog = new AlertDialog.Builder(ApplicationHolder.getActivity()).setTitle("选择操作").setView(dcdcList).show();
             dcdcList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override
@@ -135,14 +134,14 @@ public enum FunctionName {
 
         @Override
         public void run() {
-            MainActivity.instance.openRightDrawer();
+            ((MainActivity) ApplicationHolder.getActivity()).openRightDrawer();
         }
     }),
     FUNCTION_SYSTEM_EXIT("退出", FunctionGroup.GROUP_SYSTEM, new Runnable() {
 
         @Override
         public void run() {
-            MainActivity.instance.exit();
+            ((MainActivity) ApplicationHolder.getActivity()).exit();
         }
     });
 

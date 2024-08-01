@@ -12,11 +12,13 @@ import android.view.*;
 import android.widget.*;
 
 import com.meng.messtool.*;
+import com.meng.messtool.R;
 import com.meng.tools.*;
 import com.meng.tools.app.*;
+
 import java.io.*;
 
-import com.meng.messtool.R;
+import static com.meng.messtool.ApplicationHolder.*;
 
 
 public class PictureCrypt extends BaseFragment implements View.OnClickListener {
@@ -52,32 +54,33 @@ public class PictureCrypt extends BaseFragment implements View.OnClickListener {
             try {
                 String s = FileTool.saveToFile(FileTool.getAppFile(FunctionSavePath.bus, FileTool.FileType.png), cryptBitmap);
                 getActivity().getApplicationContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(s))));
-            } catch (IOException e) {}           
+            } catch (IOException e) {
+            }
         }
     }
 
     private void createBitmap(final String path) {
         ThreadPool.execute(new Runnable() {
 
-                @Override
-                public void run() {
-                    if (rbEn.isChecked()) {
-                        MainActivity.instance.showToast("开始加密");
-                        cryptBitmap = QrUtils.encryBitmap(BitmapFactory.decodeFile(path));
-                    } else if (rbDe.isChecked()) {
-                        MainActivity.instance.showToast("开始解密");
-                        cryptBitmap = QrUtils.decryBitmap(BitmapFactory.decodeFile(path));
-                    }
-                    MainActivity.instance.runOnUiThread(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                imageView.setImageBitmap(cryptBitmap);
-                                btnSave.setVisibility(View.VISIBLE);
-                            }
-                        });
+            @Override
+            public void run() {
+                if (rbEn.isChecked()) {
+                    showToast("开始加密");
+                    cryptBitmap = QrUtils.encryBitmap(BitmapFactory.decodeFile(path));
+                } else if (rbDe.isChecked()) {
+                    showToast("开始解密");
+                    cryptBitmap = QrUtils.decryBitmap(BitmapFactory.decodeFile(path));
                 }
-            });
+                ApplicationHolder.getActivity().runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        imageView.setImageBitmap(cryptBitmap);
+                        btnSave.setVisibility(View.VISIBLE);
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -88,7 +91,7 @@ public class PictureCrypt extends BaseFragment implements View.OnClickListener {
             if (!TextUtils.isEmpty(path)) {
                 createBitmap(path);
             } else {
-                MainActivity.instance.showToast("图片路径未找到");
+                showToast("图片路径未找到");
             }
         }
     }

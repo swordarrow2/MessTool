@@ -16,6 +16,8 @@ import com.meng.tools.MaterialDesign.*;
 import java.io.*;
 import java.util.*;
 
+import static com.meng.messtool.ApplicationHolder.*;
+
 public class ShowAllMedicineFragment extends BaseFragment implements View.OnClickListener {
 
     private ListView lvMain;
@@ -60,7 +62,7 @@ public class ShowAllMedicineFragment extends BaseFragment implements View.OnClic
                 byte[] picture = adapter.getItem(position).picture;
                 if (picture != null) {
                     iv.setImageBitmap(BitmapFactory.decodeByteArray(picture, 0, picture.length));
-                    new AlertDialog.Builder(MainActivity.instance).setTitle("添加药品").setView(iv).show();
+                    new AlertDialog.Builder(getActivity()).setTitle("添加药品").setView(iv).show();
                 }
             }
         });
@@ -74,7 +76,7 @@ public class ShowAllMedicineFragment extends BaseFragment implements View.OnClic
         switch (v.getId()) {
             case R.id.m_fab_add_medicine:
                 View view = LayoutInflater.from(getActivity()).inflate(R.layout.add_medicine, null);
-                final AlertDialog ad = new AlertDialog.Builder(MainActivity.instance).setTitle("添加药品").setView(view).show();
+                final AlertDialog ad = new AlertDialog.Builder(getActivity()).setTitle("添加药品").setView(view).show();
                 final MDEditText name = (MDEditText) view.findViewById(R.id.add_medicine_EditText_medicine_name);
                 final MDEditText describe = (MDEditText) view.findViewById(R.id.add_medicine_EditText_describe);
                 final MDEditText slotId = (MDEditText) view.findViewById(R.id.add_medicine_EditText_slot_id);
@@ -99,7 +101,7 @@ public class ShowAllMedicineFragment extends BaseFragment implements View.OnClic
             case R.id.m_fab_add_binding:
 //                final MengBarcodeScanView view1 = new MengBarcodeScanView(getActivity());
                 final EditText et = new EditText(getContext());
-                final AlertDialog ad2 = new AlertDialog.Builder(MainActivity.instance).setTitle("输入序列号").setView(et)
+                final AlertDialog ad2 = new AlertDialog.Builder(getActivity()).setTitle("输入序列号").setView(et)
                         .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -130,7 +132,7 @@ public class ShowAllMedicineFragment extends BaseFragment implements View.OnClic
                 callBack = new Runnable() {
                     @Override
                     public void run() {
-                        MainActivity.instance.showToast(path);
+                        showToast(path);
                     }
                 };
                 selectFile();
@@ -228,7 +230,7 @@ public class ShowAllMedicineFragment extends BaseFragment implements View.OnClic
                 }
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
-            MainActivity.instance.showToast("取消选择文件");
+            showToast("取消选择文件");
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

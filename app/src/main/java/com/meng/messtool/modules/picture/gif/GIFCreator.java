@@ -13,10 +13,13 @@ import com.meng.messtool.*;
 import com.meng.tools.*;
 import com.meng.tools.MaterialDesign.*;
 import com.meng.tools.app.*;
+
 import java.io.*;
 import java.util.*;
 
 import android.support.v7.app.AlertDialog;
+
+import static com.meng.messtool.ApplicationHolder.showToast;
 
 public class GIFCreator extends BaseFragment {
 
@@ -46,12 +49,12 @@ public class GIFCreator extends BaseFragment {
         editFrameAdapter = new EditFrameAdapter(getActivity(), selectedImages, true);
         listView.setAdapter(editFrameAdapter);
         listView.setOnItemClickListener(new OnItemClickListener() {
-                @Override
-                public void onItemClick(final AdapterView<?> parent, View v, int position, long id) {
-                    final EditText editTextName = new EditText(getActivity());
-                    final GIFFrame personInfo = (GIFFrame) parent.getItemAtPosition(position);
-                    editTextName.setText(String.valueOf(personInfo.delay));
-                    new AlertDialog.Builder(getActivity())
+            @Override
+            public void onItemClick(final AdapterView<?> parent, View v, int position, long id) {
+                final EditText editTextName = new EditText(getActivity());
+                final GIFFrame personInfo = (GIFFrame) parent.getItemAtPosition(position);
+                editTextName.setText(String.valueOf(personInfo.delay));
+                new AlertDialog.Builder(getActivity())
                         .setView(editTextName)
                         .setTitle("设置帧延时(ms)")
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -61,14 +64,14 @@ public class GIFCreator extends BaseFragment {
                                 editFrameAdapter.notifyDataSetChanged();
                             }
                         }).setNegativeButton("取消", null).show();
-                }
-            });
+            }
+        });
         listView.setOnItemLongClickListener(new OnItemLongClickListener() {
 
-                @Override
-                public boolean onItemLongClick(final AdapterView<?> adapterView, View view, final int position, long id) {
+            @Override
+            public boolean onItemLongClick(final AdapterView<?> adapterView, View view, final int position, long id) {
 
-                    new AlertDialog.Builder(getActivity())
+                new AlertDialog.Builder(getActivity())
                         .setTitle("确定删除吗")
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
@@ -77,9 +80,9 @@ public class GIFCreator extends BaseFragment {
                                 editFrameAdapter.notifyDataSetChanged();
                             }
                         }).setNegativeButton("取消", null).show();
-                    return true;
-                }
-            });
+                return true;
+            }
+        });
         /*   listView.setOnScrollListener(new AbsListView.OnScrollListener() {
 		 @Override
 		 public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -99,19 +102,19 @@ public class GIFCreator extends BaseFragment {
 		 });*/
         fabAdd.hide(false);
         new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    fabAdd.show(true);
-                }
-            }, 300);
+            @Override
+            public void run() {
+                fabAdd.show(true);
+            }
+        }, 300);
 
         fabEncode.hide(false);
         new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    fabEncode.show(true);
-                }
-            }, 600);
+            @Override
+            public void run() {
+                fabEncode.show(true);
+            }
+        }, 600);
     }
 
     View.OnClickListener listenerBtnClick = new View.OnClickListener() {
@@ -121,52 +124,52 @@ public class GIFCreator extends BaseFragment {
             switch (v.getId()) {
                 case R.id.fab_add:
                     Intent intent = new Intent(getActivity(), SelectFileActivity.class);
-                    startActivityForResult(intent, 9961);
+                    startActivityForResult(intent, Constant.REQUEST_CODE_SELECT_FILE);
                     break;
                 case R.id.fab_encode:
                     if (encoding) return;
                     encoding = true;
-                    MainActivity.instance.showToast("开始生成gif");
+                    showToast("开始生成gif");
                     ThreadPool.execute(new Runnable() {
 
-                            @Override
-                            public void run() {
-                                try {
-                                    fabEncode.setMax(selectedImages.size());
-                                    File outputFile = FileTool.getAppFile(FunctionSavePath.awesomeQR, FileTool.FileType.gif_89a);
-                                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                    getActivity().runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                fabEncode.setShowProgressBackground(true);
-                                                fabEncode.setIndeterminate(false);
-                                            }
-                                        });
-                                    AnimatedGifEncoder localAnimatedGifEncoder = new AnimatedGifEncoder();
-                                    localAnimatedGifEncoder.start(baos);//start
-                                    localAnimatedGifEncoder.setRepeat(0);//设置生成gif的开始播放时间。0为立即开始播放
-                                    int currentFile = 1;
-                                    for (GIFFrame gifFrame : selectedImages) {
-                                        localAnimatedGifEncoder.setDelay(gifFrame.delay);
-                                        localAnimatedGifEncoder.addFrame(BitmapFactory.decodeFile(gifFrame.filePath));
-                                        setProgress(currentFile);
-                                        ++currentFile;
+                        @Override
+                        public void run() {
+                            try {
+                                fabEncode.setMax(selectedImages.size());
+                                File outputFile = FileTool.getAppFile(FunctionSavePath.awesomeQR, FileTool.FileType.gif_89a);
+                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        fabEncode.setShowProgressBackground(true);
+                                        fabEncode.setIndeterminate(false);
                                     }
-                                    localAnimatedGifEncoder.finish();
-                                    FileOutputStream fos = new FileOutputStream(outputFile);
-                                    baos.writeTo(fos);
-                                    baos.flush();
-                                    fos.flush();
-                                    baos.close();
-                                    fos.close();
-                                    getActivity().getApplicationContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(outputFile)));
-                                    MainActivity.instance.showToast("完成 : " + outputFile.getAbsolutePath());
-                                } catch (Exception e) {
-                                    MainActivity.instance.showToast(e.toString());
+                                });
+                                AnimatedGifEncoder localAnimatedGifEncoder = new AnimatedGifEncoder();
+                                localAnimatedGifEncoder.start(baos);//start
+                                localAnimatedGifEncoder.setRepeat(0);//设置生成gif的开始播放时间。0为立即开始播放
+                                int currentFile = 1;
+                                for (GIFFrame gifFrame : selectedImages) {
+                                    localAnimatedGifEncoder.setDelay(gifFrame.delay);
+                                    localAnimatedGifEncoder.addFrame(BitmapFactory.decodeFile(gifFrame.filePath));
+                                    setProgress(currentFile);
+                                    ++currentFile;
                                 }
-                                encoding = false;
+                                localAnimatedGifEncoder.finish();
+                                FileOutputStream fos = new FileOutputStream(outputFile);
+                                baos.writeTo(fos);
+                                baos.flush();
+                                fos.flush();
+                                baos.close();
+                                fos.close();
+                                getActivity().getApplicationContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(outputFile)));
+                                showToast("完成 : " + outputFile.getAbsolutePath());
+                            } catch (Exception e) {
+                                showToast(e.toString());
                             }
-                        });
+                            encoding = false;
+                        }
+                    });
                     break;
             }
         }
@@ -174,21 +177,21 @@ public class GIFCreator extends BaseFragment {
 
     private void setProgress(final int progress) {
         getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (fabEncode.getMax() == progress) {
-                        fabEncode.hideProgress();
-                    } else {
-                        fabEncode.setProgress(progress, true);
-                    }
-                    //    if (progress == 100) {
-                    //    fabEncode.hideProgress();
-                    //	fabEncode.setIndeterminate(false);
-                    //      } else {
-                    //	  fabEncode.setIndeterminate(false);
-                    //           }
+            @Override
+            public void run() {
+                if (fabEncode.getMax() == progress) {
+                    fabEncode.hideProgress();
+                } else {
+                    fabEncode.setProgress(progress, true);
                 }
-            });
+                //    if (progress == 100) {
+                //    fabEncode.hideProgress();
+                //	fabEncode.setIndeterminate(false);
+                //      } else {
+                //	  fabEncode.setIndeterminate(false);
+                //           }
+            }
+        });
     }
 
     @Override
@@ -201,8 +204,8 @@ public class GIFCreator extends BaseFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 9961 && resultCode == Activity.RESULT_OK) {
-            MainActivity.instance.showToast("add frame ok");
+        if (requestCode == Constant.REQUEST_CODE_SELECT_FILE && resultCode == Activity.RESULT_OK) {
+            showToast("add frame ok");
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

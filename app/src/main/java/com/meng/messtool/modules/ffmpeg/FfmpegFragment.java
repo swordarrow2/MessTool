@@ -1,31 +1,22 @@
 package com.meng.messtool.modules.ffmpeg;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.media.ThumbnailUtils;
-import android.os.Bundle;
-import android.provider.MediaStore;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.app.*;
+import android.content.*;
+import android.media.*;
+import android.os.*;
+import android.provider.*;
+import android.view.*;
+import android.widget.*;
 
-import com.meng.messtool.BaseFragment;
-import com.meng.messtool.Constant;
-import com.meng.messtool.MFragmentManager;
-import com.meng.messtool.Welcome;
-import com.meng.messtool.task.FFmpegBackTask;
-import com.meng.messtool.MainActivity;
-import com.meng.messtool.R;
-import com.meng.tools.AndroidContent;
-import com.meng.tools.MaterialDesign.MDEditText;
-import com.meng.tools.ffmpeg.CommandBuilder;
-import com.meng.tools.ffmpeg.FFmpeg;
+import com.meng.messtool.*;
+import com.meng.messtool.task.*;
+import com.meng.tools.*;
+import com.meng.tools.MaterialDesign.*;
+import com.meng.tools.ffmpeg.*;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+
+import static com.meng.messtool.ApplicationHolder.*;
 
 public class FfmpegFragment extends BaseFragment implements View.OnClickListener {
 
@@ -74,7 +65,7 @@ public class FfmpegFragment extends BaseFragment implements View.OnClickListener
                 try {
                     generate(cb.getInput(), cb.getOutput());
                 } catch (IOException e) {
-                    MainActivity.instance.showToast(e.toString());
+                    showToast(e.toString());
                 }
                 break;
         }
@@ -100,7 +91,7 @@ public class FfmpegFragment extends BaseFragment implements View.OnClickListener
                 etCommand.setText(build);
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
-            MainActivity.instance.showToast("取消选择文件");
+            showToast("取消选择文件");
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

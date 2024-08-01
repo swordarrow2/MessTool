@@ -5,19 +5,21 @@ import android.content.*;
 import android.graphics.*;
 import android.net.*;
 import android.os.*;
+import android.support.v7.app.AlertDialog;
 import android.util.*;
 import android.view.*;
 import android.widget.*;
 
-import com.meng.messtool.task.*;
-import com.meng.messtool.customview.*;
 import com.meng.messtool.*;
+import com.meng.messtool.customview.*;
+import com.meng.messtool.task.*;
 import com.meng.tools.*;
 import com.meng.tools.MaterialDesign.*;
+
 import java.io.*;
 import java.text.*;
 
-import android.support.v7.app.AlertDialog;
+import static com.meng.messtool.ApplicationHolder.*;
 
 public class BarcodeAwesomeArbGif extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
@@ -73,7 +75,7 @@ public class BarcodeAwesomeArbGif extends BaseFragment implements View.OnClickLi
             case R.id.gif_arb_qr_checkbox_autocolor:
                 mColorBar.setVisibility(isChecked ? View.GONE : View.VISIBLE);
                 if (!isChecked) {
-                    MainActivity.instance.showToast("如果颜色搭配不合理,二维码将会难以识别");
+                    showToast("如果颜色搭配不合理,二维码将会难以识别");
                 }
                 break;
         }
@@ -104,7 +106,7 @@ public class BarcodeAwesomeArbGif extends BaseFragment implements View.OnClickLi
                     FileInputStream fis = new FileInputStream(gifFile);
                     int statusCode = gifDecoder.read(fis, fis.available());
                     if (statusCode != 0) {
-                        MainActivity.instance.showToast("读取错误:" + oldGifPath);
+                        showToast("读取错误:" + oldGifPath);
                         setProgress(100);
                         return;
                     }
@@ -134,9 +136,9 @@ public class BarcodeAwesomeArbGif extends BaseFragment implements View.OnClickLi
                     baos.close();
                     fos.close();
                     getActivity().getApplicationContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(outputFile.getAbsolutePath()))));
-                    MainActivity.instance.showToast("完成 : " + outputFile);
+                    showToast("完成 : " + outputFile);
                 } catch (Exception e) {
-                    MainActivity.instance.showToast(e.toString());
+                    showToast(e.toString());
                 }
                 System.gc();
                 getActivity().runOnUiThread(new Runnable() {
@@ -174,7 +176,7 @@ public class BarcodeAwesomeArbGif extends BaseFragment implements View.OnClickLi
             public void run() {
                 if (p == 100) {
                     pbCodingProgress.setVisibility(View.GONE);
-                    MainActivity.instance.showToast("完成");
+                    showToast("完成");
                 } else {
                     pbCodingProgress.setProgress(p);
                     if (pbCodingProgress.getVisibility() == View.GONE) {
@@ -234,7 +236,7 @@ public class BarcodeAwesomeArbGif extends BaseFragment implements View.OnClickLi
                                 mengSelectView.setLayoutParams(para);
                                 mengSelectView.setVisibility(View.VISIBLE);
                                 if (para.height > screenH * 2 / 3) {
-                                    MainActivity.instance.showToast("可使用音量键滚动界面");
+                                    showToast("可使用音量键滚动界面");
                                 }
                                 mengScrollView.post(new Runnable() {
                                     public void run() {
@@ -244,10 +246,10 @@ public class BarcodeAwesomeArbGif extends BaseFragment implements View.OnClickLi
                             }
                         }).show();
             } catch (Exception e) {
-                MainActivity.instance.showToast(e.toString());
+                showToast(e.toString());
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
-            MainActivity.instance.showToast("用户取消了操作");
+            showToast("用户取消了操作");
         } else {
             selectImage();
         }

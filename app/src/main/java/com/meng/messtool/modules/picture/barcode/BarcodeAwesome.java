@@ -8,13 +8,15 @@ import android.os.*;
 import android.view.*;
 import android.widget.*;
 
-import com.meng.messtool.customview.*;
 import com.meng.messtool.*;
+import com.meng.messtool.customview.*;
 import com.meng.tools.*;
 import com.meng.tools.MaterialDesign.*;
 import com.meng.tools.app.*;
 
 import java.io.*;
+
+import static com.meng.messtool.ApplicationHolder.*;
 
 public class BarcodeAwesome extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
@@ -70,7 +72,7 @@ public class BarcodeAwesome extends BaseFragment implements View.OnClickListener
             case R.id.awesomeqr_main_autoColor:
                 mColorBar.setVisibility(isChecked ? View.GONE : View.VISIBLE);
                 if (!isChecked) {
-                    MainActivity.instance.showToast("如果颜色搭配不合理,二维码将会难以识别");
+                    showToast("如果颜色搭配不合理,二维码将会难以识别");
                 }
                 break;
             case R.id.awesomeqr_main_binarize:
@@ -89,7 +91,7 @@ public class BarcodeAwesome extends BaseFragment implements View.OnClickListener
             case R.id.awesomeqr_main_removeBackgroundImage:
                 backgroundImage = null;
                 imgPathTextView.setVisibility(View.GONE);
-                MainActivity.instance.showToast(getResources().getString(R.string.Background_image_removed));
+                showToast(getResources().getString(R.string.Background_image_removed));
                 break;
             case R.id.awesomeqr_main_generate:
                 generate(mengEtContents.getString(),
@@ -109,10 +111,10 @@ public class BarcodeAwesome extends BaseFragment implements View.OnClickListener
             case R.id.awesomeqr_mainButton_save:
                 try {
                     String s = FileTool.saveToFile(FileTool.getAppFile(FunctionSavePath.awesomeQR, FileTool.FileType.png), bmpQRcode);
-                    MainActivity.instance.showToast("已保存至" + s);
+                    showToast("已保存至" + s);
                     getActivity().getApplicationContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(s))));//更新图库
                 } catch (IOException e) {
-                    MainActivity.instance.showToast("保存出错");
+                    showToast("保存出错");
                     break;
                 }
                 break;
@@ -144,7 +146,7 @@ public class BarcodeAwesome extends BaseFragment implements View.OnClickListener
                 }
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
-            MainActivity.instance.showToast("取消选择图片");
+            showToast("取消选择图片");
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -174,7 +176,7 @@ public class BarcodeAwesome extends BaseFragment implements View.OnClickListener
                         }
                     });
                 } catch (Exception e) {
-                    MainActivity.instance.showToast(e.toString());
+                    showToast(e.toString());
                     generating = false;
                 }
             }

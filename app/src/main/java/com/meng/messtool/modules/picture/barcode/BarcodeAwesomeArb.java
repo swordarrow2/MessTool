@@ -6,18 +6,20 @@ import android.content.*;
 import android.graphics.*;
 import android.net.*;
 import android.os.*;
+import android.support.v7.app.AlertDialog;
 import android.util.*;
 import android.view.*;
 import android.widget.*;
 
-import com.meng.messtool.customview.*;
 import com.meng.messtool.*;
+import com.meng.messtool.R;
+import com.meng.messtool.customview.*;
 import com.meng.tools.*;
 import com.meng.tools.MaterialDesign.*;
+
 import java.io.*;
 
-import android.support.v7.app.AlertDialog;
-import com.meng.messtool.R;
+import static com.meng.messtool.ApplicationHolder.*;
 
 public class BarcodeAwesomeArb extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
@@ -95,13 +97,13 @@ public class BarcodeAwesomeArb extends BaseFragment implements View.OnClickListe
                 try {
                     s = FileTool.saveToFile(FileTool.getAppFile(FunctionSavePath.awesomeQR, FileTool.FileType.png), finallyBmp);
                 } catch (IOException e) {
-                    
+
                 }
                 if (s == null) {
-                    MainActivity.instance.showToast("保存出错");
+                    showToast("保存出错");
                     break;
                 }
-                MainActivity.instance.showToast("已保存至" + s);
+                showToast("已保存至" + s);
                 getActivity().getApplicationContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(s))));//更新图库
                 btnSave.setVisibility(View.GONE);
                 break;
@@ -114,7 +116,7 @@ public class BarcodeAwesomeArb extends BaseFragment implements View.OnClickListe
             mColorBar.setVisibility(View.GONE);
         } else {
             mColorBar.setVisibility(View.VISIBLE);
-            MainActivity.instance.showToast("如果颜色搭配不合理,二维码将会难以识别");
+            showToast("如果颜色搭配不合理,二维码将会难以识别");
         }
     }
 
@@ -172,7 +174,7 @@ public class BarcodeAwesomeArb extends BaseFragment implements View.OnClickListe
                             mengSelectView.setLayoutParams(para);
                             mengSelectView.setVisibility(View.VISIBLE);
                             if (para.height > screenH * 2 / 3)
-                                MainActivity.instance.showToast("可使用音量键滚动界面");
+                                showToast("可使用音量键滚动界面");
                             sv.post(new Runnable() {
                                 public void run() {
                                     sv.fullScroll(View.FOCUS_DOWN);
@@ -181,7 +183,7 @@ public class BarcodeAwesomeArb extends BaseFragment implements View.OnClickListe
                         }
                     }).show();
         } else if (resultCode == Activity.RESULT_CANCELED) {
-            MainActivity.instance.showToast("用户取消了操作");
+            showToast("用户取消了操作");
         } else {
             selectImage();
         }

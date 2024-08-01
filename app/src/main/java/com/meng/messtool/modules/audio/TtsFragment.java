@@ -8,11 +8,14 @@ import android.view.*;
 import android.view.View.*;
 import android.widget.*;
 
-import com.meng.messtool.customview.*;
 import com.meng.messtool.*;
+import com.meng.messtool.customview.*;
 import com.meng.tools.MaterialDesign.*;
+
 import java.text.*;
 import java.util.*;
+
+import static com.meng.messtool.ApplicationHolder.*;
 
 public class TtsFragment extends BaseFragment implements OnClickListener, TextToSpeech.OnInitListener {
 
@@ -95,7 +98,7 @@ public class TtsFragment extends BaseFragment implements OnClickListener, TextTo
         mTts.setPitch(0.01f * msbPitch.getProgress());
         mTts.setSpeechRate(0.01f * msbSpeechRate.getProgress());
         mTts.speak(etContent.getString(), TextToSpeech.QUEUE_ADD, null);
-        MainActivity.instance.showToast(mTts.getVoices().toString());
+        showToast(mTts.getVoices().toString());
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -103,13 +106,13 @@ public class TtsFragment extends BaseFragment implements OnClickListener, TextTo
             if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
                 mTts = new TextToSpeech(getActivity(), this);
             } else if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_FAIL) {
-                MainActivity.instance.showToast("Need language stuff:" + resultCode);
+                showToast("Need language stuff:" + resultCode);
                 Intent dataIntent = new Intent();
                 dataIntent.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
                 try {
                     startActivity(dataIntent);
                 } catch (ActivityNotFoundException e) {
-                    MainActivity.instance.showToast(getString(R.string.no_support_tts));
+                    showToast(getString(R.string.no_support_tts));
                     MFragmentManager.getInstance().showFragment(Welcome.class);
                 }
             }

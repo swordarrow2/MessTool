@@ -22,7 +22,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     public static final String TAG = "MainActivity";
     public static String DEFAULT_TITLE = "MessTool";
-    public static MainActivity instance;
     private DrawerLayout mDrawerLayout;
 
     public ListView rightList;
@@ -46,7 +45,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.system_main_activity);
-        instance = this;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, Constant.REQUEST_CODE_REQUEST_PERMISSION);
         } else {

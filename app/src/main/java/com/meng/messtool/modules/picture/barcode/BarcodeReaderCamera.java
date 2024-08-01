@@ -20,6 +20,7 @@ import android.widget.*;
 
 import com.google.zxing.*;
 import com.meng.messtool.*;
+import com.meng.messtool.R;
 import com.meng.tools.*;
 import com.meng.tools.app.*;
 import com.meng.tools.zxing.camera.*;
@@ -28,7 +29,7 @@ import com.meng.tools.zxing.view.*;
 
 import java.util.*;
 
-import com.meng.messtool.R;
+import static com.meng.messtool.ApplicationHolder.*;
 
 public class BarcodeReaderCamera extends BaseFragment implements Callback {
 
@@ -78,7 +79,7 @@ public class BarcodeReaderCamera extends BaseFragment implements Callback {
         if (TextUtils.isEmpty(result)) {
             restartPreview();
         } else {
-            MainActivity.instance.showToast(String.format("二维码类型%s,内容:%s,已复制到剪贴板", format, result));
+            showToast(String.format("二维码类型%s,内容:%s,已复制到剪贴板", format, result));
             AndroidContent.copyToClipboard(result);
             restartPreview();
         }

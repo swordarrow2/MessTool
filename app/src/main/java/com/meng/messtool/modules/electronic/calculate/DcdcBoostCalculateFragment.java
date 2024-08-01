@@ -1,24 +1,22 @@
 package com.meng.messtool.modules.electronic.calculate;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TabHost;
-import android.widget.TextView;
-import com.meng.messtool.BaseFragment;
-import com.meng.messtool.MainActivity;
-import com.meng.messtool.R;
-import com.meng.tools.MaterialDesign.MDEditText;
-import java.util.Locale;
+import android.os.*;
+import android.view.*;
+import android.widget.*;
+
+import com.meng.messtool.*;
+import com.meng.tools.MaterialDesign.*;
+
+import java.util.*;
+
+import static com.meng.messtool.ApplicationHolder.*;
 
 public class DcdcBoostCalculateFragment extends BaseFragment implements View.OnClickListener {
 
     /*
-    *@author 清梦
-	*@date 2024-06-26 02:31:23
-    */
+     *@author 清梦
+     *@date 2024-06-26 02:31:23
+     */
     public static final String TAG = "DcdcCalculateFragment";
 
     private TabHost tabHost;
@@ -110,7 +108,7 @@ public class DcdcBoostCalculateFragment extends BaseFragment implements View.OnC
                     break;
             }
         } catch (NumberFormatException e) {
-            MainActivity.instance.showToast("请输入正确的数字");
+            showToast("请输入正确的数字");
         }
     }
 

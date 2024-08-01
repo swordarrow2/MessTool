@@ -16,6 +16,8 @@ import java.io.*;
 
 import java.lang.Process;
 
+import static com.meng.messtool.ApplicationHolder.showToast;
+
 public class RtmpFragment extends BaseFragment {
 
     private EditText etRtmpServer;
@@ -63,22 +65,22 @@ public class RtmpFragment extends BaseFragment {
                     String pushCode = etPushCode.getText().toString();
                     v.setEnabled(false);
                     if (!rtmp.startsWith("rtmp://")) {
-                        MainActivity.instance.showToast("不是合法的rtmp地址");
+                        showToast("不是合法的rtmp地址");
                         return;
                     }
                     if (rtmp.equals("rtmp://")) {
-                        MainActivity.instance.showToast("地址不能为空");
+                        showToast("地址不能为空");
                         return;
                     }
                     if (pushCode.equals("")) {
-                        MainActivity.instance.showToast("推流码不能为空");
+                        showToast("推流码不能为空");
                         return;
                     }
                     SharedPreferenceHelper.setRtmpAddr(rtmp);
                     SharedPreferenceHelper.setRtmpCode(pushCode);
                     try {
                         push(rtmp, pushCode);
-                        MainActivity.instance.showToast("开始向" + rtmp + pushCode + "推流");
+                        showToast("开始向" + rtmp + pushCode + "推流");
                     } catch (IOException e) {
                         ExceptionCatcher.getInstance().uncaughtException(Thread.currentThread(), e);
                     }
@@ -95,7 +97,7 @@ public class RtmpFragment extends BaseFragment {
                 btnSelectFile.setText(String.format("已选择%s", fileToPush.getName()));
             }
         } else if (resultCode == Activity.RESULT_CANCELED) {
-            MainActivity.instance.showToast("取消选择文件");
+            showToast("取消选择文件");
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

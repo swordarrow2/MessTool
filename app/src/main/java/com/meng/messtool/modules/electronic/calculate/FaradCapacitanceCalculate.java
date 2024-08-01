@@ -2,9 +2,12 @@ package com.meng.messtool.modules.electronic.calculate;
 
 import android.view.*;
 import android.view.View.*;
+
 import com.meng.messtool.customview.*;
-import com.meng.messtool.*;
+
 import java.util.*;
+
+import static com.meng.messtool.ApplicationHolder.*;
 
 public class FaradCapacitanceCalculate extends BaseDcdcCalculate implements OnClickListener {
     private MengEditText si;
@@ -33,7 +36,7 @@ public class FaradCapacitanceCalculate extends BaseDcdcCalculate implements OnCl
             double result = calculate(sv0.getDouble(), sv1.getDouble(), si.getDouble(), st.getDouble());
             setResult(String.format(Locale.CHINA, "容量约为:%.2fF", result));
         } catch (NumberFormatException e) {
-            MainActivity.instance.showToast("请输入正确的数字");
+            showToast("请输入正确的数字");
         }
     }
 

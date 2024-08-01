@@ -2,9 +2,12 @@ package com.meng.messtool.modules.electronic.calculate;
 
 import android.view.*;
 import android.view.View.*;
+
 import com.meng.messtool.customview.*;
-import com.meng.messtool.*;
+
 import java.util.*;
+
+import static com.meng.messtool.ApplicationHolder.*;
 
 public class BuckInductorCurrent extends BaseDcdcCalculate implements OnClickListener {
 
@@ -41,7 +44,7 @@ public class BuckInductorCurrent extends BaseDcdcCalculate implements OnClickLis
             double max = getMax(io, delta);
             setResult(String.format(Locale.CHINA, "电感电流纹波:%.2fA\n电感峰值电流:%.2fA", delta, max));
         } catch (NumberFormatException e) {
-            MainActivity.instance.showToast("请输入正确的数字");
+            showToast("请输入正确的数字");
         }
     }
 

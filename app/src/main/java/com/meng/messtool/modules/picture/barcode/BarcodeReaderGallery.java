@@ -7,10 +7,13 @@ import android.os.*;
 import android.text.*;
 import android.view.*;
 import android.widget.*;
+
 import com.google.zxing.*;
 import com.meng.messtool.*;
 import com.meng.tools.*;
 import com.meng.tools.app.*;
+
+import static com.meng.messtool.ApplicationHolder.*;
 
 public class BarcodeReaderGallery extends BaseFragment implements View.OnClickListener {
     private Button btnCreateAwesomeQR;
@@ -73,10 +76,10 @@ public class BarcodeReaderGallery extends BaseFragment implements View.OnClickLi
                     SystemTools.doVibrate(getActivity(), 200);
                     handleResult(result.getText(), result.getBarcodeFormat().toString());
                 } else {
-                    MainActivity.instance.showToast("此图片无法识别");
+                    showToast("此图片无法识别");
                 }
             } else {
-                MainActivity.instance.showToast("图片路径未找到");
+                showToast("图片路径未找到");
             }
         }
     }

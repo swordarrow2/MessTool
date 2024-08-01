@@ -11,6 +11,8 @@ import com.meng.tools.*;
 import java.io.*;
 import java.util.*;
 
+import static com.meng.messtool.ApplicationHolder.*;
+
 class MedicineDataBase extends AbstractDatabaseHelper {
 
     /*`
@@ -80,7 +82,7 @@ class MedicineDataBase extends AbstractDatabaseHelper {
         cv.put("_describe", describe);
         cv.put("_slot_id", slotId);
         if (pictureFile != null && pictureFile.length > 1_048_576) {
-            MainActivity.instance.showToast("picture too large " + pictureFile.length + "B,compress.");
+            showToast("picture too large " + pictureFile.length + "B,compress.");
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             Bitmap bitmap = BitmapFactory.decodeByteArray(pictureFile, 0, pictureFile.length);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);

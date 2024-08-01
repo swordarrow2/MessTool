@@ -1,5 +1,7 @@
 package com.meng.messtool.task;
 
+import android.app.*;
+
 import com.meng.messtool.*;
 
 public abstract class BackgroundTask implements Runnable {
@@ -14,6 +16,12 @@ public abstract class BackgroundTask implements Runnable {
     private String progressText;
     private int progress = -1;
     private int maxProgress = 100;
+
+    public Activity activity;
+
+    public BackgroundTask() {
+        activity = ApplicationHolder.getActivity();
+    }
 
     public BackgroundTask setMaxProgress(int max) {
         maxProgress = max;
@@ -57,7 +65,7 @@ public abstract class BackgroundTask implements Runnable {
 
     public BackgroundTask setProgress(final int progress) {
         this.progress = progress;
-        ApplicationHolder.getActivity().runOnUiThread(new Runnable() {
+        activity.runOnUiThread(new Runnable() {
 
             @Override
             public void run() {
@@ -78,7 +86,7 @@ public abstract class BackgroundTask implements Runnable {
     public abstract void run();
 
     public void start() {
-        ApplicationHolder.getActivity().runOnUiThread(new Runnable() {
+        activity.runOnUiThread(new Runnable() {
 
             @Override
             public void run() {

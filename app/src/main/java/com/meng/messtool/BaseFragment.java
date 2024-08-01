@@ -20,6 +20,20 @@ public class BaseFragment extends Fragment {
         return MainActivity.DEFAULT_TITLE;
     }
 
+    public void showToast(final String msgAbbr, final String msgOrigin) {
+        BaseActivity activity = (BaseActivity) getActivity();
+        if (activity != null) {
+            activity.showToast(msgAbbr, msgOrigin);
+        }
+    }
+
+    public void showToast(final String msg) {
+        BaseActivity activity = (BaseActivity) getActivity();
+        if (activity != null) {
+            activity.showToast(msg);
+        }
+    }
+
     public void selectImage() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);

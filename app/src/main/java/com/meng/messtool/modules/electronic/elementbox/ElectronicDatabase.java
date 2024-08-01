@@ -78,14 +78,15 @@ class ElectronicDatabase extends AbstractDatabaseHelper {
     }
 
     public boolean addELement(Element element) {
-        if (element._name == null) {
-            throw new IllegalArgumentException("name can't be null");
+        if (element._name == null || element._brand == null) {
+            throw new IllegalArgumentException("name or brand can't be null");
         }
         SQLiteDatabase db = sqLiteOpenHelper.getWritableDatabase();
-        Cursor cursor = db.rawQuery(String.format("select * from %s where _name = '%s' and _id_in_shop = '%s'", TABLE_DATA_MAIN, element._name, element._id_in_shop), null);
+        Cursor cursor = db.rawQuery(String.format("select * from %s where _name = '%s' and _brand = '%s'", TABLE_DATA_MAIN, element._name, element._brand), null);
         if (cursor.getCount() > 0) {
             cursor.close();
-            showToast("已经添加过" + element.toString());
+            String msg = "已经添加过" + element.toString();
+            showToast(msg);
             return false;
         }
         ContentValues cv = new ContentValues();
@@ -99,7 +100,6 @@ class ElectronicDatabase extends AbstractDatabaseHelper {
         cv.put("_id_in_shop", element._id_in_shop);
         cv.put("_rest", element._rest);
         cv.put("_brand", element._brand);
-
         if (element._picture != null && element._picture.length > 1_048_576) {
             showToast(String.format(Locale.CHINA, "picture too large %dB,compress.", element._picture.length));
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -109,7 +109,6 @@ class ElectronicDatabase extends AbstractDatabaseHelper {
         } else {
             cv.put("_picture", element._picture);
         }
-
         db.insert(TABLE_DATA_MAIN, null, cv);
         return true;
     }
@@ -234,7 +233,7 @@ class ElectronicDatabase extends AbstractDatabaseHelper {
         return result;
     }
 
-    public long updateELement(Element element) {
+    public long updateELementById(Element element) {
         if (element._name == null) {
             throw new IllegalArgumentException();
         }

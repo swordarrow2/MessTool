@@ -23,10 +23,10 @@ class ELementAdapter extends BaseAdapter {
 
     @Override
     public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
         List<Element> newMe = ElectronicDatabase.getInstance().getAllELement();
         allElelement.clear();
         allElelement.addAll(newMe);
-        super.notifyDataSetChanged();
     }
 
     public void cleanThumb(Element element) {

@@ -79,7 +79,7 @@ public class ApplicationHolder extends Application {
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            activity.setSubtitle(String.format(Locale.CHINA, "max:%.2f/%.2fM,free:%.2f/%.2fM", totalMemory, maxMemory, freeMemory, totalMemory));
+                            activity.setSubtitle(String.format(Locale.CHINA, "max:%.0fM,use:%.2f/%.2fM", maxMemory, freeMemory, totalMemory));
                         }
                     });
                 }

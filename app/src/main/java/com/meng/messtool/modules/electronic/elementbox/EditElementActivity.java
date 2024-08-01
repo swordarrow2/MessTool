@@ -71,7 +71,6 @@ public class EditElementActivity extends BaseActivity implements View.OnClickLis
             }
             if (guessNeedAutoFix()) {
                 auto.performClick();
-                showToast("正在自动填充");
             }
         }
     }
@@ -156,18 +155,27 @@ public class EditElementActivity extends BaseActivity implements View.OnClickLis
                             return;
                         }
                         if (v1.contains("pc:C")) {
+
+                            et_name.setEnabled(false);
+                            et_brand.setEnabled(false);
+
                             String lcJson = LcPojo.prepareLcJson(v1);
                             LcPojo pojo = GSON.fromJson(lcJson, LcPojo.class);
                             et_name.setText(pojo.pm);
                             et_shop_name.setText("lcsc");
                             et_id_in_shop.setText(pojo.pc);
                             et_count.setText(pojo.qty);
-                            try {
-                                generalAutoFix();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                                showToast("自动填充失败");
-                            }
+                            ThreadPool.execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        generalAutoFix();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                        showToast("自动填充失败");
+                                    }
+                                }
+                            });
                         } else {
                             showToast("没有符合的解析规则：" + v1);
                         }
@@ -213,6 +221,7 @@ public class EditElementActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void generalAutoFix() throws IOException {
+        showToast("正在自动填充");
         final LcscElement lce = LcscApi.searchLcscCid(et_id_in_shop.getString());
         if (lce == null) {
             showToast("无搜索结果");
@@ -230,6 +239,7 @@ public class EditElementActivity extends BaseActivity implements View.OnClickLis
                 et_describe.setText(builder.toString());
                 et_package.setText(lce.pack);
                 et_brand.setText(lce.brand);
+                et_id_in_shop.setText(lce.cid);
                 ThreadPool.execute(new Runnable() {
                     @Override
                     public void run() {

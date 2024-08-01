@@ -6,16 +6,11 @@ import com.meng.messtool.*;
 
 public class TestTask extends BackgroundTask {
 
-    private Activity activity;
     /*
      *@author 清梦
      *@date 2024-04-19 09:39:36
      */
     public static final String TAG = "TestTask";
-
-    public TestTask() {
-        activity = ApplicationHolder.getActivity();
-    }
 
     @Override
     public void run() {

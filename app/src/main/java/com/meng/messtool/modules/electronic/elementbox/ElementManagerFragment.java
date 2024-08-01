@@ -12,8 +12,6 @@ import com.meng.messtool.*;
 import com.meng.tools.*;
 import com.meng.tools.MaterialDesign.*;
 
-import static com.meng.messtool.ApplicationHolder.*;
-
 /*
  *@author 清梦
  *@date 2024-07-28 20:08:30
@@ -124,26 +122,37 @@ public class ElementManagerFragment extends BaseFragment implements View.OnClick
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case Constant.REQUEST_CODE_EDIT_ELEMENT:
-                    Element element = (Element) AppStack.pop();
+                    Element newElement = (Element) AppStack.pop();
                     ElectronicDatabase dataBase = ElectronicDatabase.getInstance();
                     if (addMode) {
-                        boolean su = dataBase.addELement(element);
-                        if (!su) {
-                            element._rest += dataBase.getElement(element._name)._rest;
-                            dataBase.updateELement(element);
+                        boolean success = dataBase.addELement(newElement);
+                        if (!success) {
+                            Element originElement = dataBase.getElement(newElement._name);
+                            newElement._id = originElement._id;
+                            newElement._rest += originElement._rest;
+                            dataBase.updateELementById(newElement);
+                            dataBase.addUse(new Use(0,
+                                    originElement._id,
+                                    newElement._rest,
+                                    "lcsc",
+                                    System.currentTimeMillis()));
                             showToast("仅更新数量");
+                        } else {
+                            Element originElement = dataBase.getElement(newElement._name);
+                            dataBase.addUse(new Use(0,
+                                    originElement._id,
+                                    newElement._rest,
+                                    "lcsc",
+                                    System.currentTimeMillis()));
+                            showToast("添加成功");
                         }
-                        dataBase.addUse(new Use(0,
-                                dataBase.getElement(element._name)._id,
-                                element._rest,
-                                "lcsc",
-                                System.currentTimeMillis()));
-                        showToast("添加成功");
                     } else {
-                        dataBase.updateELement(element);
+                        Element originElement = dataBase.getElement(newElement._name);
+                        newElement._id = originElement._id;
+                        dataBase.updateELementById(newElement);
                         showToast("更新成功");
                     }
-                    eLementAdapter.cleanThumb(element);
+                    eLementAdapter.cleanThumb(newElement);
                     eLementAdapter.notifyDataSetChanged();
                     break;
             }

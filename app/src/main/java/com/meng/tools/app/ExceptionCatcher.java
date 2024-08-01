@@ -59,15 +59,14 @@ public class ExceptionCatcher implements Thread.UncaughtExceptionHandler {
                 Looper.loop();
             }
         }.start();
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+        }
         if (mDefaultHandler != null) {
             mDefaultHandler.uncaughtException(thread, ex);
-        } else {
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-            }
-            System.exit(0);
         }
+        System.exit(0);
     }
 
 

@@ -1,10 +1,14 @@
 package com.meng.api.lcsc;
 
+import com.meng.messtool.*;
+import com.meng.tools.*;
+
 import org.jsoup.*;
 import org.jsoup.nodes.*;
 import org.jsoup.select.*;
 
 import java.io.*;
+import java.nio.charset.*;
 import java.util.*;
 
 public class LcscApi {
@@ -13,7 +17,7 @@ public class LcscApi {
         Iterator<LcscElement> iterator = tmpl.iterator();
         while (iterator.hasNext()) {
             LcscElement le = iterator.next();
-            if (!le.cid.equals(cid)) {
+            if (!le.cid.equalsIgnoreCase(cid)) {
                 iterator.remove();
             }
         }
@@ -26,21 +30,21 @@ public class LcscApi {
 
     public static List<LcscElement> searchLcsc(String keyword) throws IOException {
         List<LcscElement> list = new ArrayList<>();
-//        File file = new File("D:\\develop\\ai\\java_easy_ai\\" + keyword + ".html");
-//        if (!file.exists()) {
-        String s = Jsoup.connect("https://so.szlcsc.com/global.html?k=" + keyword)
-                .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.95 Safari/537.36").execute().body();
-//            try (FileOutputStream fos = new FileOutputStream(file)) {
-//                fos.write(s.getBytes(StandardCharsets.UTF_8));
-//            }
-//        }
+        File file = FileTool.getAppFile(FunctionSavePath.cache, keyword, "html");
+        if (!file.exists() || file.length() == 0) {
+            String s = Jsoup.connect("https://so.szlcsc.com/global.html?k=" + keyword)
+                    .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.95 Safari/537.36")
+                    .execute().body();
+            try (FileOutputStream fos = new FileOutputStream(file)) {
+                fos.write(s.getBytes(StandardCharsets.UTF_8));
+            }
+        }
         String html;
-//        try (FileInputStream fin = new FileInputStream(file)) {
-//            byte[] bs = new byte[(int) file.length()];
-//            fin.read(bs);
-//            html = new String(bs, StandardCharsets.UTF_8);
-//        }
-        html = s;
+        try (FileInputStream fin = new FileInputStream(file)) {
+            byte[] bs = new byte[(int) file.length()];
+            fin.read(bs);
+            html = new String(bs, StandardCharsets.UTF_8);
+        }
         Document doc = Jsoup.parse(html);
         Elements tables = doc.getElementsByClass("inside inside-page tab-data no-one-hk list-items");
         System.out.println("tables.size():" + tables.size());

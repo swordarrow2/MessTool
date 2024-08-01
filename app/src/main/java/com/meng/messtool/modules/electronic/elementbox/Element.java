@@ -46,7 +46,7 @@ class Element implements Serializable {
         sb.append(", _shop_name='").append(_shop_name).append('\'');
         sb.append(", _id_in_shop='").append(_id_in_shop).append('\'');
         sb.append(", _rest='").append(_rest).append('\'');
-        sb.append(", _picture=").append(Arrays.toString(_picture));
+        sb.append(", _picture=").append(_picture);
         sb.append(", _brand='").append(_brand).append('\'');
         sb.append('}');
         return sb.toString();

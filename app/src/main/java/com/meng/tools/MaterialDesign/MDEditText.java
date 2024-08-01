@@ -51,15 +51,23 @@ public class MDEditText extends LinearLayout {
     }
 
     public int getInt() {
-        return Integer.parseInt(getString());
+        try {
+            return Integer.parseInt(getString());
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 
-    public double getDouble() throws NumberFormatException {
-        double d = Double.parseDouble(getString());
-        if (Double.isNaN(d)) {
-            throw new NumberFormatException("NaN");
+    public double getDouble() {
+        try {
+            double d = Double.parseDouble(getString());
+            if (Double.isNaN(d)) {
+                throw new NumberFormatException("NaN");
+            }
+            return d;
+        } catch (NumberFormatException e) {
+            return Double.NaN;
         }
-        return d;
     }
 
     private boolean isEmpty() {

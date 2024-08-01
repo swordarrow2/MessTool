@@ -27,9 +27,11 @@ public class MenuManager {
     private LinkedHashMap<FunctionGroup, LinkedList<FunctionName>> menuEntry = new LinkedHashMap<>();
 
     public void init(Menu menu) {
+        Debuger.addLog(TAG, "init");
         menu.clear();
         for (FunctionGroup group : FunctionGroup.values()) {
             if (!group.isShow()) {
+                Debuger.addLog(TAG, "hideGroup", group.toString());
                 continue;
             }
             menuEntry.put(group, new LinkedList<FunctionName>());
@@ -47,6 +49,7 @@ public class MenuManager {
                 for (FunctionName fn : entry.getValue()) {
                     MenuItem item = subMenu.add(0, fn.ordinal(), 0, fn.getName());
                     item.setIcon(R.drawable.ic_menu);
+                    Debuger.addLog(TAG, "add function", fn.getName());
                 }
             }
         } else {
@@ -54,6 +57,7 @@ public class MenuManager {
                 for (FunctionName fn : entry.getValue()) {
                     MenuItem item = menu.add(fn.getGroup().ordinal(), fn.ordinal(), 0, fn.getName());
                     item.setIcon(R.drawable.ic_menu);
+                    Debuger.addLog(TAG, "add function", fn.getName());
                 }
             }
         }

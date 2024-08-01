@@ -6,18 +6,23 @@ import android.os.*;
 import android.util.*;
 import android.widget.*;
 
+import com.meng.messtool.*;
+import com.meng.tools.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.text.*;
 import java.util.*;
 
+
 public class ExceptionCatcher implements Thread.UncaughtExceptionHandler {
+
+    private String TAG = this.getClass().getSimpleName();
 
     private Thread.UncaughtExceptionHandler mDefaultHandler;
     private Context mContext;
     private Map<String, String> paramsMap = new HashMap<>();
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-    private String TAG = this.getClass().getSimpleName();
     private static ExceptionCatcher mInstance;
     private String fileName;
 
@@ -33,26 +38,15 @@ public class ExceptionCatcher implements Thread.UncaughtExceptionHandler {
 
     public void init(Context context) {
         mContext = context;
+        Debuger.addLog(TAG, "init", context.toString());
         mDefaultHandler = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(this);
     }
 
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {
-        if (!handleException(ex) && mDefaultHandler != null) {
-            mDefaultHandler.uncaughtException(thread, ex);
-        } else {
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-            }
-            System.exit(0);
-        }
-    }
-
-    private boolean handleException(Throwable ex) {
         if (ex == null) {
-            return false;
+            return;
         }
         collectDeviceInfo(mContext);
         addCustomInfo();
@@ -61,16 +55,23 @@ public class ExceptionCatcher implements Thread.UncaughtExceptionHandler {
             @Override
             public void run() {
                 Looper.prepare();
-                Toast.makeText(mContext, "软件爆炸莉", Toast.LENGTH_SHORT).show();
-                Toast.makeText(mContext, "崩溃记录已保存至" + fileName, Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, "错误信息已保存至" + fileName, Toast.LENGTH_LONG).show();
                 Looper.loop();
             }
         }.start();
-        return true;
+        if (mDefaultHandler != null) {
+            mDefaultHandler.uncaughtException(thread, ex);
+        } else {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+            }
+            System.exit(0);
+        }
     }
 
 
-    public void collectDeviceInfo(Context ctx) {
+    private void collectDeviceInfo(Context ctx) {
         try {
             PackageManager pm = ctx.getPackageManager();
             PackageInfo pi = pm.getPackageInfo(ctx.getPackageName(), PackageManager.GET_ACTIVITIES);
@@ -123,12 +124,8 @@ public class ExceptionCatcher implements Thread.UncaughtExceptionHandler {
             String time = format.format(new Date());
             fileName = "crash-" + time + "-" + timestamp + ".log";
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/crash/";
-                File dir = new File(path);
-                if (!dir.exists()) {
-                    dir.mkdirs();
-                }
-                FileOutputStream fos = new FileOutputStream(path + fileName);
+                File file = FileTool.getAppFile(FunctionSavePath.log, fileName);
+                FileOutputStream fos = new FileOutputStream(file);
                 fos.write(sb.toString().getBytes());
                 fos.close();
             }

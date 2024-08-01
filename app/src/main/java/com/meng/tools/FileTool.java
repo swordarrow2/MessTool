@@ -82,7 +82,7 @@ public class FileTool {
     }
 
     public static File getAppFile(String path, String name) {
-        File f = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/MediaTool/" + path + "/" + name);
+        File f = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/MessTool/" + path + "/" + name);
         if (f.isFile()) {
             if (!f.getParentFile().exists()) {
                 boolean mkdirs = f.getParentFile().mkdirs();

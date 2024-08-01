@@ -1,9 +1,16 @@
 package com.meng.tools.app;
 
 import android.content.*;
+import android.os.*;
+
+import com.meng.messtool.*;
+
+import java.lang.reflect.*;
+import java.util.*;
 
 
 public class SharedPreferenceHelper {
+    private static final String TAG = "Preference";
 
     /********** base **********/
     public static String getTheme() {
@@ -189,28 +196,52 @@ public class SharedPreferenceHelper {
     private static SharedPreferences.Editor editor;
 
     public static void init(Context context, String preferenceName) {
-        if (sp != null) {
-            return;
+        if (sp == null) {
+//            SharedPreferences sharedPreferences = context.getSharedPreferences(preferenceName, 0);
+//            ProxySharedPreference proxy = new ProxySharedPreference(sharedPreferences);
+//            sp = (SharedPreferences) Proxy.newProxyInstance(sharedPreferences.getClass().getClassLoader(), new Class[]{SharedPreferences.class}, proxy);
+            sp = context.getSharedPreferences(preferenceName, 0);
+            Debuger.setDebugMode(isDebugMode());
+            Debuger.addLog(TAG, "init");
+        } else {
+            Debuger.addLog(TAG, "init again");
         }
-        sp = context.getSharedPreferences(preferenceName, 0);
     }
 
     private static void putBoolean(String key, Boolean value) {
         editor = sp.edit();
         editor.putBoolean(key, value);
+        Debuger.addLog(TAG, key, value);
         editor.apply();
     }
 
     private static void putLong(String key, long value) {
         SharedPreferences.Editor editor = sp.edit();
         editor.putLong(key, value);
+        Debuger.addLog(TAG, key, value);
         editor.apply();
     }
 
     private static void putString(String key, String value) {
         editor = sp.edit();
         editor.putString(key, value);
+        Debuger.addLog(TAG, key, value);
         editor.apply();
     }
+
+//    private static class ProxySharedPreference implements InvocationHandler {
+//        private SharedPreferences preferences;
+//
+//        public ProxySharedPreference(SharedPreferences preferences) {
+//            this.preferences = preferences;
+//        }
+//
+//        @Override
+//        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+//            Object target = method.invoke(preferences, args);
+//            Debuger.addLog(TAG, method.getName() + (args == null ? "()" : Arrays.asList(args).toString()) + "=" + target.toString());
+//            return target;
+//        }
+//    }
 }
 

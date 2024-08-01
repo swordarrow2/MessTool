@@ -3,8 +3,10 @@ package com.meng.messtool.task;
 import android.app.*;
 import android.view.*;
 import android.widget.*;
+
 import com.meng.messtool.*;
 import com.meng.tools.app.*;
+
 import java.util.*;
 
 public class BackgroundTaskAdapter extends BaseAdapter {
@@ -29,14 +31,10 @@ public class BackgroundTaskAdapter extends BaseAdapter {
 
     public void init(Activity activity) {
         this.activity = activity;
+        Debuger.addLog(TAG, "init", activity.toString());
     }
 
     private BackgroundTaskAdapter() {
-    }
-
-    public BackgroundTaskAdapter(Activity context, ArrayList<BackgroundTask> l) {
-        activity = context;
-        list.addAll(l);
     }
 
     @Override
@@ -44,15 +42,17 @@ public class BackgroundTaskAdapter extends BaseAdapter {
         super.notifyDataSetChanged();
     }
 
-    public BackgroundTaskAdapter addTask(BackgroundTask mpb) {
-        list.add(mpb);
+    public BackgroundTaskAdapter addTask(BackgroundTask task) {
+        list.add(task);
         notifyDataSetChanged();
-        ThreadPool.execute(mpb);
+        ThreadPool.execute(task);
+        Debuger.addLog(TAG, "addTask", task.getTitle());
         return this;
     }
 
-    public void remove(BackgroundTask bk) {
-        list.remove(bk);
+    public void remove(BackgroundTask task) {
+        list.remove(task);
+        Debuger.addLog(TAG, "removeTask", task.getTitle());
         notifyDataSetChanged();
     }
 

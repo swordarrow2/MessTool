@@ -1,12 +1,14 @@
 package com.meng.tools;
 
+import android.content.*;
+
 import java.util.*;
 
 public abstract class AbstractDatabaseHelper {
 
     private static ArrayList<AbstractDatabaseHelper> list = new ArrayList<>();
 
-    public final void regist() {
+    public void init(Context context) {
         list.add(this);
     }
 

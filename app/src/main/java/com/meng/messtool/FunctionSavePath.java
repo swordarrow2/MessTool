@@ -16,5 +16,6 @@ public enum FunctionSavePath {
     TtsVoice,
     database,
     electronic,
-    imagecache
+    imagecache,
+    log
 }

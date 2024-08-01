@@ -3,6 +3,8 @@ package com.meng.messtool;
 import android.app.*;
 
 import com.meng.messtool.modules.picture.barcode.*;
+import com.meng.tools.app.*;
+
 import java.util.*;
 
 public class MFragmentManager {
@@ -27,6 +29,7 @@ public class MFragmentManager {
 
     public void init(Activity a) {
         activity = a;
+        Debuger.addLog(TAG, "init", activity.getClass());
         FragmentTransaction trans = a.getFragmentManager().beginTransaction();
         trans.add(R.id.fragment, setting);
         BarcodeAwesome frag = new BarcodeAwesome();
@@ -37,14 +40,17 @@ public class MFragmentManager {
     }
 
     public <T extends BaseFragment> T getFragment(Class<T> c) {
+        Debuger.addLog(TAG, "getFragment", c.getName());
         return (T) fragments.get(c.getName());
     }
 
     public SettingsPreference getSettingPreference() {
+        Debuger.addLog(TAG, "getSettingPreference");
         return setting;
     }
 
     public <T extends BaseFragment> void showFragment(Class<T> c) {
+        Debuger.addLog(TAG, "showFragment", c.getName());
         FragmentTransaction transaction = activity.getFragmentManager().beginTransaction();
         BaseFragment frag = fragments.get(c.getName());
         if (frag == null) {
@@ -53,8 +59,10 @@ public class MFragmentManager {
                 frag = (BaseFragment) cls.newInstance();
                 fragments.put(c.getName(), frag);
                 transaction.add(R.id.fragment, frag);
-            } catch (Exception e) {
-                throw new RuntimeException("反射爆炸");
+            } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+                MainActivity.instance.showToast("发生错误：" + e.toString());
+                Debuger.addLog(TAG, e.toString());
+                ExceptionCatcher.getInstance().uncaughtException(Thread.currentThread(), e);
             }
         }
         current = frag;

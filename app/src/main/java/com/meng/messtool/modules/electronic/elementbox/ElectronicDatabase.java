@@ -35,11 +35,12 @@ class ElectronicDatabase extends AbstractDatabaseHelper {
         return instance;
     }
 
+    @Override
     public void init(Context context) {
+        super.init(context);
         if (sqLiteOpenHelper != null) {
             throw new IllegalStateException("dbHelper has already init.");
         }
-        regist();
         sqLiteOpenHelper = new SQLiteOpenHelper(context, FileTool.getAppFile(FunctionSavePath.database, DATABASE_NAME, "db").getAbsolutePath(), null, DATABASE_VERSION) {
             @Override
             public void onCreate(SQLiteDatabase db) {

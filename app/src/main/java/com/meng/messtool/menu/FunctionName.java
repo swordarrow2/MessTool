@@ -7,7 +7,6 @@ import android.widget.*;
 
 import com.meng.messtool.*;
 import com.meng.messtool.modules.audio.*;
-import com.meng.messtool.modules.boxarray.*;
 import com.meng.messtool.modules.electronic.calculate.*;
 import com.meng.messtool.modules.electronic.elementbox.*;
 import com.meng.messtool.modules.electronic.usbserial.*;
@@ -30,9 +29,7 @@ public enum FunctionName {
     FUNCTION_FC_CONFIG("fc config", FunctionGroup.GROUP_DEVELOPING, FcConfig.class),
     FUNCTION_TEST_DATABASE("db test", FunctionGroup.GROUP_DEVELOPING, DatabaseTestFragment.class),
     FUNCTION_PID_SIMULATOR("pid simulator", FunctionGroup.GROUP_DEVELOPING, PIDSimulator.class),
-    FUNCTION_ELEMENT_BOX_ARRAY("元件盒", FunctionGroup.GROUP_DEVELOPING, ElementManagerFragment.class),
-
-    FUNCTION_LIST_MEDICINE("查看药品", FunctionGroup.GROUP_DEVELOPING, ShowAllMedicineFragment.class),
+//    FUNCTION_LIST_MEDICINE("查看药品", FunctionGroup.GROUP_DEVELOPING, ShowAllMedicineFragment.class),
 
     FUNCTION_PICTURE_BARCODE("条码", FunctionGroup.GROUP_PICTURE, new Runnable() {
 
@@ -89,38 +86,11 @@ public enum FunctionName {
     FUNCTION_AUDIO_ANDROID_TTS("安卓语音合成", FunctionGroup.GROUP_AUDIO, TtsFragment.class),
     FUNCTION_AUDIO_VITS_TTS("VITS语音合成", FunctionGroup.GROUP_AUDIO, VitsConnectFragment.class),
 
+    FUNCTION_ELEMENT_BOX_ARRAY("元件盒", FunctionGroup.GROUP_ELECTRONIC, ElementManagerFragment.class),
+
     FUNCTION_ELECTRONIC_SEARCH_SEMIEE("搜索半导小芯", FunctionGroup.GROUP_DEVELOPING, SearchSemieeFragment.class),
     FUNCTION_ELECTRONIC_BOOST_PART_CHOOSE("boost元件选型", FunctionGroup.GROUP_ELECTRONIC, DcdcBoostCalculateFragment.class),
-    FUNCTION_ELECTRONIC_BUCK_PART_CHOOSE("buck元件选型", FunctionGroup.GROUP_ELECTRONIC, new Runnable() {
-
-        @Override
-        public void run() {
-            ListView dcdcList = new ListView(ApplicationHolder.getActivity());
-            dcdcList.setAdapter(new ArrayAdapter<String>(ApplicationHolder.getActivity(), android.R.layout.simple_list_item_1, ApplicationHolder.getActivity().getResources().getStringArray(R.array.dcdc_cal_type)));
-            final AlertDialog dcdcDialog = new AlertDialog.Builder(ApplicationHolder.getActivity()).setTitle("选择操作").setView(dcdcList).show();
-            dcdcList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                @Override
-                public void onItemClick(AdapterView<?> p1, View p2, int p3, long p4) {
-                    dcdcDialog.dismiss();
-                    switch (p3) {
-                        case 0:
-                            MFragmentManager.getInstance().showFragment(BuckInductSelect.class);
-                            break;
-                        case 1:
-                            MFragmentManager.getInstance().showFragment(BuckInductorCurrent.class);
-                            break;
-                        case 2:
-                            MFragmentManager.getInstance().showFragment(BuckInputCapacitanceChoose.class);
-                            break;
-                        case 3:
-                            MFragmentManager.getInstance().showFragment(BuckOutputCapacitanceChoose.class);
-                            break;
-                    }
-                }
-            });
-        }
-    }),
+    FUNCTION_ELECTRONIC_BUCK_PART_CHOOSE("buck元件选型", FunctionGroup.GROUP_ELECTRONIC, DcdcBuckCalculateFragment.class),
     FUNCTION_ELECTRONIC_FARAD_TEST("法拉电容估算", FunctionGroup.GROUP_ELECTRONIC, FaradCapacitanceCalculate.class),
     FUNCTION_ELECTRONIC_SERIAL_PORT("串行端口", FunctionGroup.GROUP_DEVELOPING, UsbSerialFragment.class),
     FUNCTION_SYSTEM_SETTINGS("设置", FunctionGroup.GROUP_SYSTEM, new Runnable() {

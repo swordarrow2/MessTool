@@ -19,8 +19,6 @@ import com.meng.tools.MaterialDesign.*;
 
 import java.io.*;
 
-import static com.meng.messtool.ApplicationHolder.*;
-
 public class BarcodeAwesomeArb extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     private ImageView qrCodeImageView;

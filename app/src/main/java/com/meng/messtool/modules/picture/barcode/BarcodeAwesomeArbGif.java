@@ -19,8 +19,6 @@ import com.meng.tools.MaterialDesign.*;
 import java.io.*;
 import java.text.*;
 
-import static com.meng.messtool.ApplicationHolder.*;
-
 public class BarcodeAwesomeArbGif extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     private int qrSize;
@@ -121,6 +119,7 @@ public class BarcodeAwesomeArbGif extends BaseFragment implements View.OnClickLi
                         setProgress(i);
                         float pro = ((float) gifDecoder.getCurrentFrameIndex()) / gifDecoder.getFrameCount() * 100;
                         setProgress((int) pro);
+                        BarcodeAwesomeArbGif.this.setProgress((int) pro);
                         gifDecoder.advance();
                         localAnimatedGifEncoder.setDelay(gifDecoder.getNextDelay());
                         localAnimatedGifEncoder.addFrame(encodeAwesome(gifDecoder.getNextFrame()));
@@ -262,7 +261,7 @@ public class BarcodeAwesomeArbGif extends BaseFragment implements View.OnClickLi
         if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
             mengScrollView.post(new Runnable() {
                 public void run() {
-                    mengScrollView.scrollBy(0, 0xffffff9c);//(0xffffff9c)16=(-100)10
+                    mengScrollView.scrollBy(0, -100);
                 }
             });
             return true;

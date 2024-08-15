@@ -46,6 +46,13 @@ public class MFragmentManager {
         return (T) fragments.get(c.getName());
     }
 
+    public <T extends BaseFragment> void registFragment(T fragment) {
+        fragments.put(fragment.getClass().getName(), fragment);
+        FragmentTransaction transaction = activity.getFragmentManager().beginTransaction();
+        transaction.add(R.id.fragment, fragment);
+        transaction.commit();
+    }
+
     public SettingsPreference getSettingPreference() {
         Debuger.addLog(TAG, "getSettingPreference");
         return setting;
@@ -54,28 +61,28 @@ public class MFragmentManager {
     public <T extends BaseFragment> void showFragment(Class<T> c) {
         Debuger.addLog(TAG, "showFragment", c.getName());
         FragmentTransaction transaction = activity.getFragmentManager().beginTransaction();
-        BaseFragment frag = fragments.get(c.getName());
-        if (frag == null) {
+        BaseFragment fragment = fragments.get(c.getName());
+        if (fragment == null) {
             try {
                 Class<?> cls = Class.forName(c.getName());
-                frag = (BaseFragment) cls.newInstance();
-                fragments.put(c.getName(), frag);
-                transaction.add(R.id.fragment, frag);
+                fragment = (BaseFragment) cls.newInstance();
+                fragments.put(c.getName(), fragment);
+                transaction.add(R.id.fragment, fragment);
             } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
                 showToast("发生错误：" + e.toString());
                 Debuger.addLog(TAG, e.toString());
                 ExceptionCatcher.getInstance().uncaughtException(Thread.currentThread(), e);
             }
         }
-        current = frag;
+        current = fragment;
         hideFragment();
-        transaction.show(frag);
+        transaction.show(fragment);
         BaseActivity activity = ApplicationHolder.getActivity();
         if (activity != null) {
-            activity.setTitle(frag.getTitle());
+            activity.setTitle(fragment.getTitle());
         }
         transaction.commit();
-        frag.onResume();
+        fragment.onResume();
     }
 
     public void showSettingFragment() {

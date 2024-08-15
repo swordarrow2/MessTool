@@ -7,6 +7,7 @@ import android.text.*;
 import android.util.*;
 import android.view.*;
 import android.widget.*;
+
 import com.meng.messtool.*;
 
 public class MengColorBar extends LinearLayout {

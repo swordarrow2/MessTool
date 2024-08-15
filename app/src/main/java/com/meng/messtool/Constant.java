@@ -2,6 +2,10 @@ package com.meng.messtool;
 
 public class Constant {
 
+
+    public static final String INTENT_ACTION_GRANT_USB = "com.meng.messtool.GRANT_USB";
+    public static final String USB_PERMISSION = "com.meng.messtool.usb.permission";
+
     public static final String VIDEO_PARAMS_CONTROL_ACTION = "com.meng.videowallpager";
     public static final String ACTION = "action";
     public static final int ACTION_VOICE_SILENCE = 0x101;

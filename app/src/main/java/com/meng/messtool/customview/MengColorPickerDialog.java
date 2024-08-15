@@ -1,14 +1,13 @@
 package com.meng.messtool.customview;
 
-import android.app.Dialog;
-import android.content.Context;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import com.meng.messtool.R;
+import android.app.*;
+import android.content.*;
+import android.graphics.*;
+import android.os.*;
+import android.view.*;
+import android.widget.*;
+
+import com.meng.messtool.*;
 
 
 public class MengColorPickerDialog extends Dialog {

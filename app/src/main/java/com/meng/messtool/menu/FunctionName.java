@@ -5,6 +5,7 @@ import android.content.*;
 import android.view.*;
 import android.widget.*;
 
+import com.meng.messtool.modules.electronic.usbserial2.*;
 import com.meng.messtool.*;
 import com.meng.messtool.modules.audio.*;
 import com.meng.messtool.modules.electronic.*;
@@ -61,7 +62,6 @@ public enum FunctionName {
                             MFragmentManager.getInstance().showFragment(BarcodeAwesomeArbGif.class);
                             break;
                         case 5:
-//                            MFragmentManager.getInstance().showFragment(BarcodeReaderCamera.class);
                             Intent intent = new Intent(ApplicationHolder.getActivity(), ReadBarcodeCameraActivity.class);
                             ApplicationHolder.getActivity().startActivity(intent);
                             break;
@@ -88,12 +88,14 @@ public enum FunctionName {
     FUNCTION_AUDIO_VITS_TTS("VITS语音合成", FunctionGroup.GROUP_AUDIO, VitsConnectFragment.class),
 
     FUNCTION_ELEMENT_BOX_ARRAY("元件盒", FunctionGroup.GROUP_ELECTRONIC, ElementManagerFragment.class),
+    FUNCTION_ELEMENT_STM32_CHOOSE("STM32选型", FunctionGroup.GROUP_ELECTRONIC, Stm32choose.class),
 
     FUNCTION_ELECTRONIC_SEARCH_SEMIEE("搜索半导小芯", FunctionGroup.GROUP_DEVELOPING, SearchSemieeFragment.class),
     FUNCTION_ELECTRONIC_BOOST_PART_CHOOSE("boost元件选型", FunctionGroup.GROUP_ELECTRONIC, DcdcBoostCalculateFragment.class),
     FUNCTION_ELECTRONIC_BUCK_PART_CHOOSE("buck元件选型", FunctionGroup.GROUP_ELECTRONIC, DcdcBuckCalculateFragment.class),
     FUNCTION_ELECTRONIC_FARAD_TEST("法拉电容估算", FunctionGroup.GROUP_ELECTRONIC, FaradCapacitanceCalculate.class),
     FUNCTION_ELECTRONIC_SERIAL_PORT("串行端口", FunctionGroup.GROUP_DEVELOPING, UsbSerialFragment.class),
+    FUNCTION_ELECTRONIC_SERIAL_PORT2("串行端口2", FunctionGroup.GROUP_DEVELOPING, DevicesFragment.class),
     FUNCTION_SYSTEM_SETTINGS("设置", FunctionGroup.GROUP_SYSTEM, new Runnable() {
 
         @Override

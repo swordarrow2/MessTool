@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'debugkey'
+            keyPassword 'android'
+            storeFile file('C:/Users/SJF/.android/debug.keystore')
+            storePassword 'android'
+        }
+    }
     compileSdkVersion 23
     defaultConfig {
         applicationId "com.meng.messtool"

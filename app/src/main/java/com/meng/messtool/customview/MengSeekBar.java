@@ -4,6 +4,7 @@ import android.content.*;
 import android.util.*;
 import android.view.*;
 import android.widget.*;
+
 import com.meng.messtool.*;
 
 public class MengSeekBar extends LinearLayout {

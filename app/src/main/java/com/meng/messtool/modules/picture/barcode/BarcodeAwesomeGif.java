@@ -16,8 +16,6 @@ import com.meng.tools.MaterialDesign.*;
 
 import java.io.*;
 
-import static com.meng.messtool.ApplicationHolder.*;
-
 public class BarcodeAwesomeGif extends BaseFragment {
 
     private boolean coding = false;

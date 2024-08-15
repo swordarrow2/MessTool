@@ -2,9 +2,8 @@ package com.meng.messtool.customview;
 
 import android.content.*;
 import android.util.*;
-import android.widget.*;
 
-public class MengEditText extends EditText {
+public class MengEditText extends android.support.v7.widget.AppCompatEditText {
 
     /*
      *@author 清梦
@@ -22,11 +21,6 @@ public class MengEditText extends EditText {
 
     public MengEditText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-    }
-
-    public MengEditText(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-
     }
 
     public double getDouble() throws NumberFormatException {

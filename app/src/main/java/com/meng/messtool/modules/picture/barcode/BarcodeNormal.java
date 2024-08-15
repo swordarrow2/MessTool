@@ -166,11 +166,11 @@ public class BarcodeNormal extends BaseFragment {
                 if (cbCrop.isChecked()) {
                     Intent in = new Intent(getActivity(), CropActivity.class);
                     in.putExtra("path", path);
-                    startActivityForResult(in, 9961);
+                    startActivityForResult(in, Constant.REQUEST_CODE_CROP_PICTURE);
                 } else {
                     logoImage = BitmapFactory.decodeFile(path);
                 }
-            } else if (requestCode == 9961) {
+            } else if (requestCode == Constant.REQUEST_CODE_CROP_PICTURE) {
                 byte[] bis = data.getByteArrayExtra("bitmap");
                 if (bis != null) {
                     logoImage = BitmapFactory.decodeByteArray(bis, 0, bis.length);

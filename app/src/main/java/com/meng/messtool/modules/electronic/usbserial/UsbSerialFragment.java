@@ -5,9 +5,10 @@ import android.hardware.usb.*;
 import android.os.*;
 import android.view.*;
 import android.widget.*;
+
 import com.hoho.android.usbserial.driver.*;
 import com.meng.messtool.*;
-import com.meng.tools.MaterialDesign.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -19,18 +20,16 @@ public class UsbSerialFragment extends BaseFragment {
      */
     public static final String TAG = "UsbSerialFragment";
 
-    private ListView list;
-    private FloatingButton fb;
-    private ArrayAdapter ladpt;
+    private ListView listView;
+    private ArrayAdapter adapter;
     private ArrayList<String> devices = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View inflate = inflater.inflate(R.layout.list_fragment, null);
-        list = (ListView) inflate.findViewById(R.id.list);
-        fb = (FloatingButton) inflate.findViewById(R.id.fab_add);
-        ladpt = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, devices);
-        list.setAdapter(ladpt);
+        View inflate = inflater.inflate(R.layout.function_electronic_usbserial2_device_list, null);
+        listView = (ListView) inflate.findViewById(R.id.function_electronic_usbserial2_device_list_main_list);
+        adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, devices);
+        listView.setAdapter(adapter);
         return inflate;
     }
 
@@ -58,6 +57,7 @@ public class UsbSerialFragment extends BaseFragment {
         UsbDeviceConnection connection = manager.openDevice(driver.getDevice());
         if (connection == null) {
             // add UsbManager.requestPermission(driver.getDevice(), ..) handling here
+            showToast("UsbDeviceConnection is null");
             return;
         }
 

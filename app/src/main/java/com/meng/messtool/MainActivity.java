@@ -1,9 +1,11 @@
 package com.meng.messtool;
 
 import android.*;
+import android.app.*;
 import android.content.*;
 import android.content.pm.*;
 import android.content.res.*;
+import android.hardware.usb.*;
 import android.os.*;
 import android.support.annotation.*;
 import android.support.design.widget.*;
@@ -18,6 +20,8 @@ import com.meng.messtool.modules.electronic.usbserial2.*;
 import com.meng.messtool.task.*;
 import com.meng.tools.*;
 import com.meng.tools.app.*;
+
+import java.util.concurrent.*;
 
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -73,24 +77,50 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         BackgroundTaskAdapter.getInstance().init(this);
         MFragmentManager.getInstance().init(this);
         MFragmentManager.getInstance().showFragment(Welcome.class);
-        ThreadPool.execute(new Runnable() {
-            @Override
-            public void run() {
-                final Intent intent = getIntent();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (intent != null) {
-                            if (intent.getAction().equals("android.hardware.usb.action.USB_DEVICE_ATTACHED")) {
-                                MFragmentManager.getInstance().showFragment(DevicesFragment.class);
-                                closeDrawer();
-                            }
-                        }
-                    }
-                });
+        Intent intent = getIntent();
+        if (intent != null) {
+            if ("android.hardware.usb.action.USB_DEVICE_ATTACHED".equals(intent.getAction())) {
+                MFragmentManager.getInstance().showFragment(DevicesFragment.class);
+                closeDrawer();
             }
-        });
+        }
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
+        intentFilter.addAction(UsbManager.ACTION_USB_ACCESSORY_ATTACHED);
+        intentFilter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
+        intentFilter.addAction(Constant.USB_PERMISSION);
+        registerReceiver(usbReceiver, intentFilter);//注册receiver
     }
+
+    private BroadcastReceiver usbReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent == null) {
+                return;
+            }
+            String action = intent.getAction();
+            if (UsbManager.ACTION_USB_ACCESSORY_ATTACHED.equals(action) || UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(action)) {
+                showToast("USB从机已连接");
+                if (MFragmentManager.getInstance().getCurrent().getClass() != DevicesFragment.class && MFragmentManager.getInstance().getCurrent().getClass() != TerminalFragment.class) {
+                    ThreadPool.executeAfterTime(new Runnable() {
+                        @Override
+                        public void run() {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    MFragmentManager.getInstance().showFragment(DevicesFragment.class);
+                                }
+                            });
+                        }
+                    }, 1000, TimeUnit.MILLISECONDS);
+                }
+            }
+            if (UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action)) { // USB拔插动作
+                showToast("USB从机已断开");
+            }
+        }
+    };
+
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {

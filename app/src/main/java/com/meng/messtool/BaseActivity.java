@@ -7,6 +7,7 @@ import android.support.annotation.*;
 import android.support.design.widget.*;
 import android.support.v7.app.*;
 import android.support.v7.widget.Toolbar;
+import android.util.*;
 import android.view.*;
 import android.widget.*;
 
@@ -72,6 +73,9 @@ public abstract class BaseActivity extends AppCompatActivity {
                 super.setTheme(theme = R.style.green);
                 break;
         }
+        TypedValue outValue = new TypedValue();
+        getTheme().resolveAttribute(R.attr.theme_id, outValue, true);
+        System.out.print("theme:" + outValue.data);
     }
 
     public void showToast(final String msgAbbr, final String msgOrigin) {

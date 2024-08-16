@@ -6,16 +6,18 @@ import android.hardware.usb.*;
 import android.os.*;
 import android.support.annotation.*;
 import android.text.*;
-import android.text.method.*;
 import android.text.style.*;
+import android.util.*;
 import android.view.*;
 import android.widget.*;
 
 import com.hoho.android.usbserial.driver.*;
 import com.hoho.android.usbserial.util.*;
 import com.meng.messtool.*;
+import com.meng.tools.*;
 
 import java.io.*;
+import java.nio.charset.*;
 import java.util.*;
 
 import static com.meng.messtool.Constant.*;
@@ -32,7 +34,7 @@ public class TerminalFragment extends BaseFragment implements SerialInputOutputM
 
     private final BroadcastReceiver broadcastReceiver;
     private final Handler mainLooper;
-    private TextView receiveText;
+    private SerialReceiveAdapter adptReceivedText;
     private ControlLines controlLines;
 
     private SerialInputOutputManager usbIoManager;
@@ -55,8 +57,8 @@ public class TerminalFragment extends BaseFragment implements SerialInputOutputM
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (INTENT_ACTION_GRANT_USB.equals(intent.getAction())) {
-                    usbPermission = intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)
-                            ? UsbPermission.Granted : UsbPermission.Denied;
+                    usbPermission = intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false) ?
+                            UsbPermission.Granted : UsbPermission.Denied;
                     connect();
                 }
             }
@@ -105,15 +107,15 @@ public class TerminalFragment extends BaseFragment implements SerialInputOutputM
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.function_electronic_usbserial2_fragment_terminal, container, false);
-        receiveText = (TextView) view.findViewById(R.id.receive_text);                          // TextView performance decreases with number of spans
-        receiveText.setTextColor(getResources().getColor(R.color.colorRecieveText)); // set as default color to reduce number of spans
-        receiveText.setMovementMethod(ScrollingMovementMethod.getInstance());
+        ListView lvReceiveText = (ListView) view.findViewById(R.id.function_electronic_usbserial2_terminal_list);
+        adptReceivedText = new SerialReceiveAdapter(getActivity());
+        lvReceiveText.setAdapter(adptReceivedText);
         final TextView sendText = (TextView) view.findViewById(R.id.send_text);
         View sendBtn = view.findViewById(R.id.send_btn);
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TerminalFragment.this.send(sendText.getText().toString());
+                TerminalFragment.this.sendbytes(sendText.getText().toString());
             }
         });
         View receiveBtn = view.findViewById(R.id.receive_btn);
@@ -152,7 +154,8 @@ public class TerminalFragment extends BaseFragment implements SerialInputOutputM
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.clear) {
-            receiveText.setText("");
+            adptReceivedText.clear();
+            adptReceivedText.notifyDataSetChanged();
             return true;
         } else if (id == R.id.send_break) {
             if (!connected) {
@@ -162,10 +165,7 @@ public class TerminalFragment extends BaseFragment implements SerialInputOutputM
                     usbSerialPort.setBreak(true);
                     Thread.sleep(100); // should show progress bar instead of blocking UI thread
                     usbSerialPort.setBreak(false);
-                    SpannableStringBuilder spn = new SpannableStringBuilder();
-                    spn.append("send <break>\n");
-                    spn.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorSendText)), 0, spn.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    receiveText.append(spn);
+                    adptReceivedText.add("send <break>");
                 } catch (UnsupportedOperationException ignored) {
                     Toast.makeText(getActivity(), "BREAK not supported", Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
@@ -208,9 +208,13 @@ public class TerminalFragment extends BaseFragment implements SerialInputOutputM
     private void connect() {
         UsbDevice device = null;
         UsbManager usbManager = (UsbManager) getActivity().getSystemService(Context.USB_SERVICE);
-        for (UsbDevice v : usbManager.getDeviceList().values())
-            if (v.getDeviceId() == deviceId)
-                device = v;
+        if (usbManager != null) {
+            for (UsbDevice v : usbManager.getDeviceList().values()) {
+                if (v.getDeviceId() == deviceId) {
+                    device = v;
+                }
+            }
+        }
         if (device == null) {
             status("connection failed: device not found");
             return;
@@ -238,13 +242,13 @@ public class TerminalFragment extends BaseFragment implements SerialInputOutputM
             return;
         }
         if (usbConnection == null) {
-            if (!usbManager.hasPermission(driver.getDevice()))
+            if (!usbManager.hasPermission(driver.getDevice())) {
                 status("connection failed: permission denied");
-            else
+            } else {
                 status("connection failed: open failed");
+            }
             return;
         }
-
         try {
             usbSerialPort.open(usbConnection);
             try {
@@ -280,6 +284,53 @@ public class TerminalFragment extends BaseFragment implements SerialInputOutputM
         usbSerialPort = null;
     }
 
+    private void mspSend(byte messageID, byte[] payload) {
+        ArrayList<Byte> arrayList = new ArrayList<>();
+        arrayList.add((byte) '$');
+        arrayList.add((byte) 'M');
+        arrayList.add((byte) '<');
+        arrayList.add((byte) payload.length);
+        arrayList.add(messageID);
+        // byte checksum = (byte) (size ^ messageID);
+        byte checksum = 0;
+        checksum ^= payload.length;
+        checksum ^= messageID;
+        for (byte b : payload) {
+            checksum ^= b;
+            arrayList.add(b);
+        }
+        arrayList.add(checksum);
+        byte[] bs = new byte[arrayList.size()];
+        for (int i = 0; i < bs.length; i++) {
+            bs[i] = arrayList.get(i);
+        }
+        try {
+            usbSerialPort.write(bs, 2000);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void sendbytes(String str) {
+        if (!connected) {
+            Toast.makeText(getActivity(), "not connected", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String[] ss = str.split(" ");
+        byte[] data = new byte[ss.length - 1];
+        for (int i = 0; i < ss.length - 1; i++) {
+            data[i] = (byte) Integer.parseInt(ss[i + 1], 16);
+        }
+        mspSend((byte) Integer.parseInt(ss[0], 16), data);
+        try {
+            adptReceivedText.add("send " + data.length + " bytes: " + new String(data, StandardCharsets.US_ASCII), HexDump.toHexString(data));
+            adptReceivedText.notifyDataSetChanged();
+            //  usbSerialPort.write(data, WRITE_WAIT_MILLIS);
+        } catch (Exception e) {
+            onRunError(e);
+        }
+    }
+
     private void send(String str) {
         if (!connected) {
             Toast.makeText(getActivity(), "not connected", Toast.LENGTH_SHORT).show();
@@ -287,11 +338,8 @@ public class TerminalFragment extends BaseFragment implements SerialInputOutputM
         }
         try {
             byte[] data = (str + '\n').getBytes();
-            SpannableStringBuilder spn = new SpannableStringBuilder();
-            spn.append("send " + data.length + " bytes\n");
-            spn.append(HexDump.dumpHexString(data)).append("\n");
-            spn.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorSendText)), 0, spn.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            receiveText.append(spn);
+            adptReceivedText.add("send " + data.length + " bytes: " + new String(data, StandardCharsets.US_ASCII), HexDump.toHexString(data));
+            adptReceivedText.notifyDataSetChanged();
             usbSerialPort.write(data, WRITE_WAIT_MILLIS);
         } catch (Exception e) {
             onRunError(e);
@@ -316,17 +364,13 @@ public class TerminalFragment extends BaseFragment implements SerialInputOutputM
     }
 
     private void receive(byte[] data) {
-        SpannableStringBuilder spn = new SpannableStringBuilder();
-        spn.append("receive " + data.length + " bytes\n");
-        if (data.length > 0)
-            spn.append(HexDump.dumpHexString(data)).append("\n");
-        receiveText.append(spn);
+        adptReceivedText.add("receive " + data.length + " bytes: " + new String(data, StandardCharsets.US_ASCII), HexDump.toHexString(data));
+        adptReceivedText.notifyDataSetChanged();
     }
 
     void status(String str) {
-        SpannableStringBuilder spn = new SpannableStringBuilder(str + '\n');
-        spn.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.colorStatusText)), 0, spn.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        receiveText.append(spn);
+        adptReceivedText.add(str);
+        adptReceivedText.notifyDataSetChanged();
     }
 
     class ControlLines {
@@ -382,6 +426,7 @@ public class TerminalFragment extends BaseFragment implements SerialInputOutputM
                     ctrl = "DTR";
                     usbSerialPort.setDTR(btn.isChecked());
                 }
+                mspSend((byte) 1, new byte[0]);
             } catch (IOException e) {
                 status("set" + ctrl + "() failed: " + e.getMessage());
             }

@@ -62,4 +62,7 @@
 
     <string name="app_title">USB Serial For Android Example</string>
     <string name="devices">USB Devices</string>
+    <string name="copy_to_clipboard">复制到剪贴板</string>
+    <string name="format">格式</string>
+    <string name="rescan">重新扫描</string>
 </resources>

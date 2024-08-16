@@ -1,7 +1,6 @@
 package com.meng.messtool.menu;
 
 import android.app.*;
-import android.content.*;
 import android.view.*;
 import android.widget.*;
 
@@ -39,7 +38,7 @@ public enum FunctionName {
         public void run() {
             ListView lv = new ListView(ApplicationHolder.getActivity());
             final AlertDialog ad = new AlertDialog.Builder(ApplicationHolder.getActivity()).setTitle("选择操作").setView(lv).show();
-            lv.setAdapter(new ArrayAdapter<String>(ApplicationHolder.getActivity(), android.R.layout.simple_list_item_1, ApplicationHolder.getActivity().getResources().getStringArray(R.array.create_type)));
+            lv.setAdapter(new ArrayAdapter<>(ApplicationHolder.getActivity(), android.R.layout.simple_list_item_1, ApplicationHolder.getActivity().getResources().getStringArray(R.array.create_type)));
             lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override
@@ -62,8 +61,7 @@ public enum FunctionName {
                             MFragmentManager.getInstance().showFragment(BarcodeAwesomeArbGif.class);
                             break;
                         case 5:
-                            Intent intent = new Intent(ApplicationHolder.getActivity(), ReadBarcodeCameraActivity.class);
-                            ApplicationHolder.getActivity().startActivity(intent);
+                            MFragmentManager.getInstance().showFragment(BarcodeReaderCamera.class);
                             break;
                         case 6:
                             MFragmentManager.getInstance().showFragment(BarcodeReaderGallery.class);

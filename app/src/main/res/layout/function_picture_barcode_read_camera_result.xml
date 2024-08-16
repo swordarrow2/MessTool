@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/function_picture_barcode_read_camera_resultLinearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingBottom="0dp">
+
+    <TextView
+        android:id="@+id/function_picture_barcode_read_camera_resultTextView_format"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/format" />
+
+    <TextView
+        android:id="@+id/function_picture_barcode_read_camera_resultTextView_result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:autoLink="all"
+        android:enabled="true"
+        android:focusable="true"
+        android:longClickable="true"
+        android:text="@string/long_press_to_copy_result"
+        android:textIsSelectable="true" />
+
+    <Button
+        android:id="@+id/function_picture_barcode_read_camera_resultButton_copy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/copy_to_clipboard" />
+
+    <Button
+        android:id="@+id/function_picture_barcode_read_camera_resultButton_restart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/rescan" />
+
+</LinearLayout>
+
+
+

@@ -35,7 +35,7 @@ public class ReadBarcodeCameraActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.function_picture_barcode_qr_camera);
+        setContentView(R.layout.provider_barcode_qr_camera);
         hasSurface = false;
         inactivityTimer = new InactivityTimer(this);
         CameraManager.init(this);
@@ -65,6 +65,7 @@ public class ReadBarcodeCameraActivity extends Activity {
         } else {
             Intent re = new Intent();
             re.putExtra("result", result);
+            re.putExtra("format", format);
             setResult(RESULT_OK, re);
             finish();
         }

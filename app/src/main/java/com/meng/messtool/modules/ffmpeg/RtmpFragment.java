@@ -6,17 +6,14 @@ import android.os.*;
 import android.view.*;
 import android.widget.*;
 
-import com.meng.messtool.task.*;
 import com.meng.messtool.*;
+import com.meng.messtool.task.*;
 import com.meng.tools.*;
 import com.meng.tools.app.*;
 import com.meng.tools.ffmpeg.*;
 
 import java.io.*;
-
 import java.lang.Process;
-
-import static com.meng.messtool.ApplicationHolder.showToast;
 
 public class RtmpFragment extends BaseFragment {
 
@@ -27,6 +24,16 @@ public class RtmpFragment extends BaseFragment {
     private LinearLayout rootLayout;
 
     private File fileToPush;
+
+    @Override
+    public String getTitle() {
+        return "ffmpeg rtmp推流";
+    }
+
+    @Override
+    public String getVersionName() {
+        return "V0.0.1";
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

@@ -25,6 +25,16 @@ public class UsbSerialFragment extends BaseFragment {
     private ArrayList<String> devices = new ArrayList<>();
 
     @Override
+    public String getTitle() {
+        return "USB串口1代";
+    }
+
+    @Override
+    public String getVersionName() {
+        return "V0.0.1";
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View inflate = inflater.inflate(R.layout.function_electronic_usbserial2_device_list, null);
         listView = (ListView) inflate.findViewById(R.id.function_electronic_usbserial2_device_list_main_list);

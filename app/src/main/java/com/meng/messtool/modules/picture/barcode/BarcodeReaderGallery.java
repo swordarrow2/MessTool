@@ -13,12 +13,20 @@ import com.meng.messtool.*;
 import com.meng.tools.*;
 import com.meng.tools.app.*;
 
-import static com.meng.messtool.ApplicationHolder.*;
-
 public class BarcodeReaderGallery extends BaseFragment implements View.OnClickListener {
     private Button btnCreateAwesomeQR;
     private TextView tvResult;
     private TextView tvFormat;
+
+    @Override
+    public String getTitle() {
+        return "读取二维码";
+    }
+
+    @Override
+    public String getVersionName() {
+        return "V0.0.1";
+    }
 
     public void setResult(String resultString, String format) {
         handleResult(resultString, format);

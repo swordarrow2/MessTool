@@ -14,8 +14,6 @@ import com.meng.tools.*;
 
 import java.io.*;
 
-import static com.meng.messtool.ApplicationHolder.*;
-
 public class GrayImage extends BaseFragment implements View.OnClickListener {
 
     private ImageView imageView;
@@ -23,6 +21,16 @@ public class GrayImage extends BaseFragment implements View.OnClickListener {
     private Button btnStart;
 
     private String path;
+
+    @Override
+    public String getTitle() {
+        return "灰度图生成";
+    }
+
+    @Override
+    public String getVersionName() {
+        return "V1.0.0";
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

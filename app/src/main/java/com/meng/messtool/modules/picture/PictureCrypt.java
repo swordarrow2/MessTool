@@ -18,8 +18,6 @@ import com.meng.tools.app.*;
 
 import java.io.*;
 
-import static com.meng.messtool.ApplicationHolder.*;
-
 
 public class PictureCrypt extends BaseFragment implements View.OnClickListener {
     private final int REQUEST_PERMISSION_PHOTO = 1001;
@@ -28,6 +26,16 @@ public class PictureCrypt extends BaseFragment implements View.OnClickListener {
     private Button btnSave;
     private RadioButton rbEn;
     private RadioButton rbDe;
+
+    @Override
+    public String getTitle() {
+        return "图片加密解密";
+    }
+
+    @Override
+    public String getVersionName() {
+        return "V1.0.0";
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

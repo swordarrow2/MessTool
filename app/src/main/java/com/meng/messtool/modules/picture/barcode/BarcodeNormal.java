@@ -17,8 +17,6 @@ import com.meng.tools.MaterialDesign.*;
 
 import java.io.*;
 
-import static com.meng.messtool.ApplicationHolder.*;
-
 public class BarcodeNormal extends BaseFragment {
     private ScrollView scrollView;
     private ImageView qrcodeImageView, tipImageView;
@@ -33,6 +31,16 @@ public class BarcodeNormal extends BaseFragment {
     private MengColorBar mColorBar;
     private LinearLayout forQr;
     private Spinner spinner;
+
+    @Override
+    public String getTitle() {
+        return "二维码生成器";
+    }
+
+    @Override
+    public String getVersionName() {
+        return "V1.0.0";
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

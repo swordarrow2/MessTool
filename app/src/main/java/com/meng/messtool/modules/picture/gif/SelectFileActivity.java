@@ -39,14 +39,14 @@ public class SelectFileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.select_file_layout);
+        setContentView(R.layout.provider_select_picture_file_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawerLayout.setDrawerListener(toggle);
         toggle.syncState();
-        mainView = getLayoutInflater().inflate(R.layout.activity_file_browser_acitivity, (FrameLayout) findViewById(R.id.fragment));
+        mainView = getLayoutInflater().inflate(R.layout.provider_select_file_activity, (FrameLayout) findViewById(R.id.fragment));
         listView = (ListView) mainView.findViewById(R.id.list);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

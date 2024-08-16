@@ -11,7 +11,6 @@ import android.widget.*;
 import com.hoho.android.usbserial.driver.*;
 import com.meng.messtool.*;
 
-import java.io.*;
 import java.util.*;
 
 public class DevicesFragment extends BaseFragment {
@@ -24,6 +23,16 @@ public class DevicesFragment extends BaseFragment {
     private PendingIntent mPrtPermissionIntent;
     private UsbDeviceConnection usbDeviceConnection;
     private UsbManager usbManager;
+
+    @Override
+    public String getVersionName() {
+        return "V0.0.1";
+    }
+
+    @Override
+    public String getTitle() {
+        return "USB串口设备列表";
+    }
 
     @Nullable
     @Override
@@ -79,12 +88,19 @@ public class DevicesFragment extends BaseFragment {
                 return;
             }
             String action = intent.getAction();
-            if (!Constant.USB_PERMISSION.equals(action)) {
-                if (UsbManager.ACTION_USB_ACCESSORY_ATTACHED.equals(action) || UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(action)) { // USB拔插动作
-                    System.out.println("USB 插入...");
-                    refresh();
-                }
+            if (UsbManager.ACTION_USB_ACCESSORY_ATTACHED.equals(action) || UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(action)) { // USB拔插动作
+                System.out.println("USB 插入...");
+                refresh();
                 return;
+            }
+            if (UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action)) { // USB拔插动作
+                System.out.println("USB 拔出...");
+                refresh();
+                return;
+            }
+            if (!Constant.USB_PERMISSION.equals(action)) {
+
+//                return;
             }
             synchronized (this) {
                 if (!intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)) {

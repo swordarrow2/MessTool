@@ -12,6 +12,16 @@ public class Stm32choose extends BaseFragment {
      */
     public static final String TAG = "stm32choose";
 
+    @Override
+    public String getTitle() {
+        return "STM32型号对比器";
+    }
+
+    @Override
+    public String getVersionName() {
+        return "V0.0.1";
+    }
+
 
     public String analyze(String model) {
         if (!model.startsWith("STM32")) {

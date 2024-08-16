@@ -14,8 +14,13 @@ public class FaradCapacitanceCalculate extends BaseDcdcCalculate implements OnCl
     private MengEditText sv1;
 
     @Override
-    public String getName() {
+    public String getTitle() {
         return "法拉电容容量估算";
+    }
+
+    @Override
+    public String getVersionName() {
+        return "V1.0.0";
     }
 
     public void init() {

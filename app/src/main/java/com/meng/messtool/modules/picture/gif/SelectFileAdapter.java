@@ -47,7 +47,7 @@ public class SelectFileAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.file_item, null);
+            convertView = mInflater.inflate(R.layout.provider_select_file_item, null);
             holder = new ViewHolder();
             holder.text = (TextView) convertView.findViewById(R.id.text);
             holder.icon = (ImageView) convertView.findViewById(R.id.icon);

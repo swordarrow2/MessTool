@@ -23,6 +23,15 @@ public class ElementManagerFragment extends BaseFragment implements View.OnClick
     private ELementAdapter eLementAdapter;
     private boolean addMode = true;
 
+    @Override
+    public String getTitle() {
+        return "元件盒";
+    }
+
+    @Override
+    public String getVersionName() {
+        return "V0.1.0";
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {

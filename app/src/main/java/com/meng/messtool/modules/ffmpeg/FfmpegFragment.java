@@ -16,8 +16,6 @@ import com.meng.tools.ffmpeg.*;
 
 import java.io.*;
 
-import static com.meng.messtool.ApplicationHolder.*;
-
 public class FfmpegFragment extends BaseFragment implements View.OnClickListener {
 
     private ImageView ivThumb;
@@ -30,6 +28,16 @@ public class FfmpegFragment extends BaseFragment implements View.OnClickListener
     private CommandBuilder cb;
 
     private View mainView;
+
+    @Override
+    public String getTitle() {
+        return "ffmpeg转换器";
+    }
+
+    @Override
+    public String getVersionName() {
+        return "V1.0.0";
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

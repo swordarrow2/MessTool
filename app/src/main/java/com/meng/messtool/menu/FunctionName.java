@@ -5,13 +5,13 @@ import android.content.*;
 import android.view.*;
 import android.widget.*;
 
-import com.meng.messtool.modules.electronic.usbserial2.*;
 import com.meng.messtool.*;
 import com.meng.messtool.modules.audio.*;
 import com.meng.messtool.modules.electronic.*;
 import com.meng.messtool.modules.electronic.calculate.*;
 import com.meng.messtool.modules.electronic.elementbox.*;
 import com.meng.messtool.modules.electronic.usbserial.*;
+import com.meng.messtool.modules.electronic.usbserial2.*;
 import com.meng.messtool.modules.ffmpeg.*;
 import com.meng.messtool.modules.fpvtool.*;
 import com.meng.messtool.modules.picture.*;

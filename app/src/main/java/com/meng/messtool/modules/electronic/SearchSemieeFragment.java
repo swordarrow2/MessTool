@@ -4,11 +4,13 @@ import android.os.*;
 import android.view.*;
 import android.widget.*;
 import android.widget.AdapterView.*;
+
 import com.meng.api.semiee.*;
 import com.meng.messtool.*;
+import com.meng.messtool.modules.electronic.semiee.*;
 import com.meng.tools.*;
 import com.meng.tools.app.*;
-import com.meng.messtool.modules.electronic.semiee.*;
+
 import java.io.*;
 import java.nio.charset.*;
 import java.util.*;
@@ -16,6 +18,16 @@ import java.util.*;
 public class SearchSemieeFragment extends BaseFragment {
 
     private ListView lv;
+
+    @Override
+    public String getTitle() {
+        return "半导小芯";
+    }
+
+    @Override
+    public String getVersionName() {
+        return "V0.1.0";
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

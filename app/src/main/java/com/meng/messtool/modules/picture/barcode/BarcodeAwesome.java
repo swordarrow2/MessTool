@@ -16,8 +16,6 @@ import com.meng.tools.app.*;
 
 import java.io.*;
 
-import static com.meng.messtool.ApplicationHolder.*;
-
 public class BarcodeAwesome extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     private ImageView qrCodeImageView;
@@ -35,6 +33,16 @@ public class BarcodeAwesome extends BaseFragment implements View.OnClickListener
     private TextView imgPathTextView;
     private Bitmap bmpQRcode = null;
     private MengColorBar mColorBar;
+
+    @Override
+    public String getTitle() {
+        return "Awesome二维码";
+    }
+
+    @Override
+    public String getVersionName() {
+        return "V1.0.0";
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

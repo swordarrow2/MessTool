@@ -27,7 +27,12 @@ public class DcdcBuckCalculateFragment extends BaseFragment implements View.OnCl
 
     @Override
     public String getTitle() {
-        return "DCDC Boost元件选型";
+        return "DCDC Buck元件选型";
+    }
+
+    @Override
+    public String getVersionName() {
+        return "V1.1.0";
     }
 
     @Override

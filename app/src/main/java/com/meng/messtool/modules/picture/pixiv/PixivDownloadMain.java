@@ -44,6 +44,16 @@ public class PixivDownloadMain extends BaseFragment {
     private PixivDatabase database;
 
     @Override
+    public String getTitle() {
+        return "pixiv下载器";
+    }
+
+    @Override
+    public String getVersionName() {
+        return "V1.0.0";
+    }
+
+    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         init(view);

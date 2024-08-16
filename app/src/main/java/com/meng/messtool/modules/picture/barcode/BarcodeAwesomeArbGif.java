@@ -39,6 +39,16 @@ public class BarcodeAwesomeArbGif extends BaseFragment implements View.OnClickLi
     private MengSeekBar mengSeekBar;
 
     @Override
+    public String getTitle() {
+        return "自选位置的动态Awesome二维码";
+    }
+
+    @Override
+    public String getVersionName() {
+        return "V1.0.0";
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.function_picture_barcode_gif_arb_qr_main, container, false);
     }

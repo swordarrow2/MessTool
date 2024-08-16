@@ -10,6 +10,16 @@ public class Welcome extends BaseFragment {
 
     private TextView textView;
 
+    @Override
+    public String getTitle() {
+        return MainActivity.DEFAULT_TITLE;
+    }
+
+    @Override
+    public String getVersionName() {
+        return "V0.0.1";
+    }
+
     public Welcome() {
     }
 

@@ -15,8 +15,6 @@ import com.meng.tools.MaterialDesign.*;
 import java.text.*;
 import java.util.*;
 
-import static com.meng.messtool.ApplicationHolder.*;
-
 public class TtsFragment extends BaseFragment implements OnClickListener, TextToSpeech.OnInitListener {
 
     /*
@@ -30,6 +28,16 @@ public class TtsFragment extends BaseFragment implements OnClickListener, TextTo
     private MengSeekBar msbSpeechRate;
     private MDEditText etContent;
     private TextToSpeech mTts;
+
+    @Override
+    public String getTitle() {
+        return "语音合成";
+    }
+
+    @Override
+    public String getVersionName() {
+        return "V1.0.1";
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -152,5 +160,4 @@ public class TtsFragment extends BaseFragment implements OnClickListener, TextTo
         super.onDestroy();
         mTts.shutdown();
     }
-
 }

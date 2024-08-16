@@ -31,6 +31,16 @@ public class BarcodeAwesomeGif extends BaseFragment {
     private MengColorBar mColorBar;
 
     @Override
+    public String getTitle() {
+        return "动态Awesome二维码";
+    }
+
+    @Override
+    public String getVersionName() {
+        return "V1.0.1";
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.function_picture_barcode_gif_qr_main, container, false);
     }

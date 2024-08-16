@@ -1,14 +1,11 @@
 package com.meng.messtool.modules.fpvtool;
 
-import android.view.*;
 import android.os.*;
-
-import com.meng.tools.*;
-import com.meng.messtool.*;
-
+import android.view.*;
 import android.widget.*;
 
-import static com.meng.messtool.ApplicationHolder.showToast;
+import com.meng.messtool.*;
+import com.meng.tools.*;
 
 public class FcConfig extends BaseFragment {
 
@@ -17,6 +14,16 @@ public class FcConfig extends BaseFragment {
      *@date 2024-07-15 23:34:36
      */
     public static final String TAG = "FcConfig";
+
+    @Override
+    public String getTitle() {
+        return "BetaFlight配置生成器";
+    }
+
+    @Override
+    public String getVersionName() {
+        return "V0.0.1";
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

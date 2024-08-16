@@ -5,6 +5,7 @@ import android.content.*;
 import android.graphics.*;
 import android.net.*;
 import android.os.*;
+import android.support.v7.app.AlertDialog;
 import android.view.*;
 import android.widget.*;
 import android.widget.AdapterView.*;
@@ -17,10 +18,6 @@ import com.meng.tools.app.*;
 import java.io.*;
 import java.util.*;
 
-import android.support.v7.app.AlertDialog;
-
-import static com.meng.messtool.ApplicationHolder.showToast;
-
 public class GIFCreator extends BaseFragment {
 
     public MDEditText mengEtFrameDelay;
@@ -31,6 +28,16 @@ public class GIFCreator extends BaseFragment {
 
     private int mPreviousVisibleItem;
     private boolean encoding = false;
+
+    @Override
+    public String getTitle() {
+        return "GIF合成器";
+    }
+
+    @Override
+    public String getVersionName() {
+        return "V1.0.0";
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

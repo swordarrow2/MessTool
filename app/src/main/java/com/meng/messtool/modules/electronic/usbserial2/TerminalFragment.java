@@ -1,46 +1,24 @@
 package com.meng.messtool.modules.electronic.usbserial2;
 
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.hardware.usb.UsbDevice;
-import android.hardware.usb.UsbDeviceConnection;
-import android.hardware.usb.UsbManager;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
+import android.app.*;
+import android.content.*;
+import android.hardware.usb.*;
+import android.os.*;
 import android.support.annotation.*;
-import android.support.v4.content.*;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.method.ScrollingMovementMethod;
-import android.text.style.ForegroundColorSpan;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ToggleButton;
+import android.text.*;
+import android.text.method.*;
+import android.text.style.*;
+import android.view.*;
+import android.widget.*;
 
-
-import com.hoho.android.usbserial.driver.UsbSerialDriver;
-import com.hoho.android.usbserial.driver.UsbSerialPort;
-import com.hoho.android.usbserial.driver.UsbSerialProber;
-import com.hoho.android.usbserial.util.HexDump;
-import com.hoho.android.usbserial.util.SerialInputOutputManager;
+import com.hoho.android.usbserial.driver.*;
+import com.hoho.android.usbserial.util.*;
 import com.meng.messtool.*;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.EnumSet;
+import java.io.*;
+import java.util.*;
 
-import static com.meng.messtool.Constant.INTENT_ACTION_GRANT_USB;
+import static com.meng.messtool.Constant.*;
 
 public class TerminalFragment extends BaseFragment implements SerialInputOutputManager.Listener {
 
@@ -61,6 +39,16 @@ public class TerminalFragment extends BaseFragment implements SerialInputOutputM
     private UsbSerialPort usbSerialPort;
     private UsbPermission usbPermission = UsbPermission.Unknown;
     private boolean connected = false;
+
+    @Override
+    public String getTitle() {
+        return "USB串口通信界面";
+    }
+
+    @Override
+    public String getVersionName() {
+        return "V0.0.1";
+    }
 
     public TerminalFragment() {
         broadcastReceiver = new BroadcastReceiver() {

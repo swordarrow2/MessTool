@@ -5,8 +5,8 @@ import android.view.*;
 import android.view.View.*;
 import android.widget.*;
 
-import com.meng.messtool.customview.*;
 import com.meng.messtool.*;
+import com.meng.messtool.customview.*;
 
 public abstract class BaseDcdcCalculate extends BaseFragment {
 
@@ -17,7 +17,7 @@ public abstract class BaseDcdcCalculate extends BaseFragment {
 
     @Override
     public final View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View inflate = inflater.inflate(R.layout.boost_calculate, null);
+        View inflate = inflater.inflate(R.layout.function_electronic_farad_calculate, null);
         ll = (LinearLayout) inflate.findViewById(R.id.boost_calculateLinearLayout);
         title = (TextView) inflate.findViewById(R.id.boost_calculateTextView);
         result = (TextView) inflate.findViewById(R.id.boost_calculateTextViewResult);
@@ -34,7 +34,7 @@ public abstract class BaseDcdcCalculate extends BaseFragment {
     public final void setTitle(CharSequence s) {
         title.setText(s);
     }
-    
+
     public final void setResult(CharSequence s) {
         result.setText(s);
     }
@@ -53,7 +53,7 @@ public abstract class BaseDcdcCalculate extends BaseFragment {
         tv.setText("\n" + hint);
         ll.addView(tv);
         ll.addView(et);
-        return et;                          
+        return et;
     }
 
 }

@@ -10,16 +10,24 @@ import android.widget.*;
 import com.meng.messtool.*;
 import com.meng.tools.*;
 
-import static com.meng.messtool.ApplicationHolder.*;
-
 public class WallpaperMain extends BaseFragment {
 
     private VideoWallpaper mVideoWallpaper = new VideoWallpaper();
     private Button select, silence, voice;
 
     @Override
+    public String getTitle() {
+        return "动态壁纸";
+    }
+
+    @Override
+    public String getVersionName() {
+        return "V1.0.0";
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.wallpaper_main, container, false);
+        return inflater.inflate(R.layout.function_video_wallpaper_main, container, false);
     }
 
     @Override

@@ -5,10 +5,6 @@ import android.view.*;
 import android.widget.*;
 
 import com.meng.messtool.*;
-import com.meng.messtool.modules.electronic.elementbox.*;
-import com.meng.tools.*;
-
-import java.util.*;
 
 public class DatabaseTestFragment extends BaseFragment {
     private TextView textView;
@@ -85,4 +81,13 @@ public class DatabaseTestFragment extends BaseFragment {
         });
     }
 
+    @Override
+    public String getVersionName() {
+        return "V0.0.0";
+    }
+
+    @Override
+    public String getTitle() {
+        return "测试";
+    }
 }

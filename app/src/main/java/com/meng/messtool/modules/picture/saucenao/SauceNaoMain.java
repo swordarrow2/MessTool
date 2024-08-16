@@ -19,14 +19,22 @@ import org.jsoup.*;
 
 import java.io.*;
 
-import static com.meng.messtool.ApplicationHolder.*;
-
 public class SauceNaoMain extends BaseFragment {
     private FloatingButton mFabSelect;
     private ListView listView;
     public String uploadBmpAbsPath;
     public boolean running = false;
     private AlertDialog alertDialog;
+
+    @Override
+    public String getTitle() {
+        return "SauceNao搜图";
+    }
+
+    @Override
+    public String getVersionName() {
+        return "V1.0.0";
+    }
 
     @Nullable
     @Override

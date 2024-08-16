@@ -20,8 +20,6 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
-import static com.meng.messtool.ApplicationHolder.*;
-
 public class VitsConnectFragment extends BaseFragment implements OnClickListener {
 
     /*
@@ -38,8 +36,13 @@ public class VitsConnectFragment extends BaseFragment implements OnClickListener
     private MengSeekBar sbNoicew;
 
     @Override
-    public String getName() {
+    public String getTitle() {
         return "vits语音合成";
+    }
+
+    @Override
+    public String getVersionName() {
+        return "V1.0.0";
     }
 
     @Override

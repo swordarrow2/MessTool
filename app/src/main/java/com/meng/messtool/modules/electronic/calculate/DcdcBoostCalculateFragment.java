@@ -9,8 +9,6 @@ import com.meng.tools.MaterialDesign.*;
 
 import java.util.*;
 
-import static com.meng.messtool.ApplicationHolder.*;
-
 public class DcdcBoostCalculateFragment extends BaseFragment implements View.OnClickListener {
 
     /*
@@ -30,6 +28,11 @@ public class DcdcBoostCalculateFragment extends BaseFragment implements View.OnC
     @Override
     public String getTitle() {
         return "DCDC Boost元件选型";
+    }
+
+    @Override
+    public String getVersionName() {
+        return "V1.1.0";
     }
 
     @Override

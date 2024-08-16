@@ -45,6 +45,16 @@ public class BarcodeAwesomeArb extends BaseFragment implements View.OnClickListe
     };
 
     @Override
+    public String getTitle() {
+        return "自选位置的Awesome二维码";
+    }
+
+    @Override
+    public String getVersionName() {
+        return "V1.0.1";
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.function_picture_barcode_arb_awesome_qr, container, false);
     }

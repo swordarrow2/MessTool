@@ -17,6 +17,16 @@ public class ChipInformationFragment extends BaseFragment {
     private ScrollView sv;
 
     @Override
+    public String getTitle() {
+        return "芯片信息";
+    }
+
+    @Override
+    public String getVersionName() {
+        return "V0.0.1";
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         lv = new TextView(getActivity());
         sv = new ScrollView(getActivity());
@@ -33,24 +43,24 @@ public class ChipInformationFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         final File fileJson = new File(getActivity().getExternalFilesDir("") + "/test_semiee_chip_information.json");
         if (!fileJson.exists()) {
-            new Thread(new Runnable(){
+            new Thread(new Runnable() {
 
-                    @Override
-                    public void run() {           
-                        FileTool.saveToFile(fileJson, GSON.toJson(SemieeApi.getChipInformation("8c16d867-cf5b-4442-8fc2-773f03fb02e8")).getBytes(StandardCharsets.UTF_8));
-                        getActivity().runOnUiThread(new Runnable(){
+                @Override
+                public void run() {
+                    FileTool.saveToFile(fileJson, GSON.toJson(SemieeApi.getChipInformation("8c16d867-cf5b-4442-8fc2-773f03fb02e8")).getBytes(StandardCharsets.UTF_8));
+                    getActivity().runOnUiThread(new Runnable() {
 
-                                @Override
-                                public void run() {
-                                    try {
-                                        init(fileJson);
-                                    } catch (IOException e) {
-                                        throw new RuntimeException(e);
-                                    }   
-                                }
-                            });
-                    }
-                }).start();
+                        @Override
+                        public void run() {
+                            try {
+                                init(fileJson);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    });
+                }
+            }).start();
         } else {
             try {
                 init(fileJson);
@@ -59,6 +69,7 @@ public class ChipInformationFragment extends BaseFragment {
             }
         }
     }
+
     private void init(File fileJson) throws IOException {
         String json = FileTool.readString(fileJson);
         ChipInformation result = GSON.fromJson(json, ChipInformation.class);

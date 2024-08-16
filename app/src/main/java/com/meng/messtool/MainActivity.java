@@ -1,6 +1,7 @@
 package com.meng.messtool;
 
 import android.*;
+import android.content.*;
 import android.content.pm.*;
 import android.content.res.*;
 import android.os.*;
@@ -13,6 +14,7 @@ import android.view.*;
 import android.widget.*;
 
 import com.meng.messtool.menu.*;
+import com.meng.messtool.modules.electronic.usbserial2.*;
 import com.meng.messtool.task.*;
 import com.meng.tools.*;
 import com.meng.tools.app.*;
@@ -56,7 +58,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         rightList = (ListView) findViewById(R.id.right_list);
-        mDrawerLayout.setDrawerListener(toggle);
+        mDrawerLayout.addDrawerListener(toggle);
         rightList.setAdapter(BackgroundTaskAdapter.getInstance());
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -71,24 +73,39 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         BackgroundTaskAdapter.getInstance().init(this);
         MFragmentManager.getInstance().init(this);
         MFragmentManager.getInstance().showFragment(Welcome.class);
-
+        ThreadPool.execute(new Runnable() {
+            @Override
+            public void run() {
+                final Intent intent = getIntent();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (intent != null) {
+                            if (intent.getAction().equals("android.hardware.usb.action.USB_DEVICE_ATTACHED")) {
+                                MFragmentManager.getInstance().showFragment(DevicesFragment.class);
+                                closeDrawer();
+                            }
+                        }
+                    }
+                });
+            }
+        });
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (SharedPreferenceHelper.isOpenDrawer() && hasFocus && !firstOpened) {
-            mDrawerLayout.openDrawer(GravityCompat.START);
+            openLeftDrawer();
             firstOpened = true;
         } else {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
+            closeDrawer();
         }
     }
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        mDrawerLayout.closeDrawer(GravityCompat.START);
-        mDrawerLayout.closeDrawer(GravityCompat.END);
+        closeDrawer();
 //        new TestTask()
 //                .setTitle("goto genshin")
 //                .setStatus("自动下载原神中").start();
@@ -118,18 +135,18 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (mDrawerLayout.isDrawerOpen(Gravity.END)) {
-                mDrawerLayout.closeDrawer(Gravity.END);
+                closeDrawer();
             } else if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
                 exit();
             } else {
-                mDrawerLayout.openDrawer(GravityCompat.START);
+                openLeftDrawer();
             }
             return true;
         } else if (keyCode == KeyEvent.KEYCODE_MENU) {
             if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-                mDrawerLayout.closeDrawer(GravityCompat.START);
+                closeDrawer();
             } else {
-                mDrawerLayout.openDrawer(GravityCompat.START);
+                openLeftDrawer();
             }
             return true;
         }

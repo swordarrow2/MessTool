@@ -4,7 +4,7 @@ import android.app.*;
 import android.content.*;
 import android.view.*;
 
-public class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment {
 
     /*
      *@author 清梦
@@ -12,13 +12,9 @@ public class BaseFragment extends Fragment {
      */
     public static final String TAG = "BaseFragment";
 
-    public String getName() {
-        return "";
-    }
+    public abstract String getVersionName();
 
-    public String getTitle() {
-        return MainActivity.DEFAULT_TITLE;
-    }
+    public abstract String getTitle();
 
     public void showToast(final String msgAbbr, final String msgOrigin) {
         BaseActivity activity = (BaseActivity) getActivity();

@@ -4,6 +4,8 @@ import java.io.*;
 import java.nio.charset.*;
 import java.security.*;
 
+import static com.meng.tools.HexString.*;
+
 public class MD5 {
 
     private static MD5 md5Instance = null;
@@ -49,15 +51,4 @@ public class MD5 {
         }
     }
 
-    private String toHexString(byte[] md) {
-        char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
-        int j = md.length;
-        char str[] = new char[j * 2];
-        for (int i = 0; i < j; i++) {
-            byte byte0 = md[i];
-            str[2 * i] = hexDigits[byte0 >>> 4 & 0xf];
-            str[i * 2 + 1] = hexDigits[byte0 & 0xf];
-        }
-        return new String(str);
-    }
 }

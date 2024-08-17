@@ -5,7 +5,7 @@ package com.meng.messtool.modules.electronic.usbserial2.msp;
  *@author  清梦
  *@date    2024/8/16 22:19
  */
-public enum MspV1Command {
+public enum MspV1Cmd {
 
     MSP_NULL((byte) 0),
 
@@ -226,7 +226,7 @@ public enum MspV1Command {
 
     private byte cmd;
 
-    MspV1Command(byte b) {
+    MspV1Cmd(byte b) {
         cmd = b;
     }
 

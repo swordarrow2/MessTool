@@ -61,13 +61,13 @@ public class MspV1DataPack {
         this.cmd = cmd;
     }
 
-    public MspV1Command getCmdEnum() {
-        for (MspV1Command c : MspV1Command.values()) {
+    public MspV1Cmd getCmdEnum() {
+        for (MspV1Cmd c : MspV1Cmd.values()) {
             if (c.getCmd() == cmd) {
                 return c;
             }
         }
-        return MspV1Command.MSP_NULL;
+        return MspV1Cmd.MSP_NULL;
     }
 
     public void setPayload(byte[] payload) {

@@ -5,6 +5,7 @@ import android.content.*;
 import android.hardware.usb.*;
 import android.os.*;
 import android.support.annotation.*;
+import android.util.*;
 import android.view.*;
 import android.widget.*;
 
@@ -109,6 +110,14 @@ public class MspFragment extends BaseFragment implements SerialInputOutputManage
             @Override
             public void onClick(View v) {
                 MspFragment.this.sendbytes(sendText.getText().toString());
+            }
+        });
+        lvReceiveText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Pair<String, String> pair = adptReceivedText.getItem(position);
+                MspV2DataPack v2DataPack = new MspV2DataPack();
+//todo
             }
         });
         lvReceiveText.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -292,15 +301,22 @@ public class MspFragment extends BaseFragment implements SerialInputOutputManage
             return;
         }
         String[] ss = str.split(" ");
-        byte[] data = new byte[ss.length - 1];
-        for (int i = 0; i < ss.length - 1; i++) {
-            data[i] = (byte) Integer.parseInt(ss[i + 1], 16);
+        byte[] data = new byte[ss.length - 2];
+        for (int i = 0; i < ss.length - 2; i++) {
+            data[i] = (byte) Integer.parseInt(ss[i + 2], 16);
         }
         try {
-            MspV1DataPack dataPack = new MspV1DataPack();
-            dataPack.setCmd((byte) Integer.parseInt(ss[0], 16));
-            dataPack.setPayload(data);
-            byte[] encode = dataPack.encode();
+//            MspV1DataPack dataPack = new MspV1DataPack();
+//            dataPack.setCmd((byte) Integer.parseInt(ss[0], 16));
+//            dataPack.setPayload(data);
+            byte cb1 = (byte) Integer.parseInt(ss[0], 16);
+            byte cb2 = (byte) Integer.parseInt(ss[1], 16);
+//            data = new byte[]{};
+            MspV2DataPack v2DataPack = new MspV2DataPack();
+            v2DataPack.setCmd((short) (cb1 | (cb2 << 8)));
+            v2DataPack.setFlag((byte) 0);
+            v2DataPack.setPayload(data);
+            byte[] encode = v2DataPack.encode(); //dataPack.encode();
             usbSerialPort.write(encode, WRITE_WAIT_MILLIS);
             adptReceivedText.add("send " + encode.length + " bytes: " + new String(encode, StandardCharsets.US_ASCII), HexDump.toHexString(encode));
             adptReceivedText.notifyDataSetChanged();
@@ -310,9 +326,10 @@ public class MspFragment extends BaseFragment implements SerialInputOutputManage
     }
 
     private void receive(byte[] data) {
-        MspV1DataPack dataPack = new MspV1DataPack();
-        boolean b = dataPack.tryDecode(data);
-        adptReceivedText.add("receive " + data.length + " bytes: " + new String(data, StandardCharsets.US_ASCII) + (b ? "  legal " : "  illegal "), HexDump.toHexString(data));
+//        MspV1DataPack dataPack = new MspV1DataPack();
+        MspV2DataPack v2DataPack = new MspV2DataPack();
+        boolean b = v2DataPack.tryDecode(data);// dataPack.tryDecode(data);
+        adptReceivedText.add("receive " + data.length + " bytes: " + new String(data, StandardCharsets.US_ASCII) + (b ? "  legal " : "  illegal "), v2DataPack.toString());// HexDump.toHexString(data));
         adptReceivedText.notifyDataSetChanged();
     }
 

@@ -30,12 +30,19 @@ public class CRC32A {
         }
     }
 
-    public long calculate(byte[] data) {
-        int start = 0xffffffff;
+    public int calculate(byte[] data) {
+        int crc = 0xffffffff;
         for (int i = 0; i < data.length; i++) {
-            start = (start << 8) ^ (table[((start >> 24) & 0xff) ^ data[i]]);
+            crc = (crc << 8) ^ (table[(crc >>> 24) ^ (data[i] & 0xff)]);
         }
-        start = ~start;
-        return (((start & 0xff) << 24) + ((start & 0xff00) << 8) + ((start & 0xff0000) >>> 8) + ((start & 0xff000000) >>> 24)) & 0xFFFFFFFFL;
+        crc = ~crc;
+        byte[] result = new byte[4];
+
+        result[0] = (byte) ((crc >>> 0) & 0xff);
+        result[1] = (byte) ((crc >>> 8) & 0xff);
+        result[2] = (byte) ((crc >>> 16) & 0xff);
+        result[3] = (byte) ((crc >>> 24) & 0xff);
+
+        return result[0] << 24 | result[1] << 16 | result[2] << 8 | result[3] << 0;
     }
 }

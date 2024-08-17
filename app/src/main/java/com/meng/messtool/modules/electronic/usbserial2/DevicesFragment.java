@@ -10,6 +10,7 @@ import android.widget.*;
 
 import com.hoho.android.usbserial.driver.*;
 import com.meng.messtool.*;
+import com.meng.messtool.modules.picture.barcode.*;
 
 import java.util.*;
 
@@ -55,19 +56,37 @@ public class DevicesFragment extends BaseFragment {
                 if (item.driver == null) {
                     Toast.makeText(getActivity(), "no driver", Toast.LENGTH_SHORT).show();
                 } else {
-                    Bundle args = new Bundle();
+                    final Bundle args = new Bundle();
                     args.putInt("device", item.device.getDeviceId());
                     args.putInt("port", item.port);
                     args.putInt("baud", baudRate);
                     args.putBoolean("withIoManager", withIoManager);
-                    TerminalFragment fragment = new TerminalFragment();
-                    fragment.setArguments(args);
-                    MFragmentManager.getInstance().registFragment(fragment);
-                    MFragmentManager.getInstance().showFragment(TerminalFragment.class);
 
-//                    Fragment fragment = new TerminalFragment();
-//                    fragment.setArguments(args);
-//                    getFragmentManager().beginTransaction().add(R.id.fragment, fragment, "terminal").addToBackStack(null).commit();
+
+                    ListView lv = new ListView(ApplicationHolder.getActivity());
+                    final AlertDialog ad = new AlertDialog.Builder(ApplicationHolder.getActivity()).setTitle("选择操作").setView(lv).show();
+                    lv.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, new String[]{"普通串口通信", "MSP协议串口通信"}));
+                    lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                        @Override
+                        public void onItemClick(AdapterView<?> p1, View p2, int p3, long p4) {
+                            ad.dismiss();
+                            switch (p3) {
+                                case 0:
+                                    TerminalFragment terminalFragment = new TerminalFragment();
+                                    terminalFragment.setArguments(args);
+                                    MFragmentManager.getInstance().registFragment(terminalFragment);
+                                    MFragmentManager.getInstance().showFragment(TerminalFragment.class);
+                                    break;
+                                case 1:
+                                    MspFragment mspFragment = new MspFragment();
+                                    mspFragment.setArguments(args);
+                                    MFragmentManager.getInstance().registFragment(mspFragment);
+                                    MFragmentManager.getInstance().showFragment(MspFragment.class);
+                                    break;
+                            }
+                        }
+                    });
                 }
             }
         });

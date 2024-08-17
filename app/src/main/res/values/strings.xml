@@ -60,7 +60,7 @@
     <string name="at_slot">所在位置:</string>
     <string name="cancel">取消</string>
 
-    <string name="app_title">USB Serial For Android Example</string>
+    <string name="app_title">USB Serial For Android</string>
     <string name="devices">USB Devices</string>
     <string name="copy_to_clipboard">复制到剪贴板</string>
     <string name="format">格式</string>

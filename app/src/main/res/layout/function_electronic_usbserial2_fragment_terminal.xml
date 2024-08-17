@@ -92,15 +92,6 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/bottom_ll"
         android:layout_below="@id/top_line" />
-    <!--<TextView-->
-    <!--android:id="@+id/receive_text"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="0dp"-->
-    <!--android:freezesText="true"-->
-    <!--android:gravity="bottom"-->
-    <!--android:scrollbars="vertical"-->
-    <!--android:textAppearance="@style/TextAppearance.AppCompat.Medium"-->
-    <!--android:typeface="monospace" />-->
 
     <LinearLayout
         android:id="@+id/bottom_ll"

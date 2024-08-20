@@ -10,14 +10,15 @@ public enum FunctionGroup {
      */
 
     GROUP_DEVELOPING("正在开发"),
-
+    //    GROUP_FPV("FPV工具"),
     GROUP_BOX_ARRAY("物品存放盒"),
     GROUP_PICTURE("图片处理"),
     GROUP_VIDEO("视频"),
     GROUP_AUDIO("声音"),
     GROUP_ELECTRONIC("电子开发"),
-    GROUP_SYSTEM("系统"),
-    GROUP_DEFAULT("默认");
+    GROUP_DEFAULT("默认"),
+    GROUP_DEPRECATED("已弃用"),
+    GROUP_SYSTEM("系统");
 
     public static final String TAG = "FunctionGroup";
 

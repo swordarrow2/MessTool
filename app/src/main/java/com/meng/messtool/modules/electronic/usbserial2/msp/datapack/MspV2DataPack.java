@@ -25,17 +25,17 @@ public class MspV2DataPack {
 
     private int payloadPointer = 0;
 
-    private byte crc8_dvb_s2(byte crc, byte a) {
-        crc ^= a;
-        for (int ii = 0; ii < 8; ++ii) {
-            if ((crc & 0x80) != 0) {
-                crc = (byte) ((crc << 1) ^ 0xD5);
-            } else {
-                crc = (byte) (crc << 1);
-            }
-        }
-        return crc;
-    }
+//    private byte crc8_dvb_s2(byte crc, byte a) {
+//        crc ^= a;
+//        for (int ii = 0; ii < 8; ++ii) {
+//            if ((crc & 0x80) != 0) {
+//                crc = (byte) ((crc << 1) ^ 0xD5);
+//            } else {
+//                crc = (byte) (crc << 1);
+//            }
+//        }
+//        return crc;
+//    }
 
     public String tryDecode(final byte[] data) {
         if (data[0] == '$' && data[1] == 'X' && data[2] == '>') {
@@ -51,7 +51,8 @@ public class MspV2DataPack {
             payload = new byte[payloadLength & 0xFFFF];
 
             byte csm = 0;
-            csm = crc8_dvb_s2(csm, (byte) 0);
+           CRC8_DVB_S2 crc8_dvb_s2= CRC8_DVB_S2.getInstance();
+            csm = crc8_dvb_s2.add(csm, (byte) 0);
             csm = crc8_dvb_s2(csm, (byte) cmd);
             csm = crc8_dvb_s2(csm, (byte) (cmd >>> 8));
             csm = crc8_dvb_s2(csm, (byte) payloadLength);

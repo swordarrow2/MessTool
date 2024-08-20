@@ -27,11 +27,14 @@ public enum FunctionName {
      *@author 清梦
      *@date 2024-06-26 09:48:59
      */
-    FUNCTION_FC_CONFIG("fc config", FunctionGroup.GROUP_DEVELOPING, FcConfig.class),
     FUNCTION_TEST_DATABASE("db test", FunctionGroup.GROUP_DEVELOPING, DatabaseTestFragment.class),
-    FUNCTION_PID_SIMULATOR("pid simulator", FunctionGroup.GROUP_DEVELOPING, PIDSimulator.class),
 //    FUNCTION_LIST_MEDICINE("查看药品", FunctionGroup.GROUP_DEVELOPING, ShowAllMedicineFragment.class),
 
+//    FUNCTION_FPV_MSPV1("msp v1",FunctionGroup.GROUP_FPV,MspV1TestFragment.class),
+//    FUNCTION_FPV_MSPV2("msp v2",FunctionGroup.GROUP_FPV,MspV2TestFragment.class),
+//    FUNCTION_FPV_MSP_SENSOR("msp sensor",FunctionGroup.GROUP_FPV,MspV2TestFragment.class),
+
+/********************PICTURE*********************/
     FUNCTION_PICTURE_BARCODE("条码", FunctionGroup.GROUP_PICTURE, new Runnable() {
 
         @Override
@@ -78,12 +81,23 @@ public enum FunctionName {
     FUNCTION_PICTURE_PIXIV_DOWNLOAD("PIXIV下载", FunctionGroup.GROUP_PICTURE, PixivDownloadMain.class),
     FUNCTION_PICTURE_SAUCENAO("SauceNAO搜图", FunctionGroup.GROUP_PICTURE, SauceNaoMain.class),
 
+    /********************VIDEO*********************/
+
     FUNCTION_VIDEO_FORMAT_CONVERT("视频格式转换", FunctionGroup.GROUP_DEVELOPING, FfmpegFragment.class),
     FUNCTION_VIDEO_RTMP_PUSH("RTMP推流", FunctionGroup.GROUP_VIDEO, RtmpFragment.class),
     FUNCTION_VIDEO_WALLPAPER("视频动态壁纸", FunctionGroup.GROUP_VIDEO, WallpaperMain.class),
 
+    /********************FPV*********************/
+
+    FUNCTION_FC_CONFIG("fc config", FunctionGroup.GROUP_DEVELOPING, FcConfig.class),
+    FUNCTION_PID_SIMULATOR("pid simulator", FunctionGroup.GROUP_DEVELOPING, PIDSimulator.class),
+
+    /********************TTS*********************/
+
     FUNCTION_AUDIO_ANDROID_TTS("安卓语音合成", FunctionGroup.GROUP_AUDIO, TtsFragment.class),
     FUNCTION_AUDIO_VITS_TTS("VITS语音合成", FunctionGroup.GROUP_AUDIO, VitsConnectFragment.class),
+
+    /********************ELECTRONIC*********************/
 
     FUNCTION_ELEMENT_BOX_ARRAY("元件盒", FunctionGroup.GROUP_ELECTRONIC, ElementManagerFragment.class),
     FUNCTION_ELEMENT_STM32_CHOOSE("STM32选型", FunctionGroup.GROUP_ELECTRONIC, Stm32choose.class),
@@ -92,8 +106,15 @@ public enum FunctionName {
     FUNCTION_ELECTRONIC_BOOST_PART_CHOOSE("boost元件选型", FunctionGroup.GROUP_ELECTRONIC, DcdcBoostCalculateFragment.class),
     FUNCTION_ELECTRONIC_BUCK_PART_CHOOSE("buck元件选型", FunctionGroup.GROUP_ELECTRONIC, DcdcBuckCalculateFragment.class),
     FUNCTION_ELECTRONIC_FARAD_TEST("法拉电容估算", FunctionGroup.GROUP_ELECTRONIC, FaradCapacitanceCalculate.class),
-    FUNCTION_ELECTRONIC_SERIAL_PORT("串行端口", FunctionGroup.GROUP_DEVELOPING, UsbSerialFragment.class),
     FUNCTION_ELECTRONIC_SERIAL_PORT2("串行端口2", FunctionGroup.GROUP_DEVELOPING, DevicesFragment.class),
+
+    /********************DEPRCATED*********************/
+
+    FUNCTION_ELECTRONIC_SERIAL_PORT("串行端口", FunctionGroup.GROUP_DEPRECATED, UsbSerialFragment.class),
+
+    /********************SYSTEM*********************/
+
+
     FUNCTION_SYSTEM_SETTINGS("设置", FunctionGroup.GROUP_SYSTEM, new Runnable() {
 
         @Override

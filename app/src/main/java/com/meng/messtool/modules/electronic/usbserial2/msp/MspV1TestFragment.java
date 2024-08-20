@@ -1,4 +1,4 @@
-package com.meng.messtool.modules.electronic.usbserial2;
+package com.meng.messtool.tester;
 
 import android.app.*;
 import android.content.*;
@@ -12,6 +12,7 @@ import android.widget.*;
 import com.hoho.android.usbserial.driver.*;
 import com.hoho.android.usbserial.util.*;
 import com.meng.messtool.*;
+import com.meng.messtool.modules.electronic.usbserial2.*;
 import com.meng.messtool.modules.electronic.usbserial2.msp.*;
 import com.meng.tools.*;
 
@@ -20,7 +21,7 @@ import java.nio.charset.*;
 
 import static com.meng.messtool.Constant.*;
 
-public class MspFragment extends BaseFragment implements SerialInputOutputManager.Listener {
+public class MspTestFragment extends BaseFragment implements SerialInputOutputManager.Listener {
 
     private enum UsbPermission {Unknown, Requested, Granted, Denied}
 
@@ -47,7 +48,7 @@ public class MspFragment extends BaseFragment implements SerialInputOutputManage
         return "V0.0.1";
     }
 
-    public MspFragment() {
+    public MspTestFragment() {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -109,7 +110,7 @@ public class MspFragment extends BaseFragment implements SerialInputOutputManage
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MspFragment.this.sendbytes(sendText.getText().toString());
+                MspTestFragment.this.sendbytes(sendText.getText().toString());
             }
         });
         lvReceiveText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -155,7 +156,7 @@ public class MspFragment extends BaseFragment implements SerialInputOutputManage
             mainLooper.post(new Runnable() {
                 @Override
                 public void run() {
-                    MspFragment.this.connect();
+                    MspTestFragment.this.connect();
                 }
             });
     }
@@ -201,7 +202,7 @@ public class MspFragment extends BaseFragment implements SerialInputOutputManage
         mainLooper.post(new Runnable() {
             @Override
             public void run() {
-                MspFragment.this.receive(data);
+                MspTestFragment.this.receive(data);
             }
         });
     }
@@ -211,8 +212,8 @@ public class MspFragment extends BaseFragment implements SerialInputOutputManage
         mainLooper.post(new Runnable() {
             @Override
             public void run() {
-                MspFragment.this.status("connection lost: " + e.getMessage());
-                MspFragment.this.disconnect();
+                MspTestFragment.this.status("connection lost: " + e.getMessage());
+                MspTestFragment.this.disconnect();
             }
         });
     }

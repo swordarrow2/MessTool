@@ -64,6 +64,12 @@
                 android:summaryOn="是"
                 android:title="显示储物盒相关功能" />
             <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="GROUP_DEPRECATED"
+                android:summaryOff="否"
+                android:summaryOn="是"
+                android:title="显示弃用的功能" />
+            <CheckBoxPreference
                 android:defaultValue="false"
                 android:key="GROUP_DEVELOPING"
                 android:summaryOff="否"

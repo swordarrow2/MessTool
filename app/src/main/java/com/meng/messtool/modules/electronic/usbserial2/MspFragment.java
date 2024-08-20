@@ -328,8 +328,8 @@ public class MspFragment extends BaseFragment implements SerialInputOutputManage
     private void receive(byte[] data) {
 //        MspV1DataPack dataPack = new MspV1DataPack();
         MspV2DataPack v2DataPack = new MspV2DataPack();
-        boolean b = v2DataPack.tryDecode(data);// dataPack.tryDecode(data);
-        adptReceivedText.add("receive " + data.length + " bytes: " + new String(data, StandardCharsets.US_ASCII) + (b ? "  legal " : "  illegal "), v2DataPack.toString());// HexDump.toHexString(data));
+        // boolean b = ;// dataPack.tryDecode(data);
+        adptReceivedText.add("receive " + data.length + " bytes: " + new String(data, StandardCharsets.US_ASCII) + (v2DataPack.tryDecode(data)), HexString.toHexStringWithSpace(data));// HexDump.toHexString(data));
         adptReceivedText.notifyDataSetChanged();
     }
 

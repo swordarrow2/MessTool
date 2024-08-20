@@ -1,7 +1,12 @@
 package com.meng.messtool.modules.electronic.usbserial2.msp;
 
+import android.util.*;
+
+import com.meng.messtool.*;
 import com.meng.tools.*;
 import com.meng.tools.hash.*;
+
+import java.util.*;
 
 /*
  *package  com.meng.messtool.modules.electronic.usbserial2.msp
@@ -32,7 +37,7 @@ public class MspV2DataPack {
         return crc;
     }
 
-    public boolean tryDecode(byte[] data) {
+    public String tryDecode(final byte[] data) {
         if (data[0] == '$' && data[1] == 'X' && data[2] == '>') {
             flag = data[3];
             byte cmd1 = data[4];
@@ -59,9 +64,27 @@ public class MspV2DataPack {
                 csm = crc8_dvb_s2(csm, b);
             }
             checksum = csm;
-            return data[pointer] == csm;
+            try {
+                final byte c1 = csm;
+                final int p1 = pointer;
+                ApplicationHolder.getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Debuger.addLog(getClass().getSimpleName(), String.format(Locale.CHINA, "%d not equals %d", data[p1], c1));
+                            ApplicationHolder.getActivity().setTitle(String.format(Locale.CHINA, "%d not equals %d", data[p1], c1));
+                        } catch (Exception e) {
+                        }
+                    }
+                });
+            } catch (Exception e) {
+            }
+            if (data[pointer] == csm) {
+                return "llegal";
+            }
+            return "illegal" + String.format(Locale.CHINA, "%d not equals %d", data[pointer], csm);
         }
-        return false;
+        return "not";
     }
 
 

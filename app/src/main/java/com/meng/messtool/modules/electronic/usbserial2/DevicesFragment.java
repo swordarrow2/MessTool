@@ -10,7 +10,7 @@ import android.widget.*;
 
 import com.hoho.android.usbserial.driver.*;
 import com.meng.messtool.*;
-import com.meng.messtool.modules.picture.barcode.*;
+import com.meng.messtool.modules.electronic.usbserial2.msp.*;
 
 import java.util.*;
 
@@ -18,7 +18,7 @@ public class DevicesFragment extends BaseFragment {
 
     private final ArrayList<ListItem> listItems = new ArrayList<>();
     private ArrayAdapter<ListItem> listAdapter;
-    private int baudRate = 19200;
+    private int baudRate = 115200;
     private boolean withIoManager = true;
     private ListView listView;
     private PendingIntent mPrtPermissionIntent;
@@ -65,7 +65,11 @@ public class DevicesFragment extends BaseFragment {
 
                     ListView lv = new ListView(ApplicationHolder.getActivity());
                     final AlertDialog ad = new AlertDialog.Builder(ApplicationHolder.getActivity()).setTitle("选择操作").setView(lv).show();
-                    lv.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, new String[]{"普通串口通信", "MSP协议串口通信"}));
+                    lv.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, new String[]{
+                            "普通串口通信",
+                            "MSP V1协议串口通信",
+                            "MSP V2协议串口通信",
+                            "MSP虚拟传感器"}));
                     lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                         @Override
@@ -79,10 +83,22 @@ public class DevicesFragment extends BaseFragment {
                                     MFragmentManager.getInstance().showFragment(TerminalFragment.class);
                                     break;
                                 case 1:
-                                    MspFragment mspFragment = new MspFragment();
-                                    mspFragment.setArguments(args);
-                                    MFragmentManager.getInstance().registFragment(mspFragment);
-                                    MFragmentManager.getInstance().showFragment(MspFragment.class);
+                                    MspV1TestFragment v1TestFragment = new MspV1TestFragment();
+                                    v1TestFragment.setArguments(args);
+                                    MFragmentManager.getInstance().registFragment(v1TestFragment);
+                                    MFragmentManager.getInstance().showFragment(MspV1TestFragment.class);
+                                    break;
+                                case 2:
+                                    MspV2TestFragment v2TestFragment = new MspV2TestFragment();
+                                    v2TestFragment.setArguments(args);
+                                    MFragmentManager.getInstance().registFragment(v2TestFragment);
+                                    MFragmentManager.getInstance().showFragment(MspV2TestFragment.class);
+                                    break;
+                                case 3:
+                                    MspSensorTestFragment sensorTestFragment = new MspSensorTestFragment();
+                                    sensorTestFragment.setArguments(args);
+                                    MFragmentManager.getInstance().registFragment(sensorTestFragment);
+                                    MFragmentManager.getInstance().showFragment(MspSensorTestFragment.class);
                                     break;
                             }
                         }

@@ -34,7 +34,7 @@ public enum FunctionName {
 //    FUNCTION_FPV_MSPV2("msp v2",FunctionGroup.GROUP_FPV,MspV2TestFragment.class),
 //    FUNCTION_FPV_MSP_SENSOR("msp sensor",FunctionGroup.GROUP_FPV,MspV2TestFragment.class),
 
-/********************PICTURE*********************/
+    /********************PICTURE*********************/
     FUNCTION_PICTURE_BARCODE("条码", FunctionGroup.GROUP_PICTURE, new Runnable() {
 
         @Override
@@ -95,7 +95,6 @@ public enum FunctionName {
     /********************TTS*********************/
 
     FUNCTION_AUDIO_ANDROID_TTS("安卓语音合成", FunctionGroup.GROUP_AUDIO, TtsFragment.class),
-    FUNCTION_AUDIO_VITS_TTS("VITS语音合成", FunctionGroup.GROUP_AUDIO, VitsConnectFragment.class),
 
     /********************ELECTRONIC*********************/
 
@@ -111,6 +110,7 @@ public enum FunctionName {
     /********************DEPRCATED*********************/
 
     FUNCTION_ELECTRONIC_SERIAL_PORT("串行端口", FunctionGroup.GROUP_DEPRECATED, UsbSerialFragment.class),
+    FUNCTION_AUDIO_VITS_TTS("VITS语音合成", FunctionGroup.GROUP_DEPRECATED, VitsConnectFragment.class),
 
     /********************SYSTEM*********************/
 

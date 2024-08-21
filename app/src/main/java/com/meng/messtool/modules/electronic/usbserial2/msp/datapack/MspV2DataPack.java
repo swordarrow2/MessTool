@@ -1,8 +1,5 @@
-package com.meng.messtool.modules.electronic.usbserial2.msp;
+package com.meng.messtool.modules.electronic.usbserial2.msp.datapack;
 
-import android.util.*;
-
-import com.meng.messtool.*;
 import com.meng.tools.*;
 import com.meng.tools.hash.*;
 
@@ -25,18 +22,6 @@ public class MspV2DataPack {
 
     private int payloadPointer = 0;
 
-//    private byte crc8_dvb_s2(byte crc, byte a) {
-//        crc ^= a;
-//        for (int ii = 0; ii < 8; ++ii) {
-//            if ((crc & 0x80) != 0) {
-//                crc = (byte) ((crc << 1) ^ 0xD5);
-//            } else {
-//                crc = (byte) (crc << 1);
-//            }
-//        }
-//        return crc;
-//    }
-
     public String tryDecode(final byte[] data) {
         if (data[0] == '$' && data[1] == 'X' && data[2] == '>') {
             flag = data[3];
@@ -50,44 +35,51 @@ public class MspV2DataPack {
 
             payload = new byte[payloadLength & 0xFFFF];
 
-            byte csm = 0;
-           CRC8_DVB_S2 crc8_dvb_s2= CRC8_DVB_S2.getInstance();
-            csm = crc8_dvb_s2.add(csm, (byte) 0);
-            csm = crc8_dvb_s2(csm, (byte) cmd);
-            csm = crc8_dvb_s2(csm, (byte) (cmd >>> 8));
-            csm = crc8_dvb_s2(csm, (byte) payloadLength);
-            csm = crc8_dvb_s2(csm, (byte) (payloadLength >>> 8));
+            CRC8_DVB_S2 hash = CRC8_DVB_S2.getInstance();
+            hash.addHash((byte) 0);
+            hash.addHash((byte) cmd);
+            hash.addHash((byte) (cmd >>> 8));
+            hash.addHash((byte) payloadLength);
+            hash.addHash((byte) (payloadLength >>> 8));
 
             int pointer = 8;
             for (; pointer < data.length - 1; pointer++) {
                 byte b = data[pointer];
                 payload[pointer - 8] = b;
-                csm = crc8_dvb_s2(csm, b);
+                hash.addHash(b);
             }
-            checksum = csm;
-            try {
-                final byte c1 = csm;
-                final int p1 = pointer;
-                ApplicationHolder.getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Debuger.addLog(getClass().getSimpleName(), String.format(Locale.CHINA, "%d not equals %d", data[p1], c1));
-                            ApplicationHolder.getActivity().setTitle(String.format(Locale.CHINA, "%d not equals %d", data[p1], c1));
-                        } catch (Exception e) {
-                        }
-                    }
-                });
-            } catch (Exception e) {
-            }
-            if (data[pointer] == csm) {
+            checksum = hash.getCrc();
+            if (data[pointer] == checksum) {
                 return "llegal";
             }
-            return "illegal" + String.format(Locale.CHINA, "%d not equals %d", data[pointer], csm);
+            return "illegal" + String.format(Locale.CHINA, "%d not equals %d", data[pointer], hash.getCrc());
         }
         return "not";
     }
 
+
+    public static byte[] encode(MspV2Cmd cmd, byte[] payload) {
+        CRC8_DVB_S2 hash = CRC8_DVB_S2.getInstance();
+
+        byte[] result = new byte[payload.length + 9];
+        result[0] = (byte) '$';
+        result[1] = (byte) 'X';
+        result[2] = (byte) '<';
+
+        hash.addHash(result[3] = (byte) 0);
+        hash.addHash(result[4] = (byte) cmd.getCmd());
+        hash.addHash(result[5] = (byte) (cmd.getCmd() >>> 8));
+        hash.addHash(result[6] = (byte) payload.length);
+        hash.addHash(result[7] = (byte) (payload.length >>> 8));
+
+        int pointer = 8;
+        for (; pointer < payload.length + 8; pointer++) {
+            hash.addHash(result[pointer] = payload[pointer - 8]);
+        }
+        result[pointer] = hash.getCrc();
+
+        return result;
+    }
 
     public byte[] encode() {
         byte[] result = new byte[payload.length + 9];
@@ -100,21 +92,21 @@ public class MspV2DataPack {
         result[6] = (byte) payloadLength;
         result[7] = (byte) (payloadLength >>> 8);
 
+        CRC8_DVB_S2 hash = CRC8_DVB_S2.getInstance();
 
-        byte csm = 0;
-        csm = crc8_dvb_s2(csm, (byte) 0);
-        csm = crc8_dvb_s2(csm, (byte) cmd);
-        csm = crc8_dvb_s2(csm, (byte) (cmd >>> 8));
-        csm = crc8_dvb_s2(csm, (byte) payloadLength);
-        csm = crc8_dvb_s2(csm, (byte) (payloadLength >>> 8));
+        hash.addHash((byte) 0);
+        hash.addHash((byte) cmd);
+        hash.addHash((byte) (cmd >>> 8));
+        hash.addHash((byte) payloadLength);
+        hash.addHash((byte) (payloadLength >>> 8));
 
         int pointer = 8;
         for (; pointer < payload.length + 8; pointer++) {
             byte b = payload[pointer - 8];
             result[pointer] = b;
-            csm = crc8_dvb_s2(csm, b);
+            hash.addHash(b);
         }
-        result[pointer] = csm;
+        result[pointer] = hash.getCrc();
 
         return result;
     }

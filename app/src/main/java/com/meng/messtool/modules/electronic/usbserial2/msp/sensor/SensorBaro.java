@@ -42,6 +42,34 @@ public class SensorBaro {
     public void setTemp_int16(int temp_int16) {
         this.temp_int16 = temp_int16 & 0xFFFF;
     }
+
+    public byte[] encode() {
+        byte[] result = new byte[15];
+
+        result[0] = (byte) instance_uint8;
+
+        result[1] = (byte) (timeMs_uint32 >>> 0);
+        result[2] = (byte) (timeMs_uint32 >>> 8);
+        result[3] = (byte) (timeMs_uint32 >>> 16);
+        result[4] = (byte) (timeMs_uint32 >>> 24);
+        result[5] = (byte) (timeMs_uint32 >>> 32);
+        result[6] = (byte) (timeMs_uint32 >>> 40);
+        result[7] = (byte) (timeMs_uint32 >>> 48);
+        result[8] = (byte) (timeMs_uint32 >>> 56);
+
+        int fbyte = Float.floatToRawIntBits(pressurePa_float);
+
+        result[9] = (byte) (fbyte >>> 0);
+        result[10] = (byte) (fbyte >>> 8);
+        result[11] = (byte) (fbyte >>> 16);
+        result[12] = (byte) (fbyte >>> 24);
+
+
+        result[13] = (byte) (temp_int16 >>> 0);
+        result[14] = (byte) (temp_int16 >>> 8);
+        return result;
+    }
+
 //    uint8_t instance;
 //    uint32_t timeMs;
 //    float pressurePa;

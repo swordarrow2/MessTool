@@ -24,6 +24,18 @@ public class SensorRangefinder {
     public void setDistanceMm_int32(int distanceMm_int32) {
         this.distanceMm_int32 = distanceMm_int32;
     }
+
+    public byte[] encode() {
+        byte[] result = new byte[5];
+
+        result[0] = (byte) quality_uint8;
+
+        result[1] = (byte) (distanceMm_int32 >>> 0);
+        result[2] = (byte) (distanceMm_int32 >>> 8);
+        result[3] = (byte) (distanceMm_int32 >>> 16);
+        result[4] = (byte) (distanceMm_int32 >>> 24);
+        return result;
+    }
 //    uint8_t quality;    // [0;255]
 //    int32_t distanceMm; // Negative value for out of range
 }

@@ -1,6 +1,7 @@
 package com.meng.messtool.customview;
 
 import android.content.*;
+import android.content.res.*;
 import android.util.*;
 import android.view.*;
 import android.widget.*;
@@ -25,11 +26,24 @@ public class MengSeekBar extends LinearLayout {
         LayoutInflater.from(context).inflate(R.layout.meng_seekbar_view, this);
         textView = (TextView) findViewById(R.id.progress_view_tv);
         seekBar = (SeekBar) findViewById(R.id.progress_view_sb);
-//        if (attributeSet != null) {
-//            MainActivity.instance.showToast(attributeSet.toString());
-//            textView.setText(attributeSet.getAttributeValue("android", "text"));
-//            seekBar.setProgress(attributeSet.getAttributeIntValue("android", "progress", 0));
-//        }
+
+        if (attributeSet != null) {
+            TypedArray a = context.getTheme().obtainStyledAttributes(
+                    attributeSet,
+                    R.styleable.MengSeekBar,
+                    0, 0);
+            try {
+                textView.setText(a.getString(R.styleable.MengSeekBar_title));
+                seekBar.setProgress(a.getInteger(R.styleable.MengSeekBar_progress, 0));
+                seekBar.setMax(a.getInteger(R.styleable.MengSeekBar_max_progress, 0));
+            } finally {
+                a.recycle();
+            }
+//
+//            textView.setText(attributeSet.getAttributeValue("MengSeekBar", "title"));
+//            seekBar.setProgress(attributeSet.getAttributeIntValue("MengSeekBar", "progress", 0));
+//            seekBar.setMax(attributeSet.getAttributeIntValue("MengSeekBar", "max_progress", 0));
+        }
     }
 
     public void setMax(int max) {

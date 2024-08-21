@@ -102,6 +102,7 @@
         <attr name="menu_fab_show_animation" format="reference" />
         <attr name="menu_fab_hide_animation" format="reference" />
     </declare-styleable>
+
     <declare-styleable name="MDEdittext">
         <attr name="errorEnable" format="boolean" />
         <attr name="hint" format="string" />
@@ -109,9 +110,16 @@
         <attr name="textColor" format="color" />
         <attr name="textSize" format="dimension" />
     </declare-styleable>
+
     <declare-styleable name="ButtonBarContainerTheme">
         <attr name="metaButtonBarStyle" format="reference" />
         <attr name="metaButtonBarButtonStyle" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="MengSeekBar">
+        <attr name="title" format="string" />
+        <attr name="max_progress" format="integer" />
+        <attr name="progress" format="integer" />
     </declare-styleable>
 
 </resources>

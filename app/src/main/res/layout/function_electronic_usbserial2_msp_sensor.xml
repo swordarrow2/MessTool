@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:sjf="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="range finder" />
+
+            <TextView
+                android:id="@+id/function_electronic_usbserial2_msp_sensor_range_finder_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <com.meng.messtool.customview.MengSeekBar
+                android:id="@+id/function_electronic_usbserial2_msp_sensor_range_finder_quality"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                sjf:max_progress="255"
+                sjf:progress="127"
+                sjf:title="quality" />
+
+            <com.meng.messtool.customview.MengSeekBar
+                android:id="@+id/function_electronic_usbserial2_msp_sensor_range_finder_distanceMm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                sjf:max_progress="9961"
+                sjf:progress="0"
+                sjf:title="distanceMm" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/color_c1" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="opflow" />
+
+            <TextView
+                android:id="@+id/function_electronic_usbserial2_msp_sensor_opflow_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <com.meng.messtool.customview.MengSeekBar
+                android:id="@+id/function_electronic_usbserial2_msp_sensor_opflow_quality"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                sjf:max_progress="255"
+                sjf:progress="127"
+                sjf:title="quality" />
+
+            <com.meng.messtool.customview.MengSeekBar
+                android:id="@+id/function_electronic_usbserial2_msp_sensor_opflow_motionX"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                sjf:max_progress="9961"
+                sjf:progress="0"
+                sjf:title="motionX" />
+
+            <com.meng.messtool.customview.MengSeekBar
+                android:id="@+id/function_electronic_usbserial2_msp_sensor_opflow_motionY"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                sjf:max_progress="9961"
+                sjf:progress="0"
+                sjf:title="motionY" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/color_c1" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="baro" />
+
+            <TextView
+                android:id="@+id/function_electronic_usbserial2_msp_sensor_baro_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <com.meng.messtool.customview.MengSeekBar
+                android:id="@+id/function_electronic_usbserial2_msp_sensor_baro_timeMs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                sjf:max_progress="114514"
+                sjf:progress="127"
+                sjf:title="timeMs" />
+
+            <com.meng.messtool.customview.MengSeekBar
+                android:id="@+id/function_electronic_usbserial2_msp_sensor_baro_pressurePa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                sjf:max_progress="114514"
+                sjf:progress="0"
+                sjf:title="pressurePa" />
+
+            <com.meng.messtool.customview.MengSeekBar
+                android:id="@+id/function_electronic_usbserial2_msp_sensor_baro_temp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                sjf:max_progress="9961"
+                sjf:progress="0"
+                sjf:title="temp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/color_c1" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+</ScrollView>
+

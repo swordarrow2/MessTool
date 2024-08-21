@@ -1,4 +1,4 @@
-package com.meng.messtool.modules.electronic.usbserial2.msp;
+package com.meng.messtool.modules.electronic.usbserial2.msp.datapack;
 
 import com.meng.tools.*;
 

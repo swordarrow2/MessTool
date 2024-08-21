@@ -21,7 +21,7 @@ import java.nio.charset.*;
 
 import static com.meng.messtool.Constant.*;
 
-public class MspV1TestFragment extends BaseFragment implements SerialInputOutputManager.Listener {
+public class MspV2TestFragment extends BaseFragment implements SerialInputOutputManager.Listener {
 
     private enum UsbPermission {Unknown, Requested, Granted, Denied}
 
@@ -32,6 +32,7 @@ public class MspV1TestFragment extends BaseFragment implements SerialInputOutput
     private final BroadcastReceiver broadcastReceiver;
     private final Handler mainLooper;
     private SerialReceiveAdapter adptReceivedText;
+
     private SerialInputOutputManager usbIoManager;
     private UsbSerialPort usbSerialPort;
     private UsbPermission usbPermission = UsbPermission.Unknown;
@@ -39,7 +40,7 @@ public class MspV1TestFragment extends BaseFragment implements SerialInputOutput
 
     @Override
     public String getTitle() {
-        return "MSP V1通信";
+        return "MSP V2通信";
     }
 
     @Override
@@ -47,7 +48,7 @@ public class MspV1TestFragment extends BaseFragment implements SerialInputOutput
         return "V0.0.1";
     }
 
-    public MspV1TestFragment() {
+    public MspV2TestFragment() {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -109,7 +110,7 @@ public class MspV1TestFragment extends BaseFragment implements SerialInputOutput
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MspV1TestFragment.this.sendbytes(sendText.getText().toString());
+                MspV2TestFragment.this.sendbytes(sendText.getText().toString());
             }
         });
         lvReceiveText.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -155,7 +156,7 @@ public class MspV1TestFragment extends BaseFragment implements SerialInputOutput
             mainLooper.post(new Runnable() {
                 @Override
                 public void run() {
-                    MspV1TestFragment.this.connect();
+                    MspV2TestFragment.this.connect();
                 }
             });
     }
@@ -201,7 +202,7 @@ public class MspV1TestFragment extends BaseFragment implements SerialInputOutput
         mainLooper.post(new Runnable() {
             @Override
             public void run() {
-                MspV1TestFragment.this.receive(data);
+                MspV2TestFragment.this.receive(data);
             }
         });
     }
@@ -211,8 +212,8 @@ public class MspV1TestFragment extends BaseFragment implements SerialInputOutput
         mainLooper.post(new Runnable() {
             @Override
             public void run() {
-                MspV1TestFragment.this.status("connection lost: " + e.getMessage());
-                MspV1TestFragment.this.disconnect();
+                MspV2TestFragment.this.status("connection lost: " + e.getMessage());
+                MspV2TestFragment.this.disconnect();
             }
         });
     }
@@ -306,10 +307,17 @@ public class MspV1TestFragment extends BaseFragment implements SerialInputOutput
             data[i] = (byte) Integer.parseInt(ss[i + 2], 16);
         }
         try {
-            MspV1DataPack dataPack = new MspV1DataPack();
-            dataPack.setCmd((byte) Integer.parseInt(ss[0], 16));
-            dataPack.setPayload(data);
-            byte[] encode = dataPack.encode();
+//            MspV1DataPack dataPack = new MspV1DataPack();
+//            dataPack.setCmd((byte) Integer.parseInt(ss[0], 16));
+//            dataPack.setPayload(data);
+            byte cb1 = (byte) Integer.parseInt(ss[0], 16);
+            byte cb2 = (byte) Integer.parseInt(ss[1], 16);
+//            data = new byte[]{};
+            MspV2DataPack v2DataPack = new MspV2DataPack();
+            v2DataPack.setCmd((short) (cb1 | (cb2 << 8)));
+            v2DataPack.setFlag((byte) 0);
+            v2DataPack.setPayload(data);
+            byte[] encode = v2DataPack.encode(); //dataPack.encode();
             usbSerialPort.write(encode, WRITE_WAIT_MILLIS);
             adptReceivedText.add("send " + encode.length + " bytes: " + new String(encode, StandardCharsets.US_ASCII), HexDump.toHexString(encode));
             adptReceivedText.notifyDataSetChanged();
@@ -319,9 +327,10 @@ public class MspV1TestFragment extends BaseFragment implements SerialInputOutput
     }
 
     private void receive(byte[] data) {
-        MspV1DataPack dataPack = new MspV1DataPack();
-        boolean b = dataPack.tryDecode(data);
-        adptReceivedText.add("receive " + data.length + " bytes: " + new String(data, StandardCharsets.US_ASCII) + (b), HexDump.toHexString(data));
+//        MspV1DataPack dataPack = new MspV1DataPack();
+        MspV2DataPack v2DataPack = new MspV2DataPack();
+        // boolean b = ;// dataPack.tryDecode(data);
+        adptReceivedText.add("receive " + data.length + " bytes: " + new String(data, StandardCharsets.US_ASCII) + (v2DataPack.tryDecode(data)), HexString.toHexStringWithSpace(data));// HexDump.toHexString(data));
         adptReceivedText.notifyDataSetChanged();
     }
 

@@ -55,6 +55,13 @@ public class MspSensorTestFragment extends BaseFragment implements SerialInputOu
     private MengSeekBar sbBaroTemp;
     private TextView tvBaroBytes;
 
+
+    private MengSeekBar sbAirTimeMs;
+    private MengSeekBar sbAirPressurePa;
+    private MengSeekBar sbAirTemp;
+    private TextView tvAirBytes;
+
+
     @Override
     public String getTitle() {
         return "MSP虚拟传感器";
@@ -135,6 +142,12 @@ public class MspSensorTestFragment extends BaseFragment implements SerialInputOu
         sbBaroTemp = (MengSeekBar) view.findViewById(R.id.function_electronic_usbserial2_msp_sensor_baro_temp);
         tvBaroBytes = (TextView) view.findViewById(R.id.function_electronic_usbserial2_msp_sensor_baro_text);
 
+
+        sbAirTimeMs = (MengSeekBar) view.findViewById(R.id.function_electronic_usbserial2_msp_sensor_air_timeMs);
+        sbAirPressurePa = (MengSeekBar) view.findViewById(R.id.function_electronic_usbserial2_msp_sensor_air_pressurePa);
+        sbAirTemp = (MengSeekBar) view.findViewById(R.id.function_electronic_usbserial2_msp_sensor_air_temp);
+        tvAirBytes = (TextView) view.findViewById(R.id.function_electronic_usbserial2_msp_sensor_air_text);
+
         return view;
     }
 
@@ -149,12 +162,21 @@ public class MspSensorTestFragment extends BaseFragment implements SerialInputOu
                     sendTask = ThreadPool.executeAtFixedRate(new Runnable() {
                         @Override
                         public void run() {
-                            SensorRangefinder rangefinder = new SensorRangefinder();
-                            rangefinder.setQuality_uint8(sbRangeFinderQuality.getProgress());
-                            rangefinder.setDistanceMm_int32(sbRangeFinderDistanceMm.getProgress());
-                            final byte[] rangeFinderBytes = MspV2DataPack.encode(MspV2Cmd.MSP2_SENSOR_RANGEFINDER, rangefinder.encode());
-                            sendbytes(rangeFinderBytes);
 
+                            SensorAirspeed airspeed = new SensorAirspeed();
+                            airspeed.setInstance_uint8(0);
+                            airspeed.setTimeMs_uint32(sbAirTimeMs.getProgress());
+                            airspeed.setDiffPressurePa_float(sbAirPressurePa.getProgress());
+                            airspeed.setTemp_int16(sbAirTemp.getProgress());
+                            final byte[] airBytes = MspV2DataPack.encode(MspV2Cmd.MSP2_SENSOR_BAROMETER, airspeed.encode());
+                            sendbytes(airBytes);
+
+                            SensorBaro baro = new SensorBaro();
+                            baro.setTimeMs_uint32(sbBarotimeMs.getProgress());
+                            baro.setPressurePa_float(sbBaropressurePa.getProgress());
+                            baro.setTemp_int16(sbBaroTemp.getProgress());
+                            final byte[] baroBytes = MspV2DataPack.encode(MspV2Cmd.MSP2_SENSOR_BAROMETER, baro.encode());
+                            sendbytes(baroBytes);
 
                             SensorOpflow opflow = new SensorOpflow();
                             opflow.setQuality_uint8(sbOpflowQuality.getProgress());
@@ -164,19 +186,20 @@ public class MspSensorTestFragment extends BaseFragment implements SerialInputOu
                             sendbytes(opflowBytes);
 
 
-                            SensorBaro baro = new SensorBaro();
-                            baro.setTimeMs_uint32(sbBarotimeMs.getProgress());
-                            baro.setPressurePa_float(sbBaropressurePa.getProgress());
-                            baro.setTemp_int16(sbBaroTemp.getProgress());
-                            final byte[] baroBytes = MspV2DataPack.encode(MspV2Cmd.MSP2_SENSOR_BAROMETER, baro.encode());
-                            sendbytes(baroBytes);
+                            SensorRangefinder rangefinder = new SensorRangefinder();
+                            rangefinder.setQuality_uint8(sbRangeFinderQuality.getProgress());
+                            rangefinder.setDistanceMm_int32(sbRangeFinderDistanceMm.getProgress());
+                            final byte[] rangeFinderBytes = MspV2DataPack.encode(MspV2Cmd.MSP2_SENSOR_RANGEFINDER, rangefinder.encode());
+                            sendbytes(rangeFinderBytes);
+
 
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    tvRangeFinderBytes.setText(HexDump.toHexString(rangeFinderBytes));
-                                    tvOpflowBytes.setText(HexDump.toHexString(opflowBytes));
+                                    tvAirBytes.setText(HexDump.toHexString(airBytes));
                                     tvBaroBytes.setText(HexDump.toHexString(baroBytes));
+                                    tvOpflowBytes.setText(HexDump.toHexString(opflowBytes));
+                                    tvRangeFinderBytes.setText(HexDump.toHexString(rangeFinderBytes));
                                 }
                             });
                         }

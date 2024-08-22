@@ -139,6 +139,54 @@
                 android:layout_height="2dp"
                 android:background="@color/color_c1" />
         </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="air speed" />
+
+            <TextView
+                android:id="@+id/function_electronic_usbserial2_msp_sensor_air_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <com.meng.messtool.customview.MengSeekBar
+                android:id="@+id/function_electronic_usbserial2_msp_sensor_air_timeMs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                sjf:max_progress="114514"
+                sjf:progress="127"
+                sjf:title="timeMs" />
+
+            <com.meng.messtool.customview.MengSeekBar
+                android:id="@+id/function_electronic_usbserial2_msp_sensor_air_pressurePa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                sjf:max_progress="114514"
+                sjf:progress="0"
+                sjf:title="pressurePa" />
+
+            <com.meng.messtool.customview.MengSeekBar
+                android:id="@+id/function_electronic_usbserial2_msp_sensor_air_temp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                sjf:max_progress="9961"
+                sjf:progress="0"
+                sjf:title="temp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/color_c1" />
+        </LinearLayout>
+
+
     </LinearLayout>
 
 

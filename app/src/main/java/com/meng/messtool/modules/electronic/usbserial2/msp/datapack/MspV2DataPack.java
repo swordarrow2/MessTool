@@ -129,6 +129,10 @@ public class MspV2DataPack {
         payloadLength = (short) payload.length;
     }
 
+    public byte[] getPayload() {
+        return payload;
+    }
+
     public void setFlag(byte flag) {
         this.flag = flag;
     }

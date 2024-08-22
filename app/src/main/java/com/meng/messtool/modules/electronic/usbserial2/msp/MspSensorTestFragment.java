@@ -157,7 +157,7 @@ public class MspSensorTestFragment extends BaseFragment implements SerialInputOu
 
 
                             SensorOpflow opflow = new SensorOpflow();
-                            opflow.setQuality(sbOpflowQuality.getProgress());
+                            opflow.setQuality_uint8(sbOpflowQuality.getProgress());
                             opflow.setMotionX_int32(sbOpflowMotionX.getProgress());
                             opflow.setMotionY_int32(sbOpflowMotionY.getProgress());
                             final byte[] opflowBytes = MspV2DataPack.encode(MspV2Cmd.MSP2_SENSOR_OPTIC_FLOW, opflow.encode());

@@ -1,11 +1,14 @@
 package com.meng.messtool.modules.electronic.usbserial2.msp.sensor;
 
+import com.meng.messtool.modules.electronic.usbserial2.msp.*;
+import com.meng.tools.datapack.*;
+
 /*
  *package  com.meng.messtool.modules.electronic.usbserial2.msp.sensor
  *@author  清梦
  *@date    2024/8/20 16:37
  */
-public class SensorRangefinder {
+public class SensorRangefinder implements MspSeriallizeable<SensorRangefinder> {
     private int quality_uint8;    // [0;255]
     private int distanceMm_int32; // Negative value for out of range
 
@@ -26,15 +29,34 @@ public class SensorRangefinder {
     }
 
     public byte[] encode() {
-        byte[] result = new byte[5];
+        return new DatapackWriter(true)
+                .writeUint8(getQuality_uint8())
+                .writeInt32(getDistanceMm_int32()).encode();
+    }
 
-        result[0] = (byte) quality_uint8;
+    @Override
+    public void decode(byte[] seriallized, int offset) {
+        DatapackReader reader = new DatapackReader(seriallized, true);
+        reader.setOffset(offset);
+        setQuality_uint8(reader.readUint8());
+        setDistanceMm_int32(reader.readInt32());
+    }
 
-        result[1] = (byte) (distanceMm_int32 >>> 0);
-        result[2] = (byte) (distanceMm_int32 >>> 8);
-        result[3] = (byte) (distanceMm_int32 >>> 16);
-        result[4] = (byte) (distanceMm_int32 >>> 24);
-        return result;
+    @Override
+    public SensorRangefinder deepCopy() {
+        SensorRangefinder rangefinder = new SensorRangefinder();
+        rangefinder.setQuality_uint8(getQuality_uint8());
+        rangefinder.setDistanceMm_int32(getDistanceMm_int32());
+        return rangefinder;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("SensorRangefinder{");
+        sb.append("quality_uint8=").append(quality_uint8);
+        sb.append(", distanceMm_int32=").append(distanceMm_int32);
+        sb.append('}');
+        return sb.toString();
     }
 //    uint8_t quality;    // [0;255]
 //    int32_t distanceMm; // Negative value for out of range

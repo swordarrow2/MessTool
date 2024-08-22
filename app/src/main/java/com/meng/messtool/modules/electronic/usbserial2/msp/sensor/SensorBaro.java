@@ -1,11 +1,14 @@
 package com.meng.messtool.modules.electronic.usbserial2.msp.sensor;
 
+import com.meng.messtool.modules.electronic.usbserial2.msp.*;
+import com.meng.tools.datapack.*;
+
 /*
  *package  com.meng.messtool.modules.electronic.usbserial2.msp.sensor
  *@author  清梦
  *@date    2024/8/20 18:01
  */
-public class SensorBaro {
+public class SensorBaro implements MspSeriallizeable<SensorBaro> {
     private int instance_uint8;
     private long timeMs_uint32;
     private float pressurePa_float;
@@ -44,30 +47,43 @@ public class SensorBaro {
     }
 
     public byte[] encode() {
-        byte[] result = new byte[15];
+        return new DatapackWriter(true)
+                .writeUint8(getInstance_uint8())
+                .writeUint32(getTimeMs_uint32())
+                .writeFloat(getPressurePa_float())
+                .writeInt16(getTemp_int16())
+                .encode();
+    }
 
-        result[0] = (byte) instance_uint8;
+    @Override
+    public void decode(byte[] seriallized, int offset) {
+        DatapackReader reader = new DatapackReader(seriallized, true);
+        reader.setOffset(offset);
+        setInstance_uint8(reader.readUint8());
+        setTimeMs_uint32(reader.readUint32());
+        setPressurePa_float(reader.readFloat());
+        setTemp_int16(reader.readInt16());
+    }
 
-        result[1] = (byte) (timeMs_uint32 >>> 0);
-        result[2] = (byte) (timeMs_uint32 >>> 8);
-        result[3] = (byte) (timeMs_uint32 >>> 16);
-        result[4] = (byte) (timeMs_uint32 >>> 24);
-        result[5] = (byte) (timeMs_uint32 >>> 32);
-        result[6] = (byte) (timeMs_uint32 >>> 40);
-        result[7] = (byte) (timeMs_uint32 >>> 48);
-        result[8] = (byte) (timeMs_uint32 >>> 56);
+    @Override
+    public SensorBaro deepCopy() {
+        SensorBaro sensorBaro = new SensorBaro();
+        sensorBaro.setInstance_uint8(getInstance_uint8());
+        sensorBaro.setTimeMs_uint32(getTimeMs_uint32());
+        sensorBaro.setPressurePa_float(getPressurePa_float());
+        sensorBaro.setTemp_int16(getTemp_int16());
+        return sensorBaro;
+    }
 
-        int fbyte = Float.floatToRawIntBits(pressurePa_float);
-
-        result[9] = (byte) (fbyte >>> 0);
-        result[10] = (byte) (fbyte >>> 8);
-        result[11] = (byte) (fbyte >>> 16);
-        result[12] = (byte) (fbyte >>> 24);
-
-
-        result[13] = (byte) (temp_int16 >>> 0);
-        result[14] = (byte) (temp_int16 >>> 8);
-        return result;
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("SensorBaro{");
+        sb.append("instance_uint8=").append(instance_uint8);
+        sb.append(", timeMs_uint32=").append(timeMs_uint32);
+        sb.append(", pressurePa_float=").append(pressurePa_float);
+        sb.append(", temp_int16=").append(temp_int16);
+        sb.append('}');
+        return sb.toString();
     }
 
 //    uint8_t instance;

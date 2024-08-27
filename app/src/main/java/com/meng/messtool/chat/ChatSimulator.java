@@ -1,4 +1,5 @@
 package com.meng.messtool.chat;
+
 import android.app.*;
 import android.content.*;
 import android.os.*;
@@ -6,11 +7,8 @@ import android.view.*;
 import android.view.View.*;
 import android.widget.*;
 import com.meng.messtool.*;
-import hq.king.*;
-import hq.king.adapter.*;
-import hq.king.view.*;
-import java.util.*;
 import com.meng.tools.*;
+import java.util.*;
 
 public class ChatSimulator extends BaseFragment {
 
@@ -23,10 +21,10 @@ public class ChatSimulator extends BaseFragment {
     private TextView chat_title_nick;
     private EditText chat_bottom_edit;
     private ListView mListView;
-    private ChatMsgViewAdapter mAdapter;
-    private LinkedList<ChatMsgEntity> mDataArrays = new LinkedList<ChatMsgEntity>();
-    private MessageDB messageDB;
-    public CharaManager charaManager;
+    private ChatMsgAdapter mAdapter;
+    private LinkedList<ChatScriptAction> mDataArrays = new LinkedList<ChatScriptAction>();
+    private MessageDatabase messageDB;
+    public CharacterManager charaManager;
 
     @Override
     public String getTitle() {
@@ -73,9 +71,9 @@ public class ChatSimulator extends BaseFragment {
     }
 
     private void init(String scriptName)  {
-        messageDB = new MessageDB(scriptName);
-        charaManager = new CharaManager();
-        mAdapter = new ChatMsgViewAdapter(getActivity(), charaManager, mListView, mDataArrays);
+        messageDB = new MessageDatabase(scriptName);
+        charaManager = new CharacterManager();
+        mAdapter = new ChatMsgAdapter(getActivity(), charaManager, mListView, mDataArrays);
         mListView.setAdapter(mAdapter);
 
         chat_bottom_send.setOnClickListener(new OnClickListener() {
@@ -88,11 +86,9 @@ public class ChatSimulator extends BaseFragment {
                         showToast("内容不能为空");
                         return;
                     }
-                    ChatMsgEntity entity = new ChatMsgEntity();
-                    entity.date = getDate();
-                    entity.rec = false;
-                    entity.name = "快乐的清洁工";
-                    entity.message = contString;
+                    ChatScriptAction entity = new ChatScriptAction();
+                    entity.from = "快乐的清洁工";
+                    entity.content = contString;
                     onMessage(entity);
                     //            initData();
                 }
@@ -124,7 +120,7 @@ public class ChatSimulator extends BaseFragment {
      * 加载消息历史，从数据库中读出
      */
     public void initData() {
-        final List<ChatMsgEntity> list = messageDB.getMsg("观星".hashCode());
+        final List<ChatScriptAction> list = messageDB.getMsg("观星".hashCode());
         final Random random = new Random();
         if (list.size() > 0) {
             new Thread(new Runnable(){
@@ -134,7 +130,7 @@ public class ChatSimulator extends BaseFragment {
                         try {
                             Thread.sleep(2000);
                         } catch (InterruptedException e) {}
-                        for (ChatMsgEntity entity : list) {
+                        for (ChatScriptAction entity : list) {
                             try {
                                 Thread.sleep(entity.delay == -1 ?random.nextInt(3000): entity.delay);
                             } catch (InterruptedException e) {}
@@ -185,8 +181,8 @@ public class ChatSimulator extends BaseFragment {
         return sbBuffer.toString();
     }
 
-    private void onMessage(final ChatMsgEntity msg) {
-        getActivity().      runOnUiThread(new Runnable(){
+    private void onMessage(final ChatScriptAction msg) {
+        getActivity().runOnUiThread(new Runnable(){
 
                 @Override
                 public void run() {

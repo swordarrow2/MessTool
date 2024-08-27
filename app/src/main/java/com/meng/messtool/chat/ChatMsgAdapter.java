@@ -1,4 +1,4 @@
-package hq.king.adapter;
+package com.meng.messtool.chat;
 
 import android.content.*;
 import android.graphics.*;
@@ -8,27 +8,31 @@ import android.view.*;
 import android.view.animation.*;
 import android.widget.*;
 import com.meng.messtool.*;
-import com.meng.messtool.chat.*;
-import hq.king.*;
-import hq.king.view.*;
-import java.util.*;
 import com.meng.tools.*;
 
-public class ChatMsgViewAdapter extends BaseAdapter {
+import java.util.*;
 
-    private LinkedList<ChatMsgEntity> coll;
+public class ChatMsgAdapter extends BaseAdapter {
+
+    /*
+     *@author 清梦
+     *@date 2024-08-26 17:39:05
+     */
+    public static final String TAG = "ChatMsgAdapter";
+
+    private LinkedList<ChatScriptAction> coll;
     private Context ctx;
     private LayoutInflater mInflater;
     private HashMap<String,Bitmap> headCache = new HashMap<>();
     private Animation animation;
     private ListView listview;
-    private CharaManager charaManager;
+    private CharacterManager charaManager;
 
     private int mFirstTop, mFirstPosition;  
     private boolean isScrollDown;  
 
 
-    public ChatMsgViewAdapter(Context context, CharaManager charaManager, ListView lv, LinkedList<ChatMsgEntity> coll) {
+    public ChatMsgAdapter(Context context, CharacterManager charaManager, ListView lv, LinkedList<ChatScriptAction> coll) {
         ctx = context;
         this.coll = coll;
         listview = lv;
@@ -42,7 +46,7 @@ public class ChatMsgViewAdapter extends BaseAdapter {
         return coll.size();
     }
 
-    public ChatMsgEntity getItem(int position) {
+    public ChatScriptAction getItem(int position) {
         return coll.get(position);
     }
 
@@ -50,27 +54,22 @@ public class ChatMsgViewAdapter extends BaseAdapter {
         return position;
     }
 
-	public int getItemViewType(int position) {
-		// TODO Auto-generated method stub
-	 	ChatMsgEntity entity = coll.get(position);
-	 	return entity.rec ?1: 0;
-	}
 
-	public int getViewTypeCount() {
-		// TODO Auto-generated method stub
-		return 2;
-	}
+    public int getViewTypeCount() {
+        // TODO Auto-generated method stub
+        return 2;
+    }
 
     public View getView(int position, View convertView, ViewGroup parent) {
 
-    	ChatMsgEntity entity = coll.get(position);
+        ChatScriptAction entity = coll.get(position);
 
-    	ViewHolder viewHolder = null;	
-	    if (convertView == null) {
-            if (entity.rec) {
-                convertView = mInflater.inflate(R.layout.chatting_item_msg_left, null);
-            } else {
+        ViewHolder viewHolder = null;   
+        if (convertView == null) {
+            if (entity.isSelf) {
                 convertView = mInflater.inflate(R.layout.chatting_item_msg_right, null);
+            } else {
+                convertView = mInflater.inflate(R.layout.chatting_item_msg_left, null);
             }
             viewHolder = new ViewHolder();
             viewHolder.ll = (LinearLayout) convertView.findViewById(R.id.chatting_item_msg_leftLinearLayout_time);
@@ -78,7 +77,7 @@ public class ChatMsgViewAdapter extends BaseAdapter {
             viewHolder.tvUserName = (TextView) convertView.findViewById(R.id.tv_username);
             viewHolder.tvContent = (TextView) convertView.findViewById(R.id.tv_chatcontent);
             viewHolder.img = (CircleImageView) convertView.findViewById(R.id.iv_userhead);
-
+            viewHolder.rl = (RelativeLayout)convertView.findViewById(R.id.chatting_item_msg_leftRelativeLayout);
 
 //            for (int i=0;i<listview.getChildCount();i++){  
 //                View view = listview.getChildAt(i);  
@@ -92,30 +91,45 @@ public class ChatMsgViewAdapter extends BaseAdapter {
                 convertView.startAnimation(animation);
             }
             convertView.setTag(viewHolder);
-	    } else {
-	        viewHolder = (ViewHolder) convertView.getTag();
-	    }
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
+        viewHolder.ll.setVisibility(View.GONE);                        
+        viewHolder.rl.setVisibility(View.GONE);                        
 
-        if (entity.date == null || entity.date.equals("")) {
-            viewHolder.ll.setVisibility(View.GONE);  
-        } else {
-            viewHolder.tvSendTime.setText(entity.date);
+        switch (entity.action) {
+            case TYPE_STRING_MESSAGE:
+                viewHolder.rl.setVisibility(View.VISIBLE);                                        
+                viewHolder.tvUserName.setText(entity.from);
+                viewHolder.tvContent.setText(entity.content);
+                break;
+            case TYPE_IMAGE_MESSAGE:
+                viewHolder.rl.setVisibility(View.VISIBLE);                                        
+                viewHolder.tvUserName.setText(entity.from);
+                SpannableString msp = new SpannableString(entity.content);
+                msp.setSpan(new ImageSpan(ctx, BitmapFactory.decodeFile(FileTool.getAppFile(FunctionSavePath.chat_image, entity.content).getAbsolutePath())), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                viewHolder.tvContent.setText(msp);
+                break;
+            case TYPE_DATE_TIP:
+                viewHolder.ll.setVisibility(View.VISIBLE);                        
+                viewHolder.tvSendTime.setText(entity.content);                
+                break;
+            case TYPE_DIALOG:
+
+                break;
+            default:
+
+                break;
         }
-	    viewHolder.tvUserName.setText(entity.name);
-        if (entity.span) {
-            SpannableString msp = new SpannableString(" ");
-            msp.setSpan(new ImageSpan(ctx, BitmapFactory.decodeFile(FileTool.getAppFile(FunctionSavePath.chat_image,entity.spanPic).getAbsolutePath())), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            viewHolder.tvContent.setText(msp);
-        } else {
-            viewHolder.tvContent.setText(entity.message);
-        }
-        Bitmap decodeFile = headCache.get(entity.name);
+
+
+        Bitmap decodeFile = headCache.get(entity.from);
         if (decodeFile == null) {  
-            headCache.put(entity.name, decodeFile = BitmapFactory.decodeFile(FileTool.getAppFile(FunctionSavePath.chat_character, charaManager.get(entity.name).head).getAbsolutePath()));
+            headCache.put(entity.content, decodeFile = BitmapFactory.decodeFile(FileTool.getAppFile(FunctionSavePath.chat_character, charaManager.get(entity.from).head).getAbsolutePath()));
         }
         viewHolder.img.setImageBitmap(decodeFile);
 
-	    return convertView;
+        return convertView;
 
     }
 
@@ -143,6 +157,7 @@ public class ChatMsgViewAdapter extends BaseAdapter {
 
     static class ViewHolder { 
         public LinearLayout ll;
+        public RelativeLayout rl;
         public TextView tvSendTime;
         public TextView tvUserName;
         public TextView tvContent;

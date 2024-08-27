@@ -116,4 +116,7 @@
         <item>event: SerialInputOutputManager.onNewData()</item>
         <item>direct: UsbSerialPort.read()</item>
     </string-array>
+    
+    
+    
 </resources>

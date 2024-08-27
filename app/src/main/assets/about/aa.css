@@ -1,0 +1,27 @@
+
+body{
+    font-size:12px;
+    line-height:24px;
+    }  
+.title{
+    font-size:30px;  
+    color:#000;  
+    text-align:center;  
+    margin-top:28px  
+    }  
+.content1{
+    font-size:14px;  
+    color:#7fcaff;  
+    text-align:center;  
+    margin-top:18px
+    }  
+.contentothers{
+    font-size:18px;  
+    color:#000;  
+    text-align:center;  
+    margin-top:8px
+    }  
+.imagecenter{
+    text-align:center;  
+    margin-top:18px
+    }  

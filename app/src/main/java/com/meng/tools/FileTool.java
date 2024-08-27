@@ -102,19 +102,19 @@ public class FileTool {
     }
 
     public static File getAppFile(FunctionSavePath functionName, String name) {
-        return getAppFile(functionName.toString(), name);
+        return getAppFile(functionName.getPath(), name);
     }
 
     public static File getAppFile(FunctionSavePath functionName, String baseName, String extendName) {
-        return getAppFile(functionName.toString(), baseName + "." + extendName);
+        return getAppFile(functionName.getPath(), baseName + "." + extendName);
     }
 
     public static File getAppFile(FunctionSavePath functionName, String baseName, FileType ft) {
-        return getAppFile(functionName.toString(), baseName + "." + ft.getExtendName());
+        return getAppFile(functionName.getPath(), baseName + "." + ft.getExtendName());
     }
 
     public static File getAppFile(FunctionSavePath functionName, FileType ft) {
-        return getAppFile(functionName.toString(), (System.currentTimeMillis() / 1000) + "." + ft.getExtendName());
+        return getAppFile(functionName.getPath(), (System.currentTimeMillis() / 1000) + "." + ft.getExtendName());
     }
 
     public static String getPreDownloadJsonPath() {

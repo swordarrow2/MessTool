@@ -13,6 +13,14 @@ public class SharedPreferenceHelper {
     private static final String TAG = "Preference";
 
     /********** base **********/
+    public static boolean isFirstUse() {
+        return sp.getBoolean("first_use", true);
+    }
+
+    public static void setFirstUse(boolean b) {
+        putBoolean("first_use", b);
+    }
+
     public static String getTheme() {
         return sp.getString("theme", "蓝");
     }
@@ -63,7 +71,7 @@ public class SharedPreferenceHelper {
 
     /********** menu **********/
     public static boolean isShowSJF() {
-        return sp.getBoolean("showSJF", true);
+        return sp.getBoolean("showSJF", false);
     }
 
     public static void setShowSJF(boolean use) {
@@ -75,7 +83,7 @@ public class SharedPreferenceHelper {
     }
 
     public static boolean isShowGroupPicture() {
-        return sp.getBoolean("GROUP_PICTURE", false);
+        return sp.getBoolean("GROUP_PICTURE", true);
     }
 
     public static void setShowGroupVideo(boolean b) {
@@ -83,7 +91,7 @@ public class SharedPreferenceHelper {
     }
 
     public static boolean isShowGroupVideo() {
-        return sp.getBoolean("GROUP_VIDEO", false);
+        return sp.getBoolean("GROUP_VIDEO", true);
     }
 
     public static void setShowGroupAudio(boolean b) {
@@ -91,7 +99,7 @@ public class SharedPreferenceHelper {
     }
 
     public static boolean isShowGroupAudio() {
-        return sp.getBoolean("GROUP_AUDIO", false);
+        return sp.getBoolean("GROUP_AUDIO", true);
     }
 
     public static void setShowGroupElectronic(boolean b) {
@@ -99,7 +107,7 @@ public class SharedPreferenceHelper {
     }
 
     public static boolean isShowGroupElectronic() {
-        return sp.getBoolean("GROUP_ELECTRONIC", false);
+        return sp.getBoolean("GROUP_ELECTRONIC", true);
     }
 
     public static void setShowGroupSystem(boolean b) {
@@ -129,7 +137,7 @@ public class SharedPreferenceHelper {
     }
 
     public static boolean isShowGroupName() {
-        return sp.getBoolean("show_group_name", false);
+        return sp.getBoolean("show_group_name", true);
     }
 
     /********** pixiv **********/
@@ -201,10 +209,10 @@ public class SharedPreferenceHelper {
 //            ProxySharedPreference proxy = new ProxySharedPreference(sharedPreferences);
 //            sp = (SharedPreferences) Proxy.newProxyInstance(sharedPreferences.getClass().getClassLoader(), new Class[]{SharedPreferences.class}, proxy);
             sp = context.getSharedPreferences(preferenceName, 0);
-            Debuger.setDebugMode(isDebugMode());
-            Debuger.addLog(TAG, "init");
-        } else {
-            Debuger.addLog(TAG, "init again");
+//            Debuger.setDebugMode(isDebugMode());
+//            Debuger.addLog(TAG, "init");
+//        } else {
+//            Debuger.addLog(TAG, "init again");
         }
     }
 

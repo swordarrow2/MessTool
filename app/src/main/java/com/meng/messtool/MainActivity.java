@@ -1,27 +1,28 @@
 package com.meng.messtool;
 
-import android.*;
 import android.app.*;
 import android.content.*;
-import android.content.pm.*;
 import android.content.res.*;
 import android.hardware.usb.*;
+import android.net.*;
 import android.os.*;
-import android.support.annotation.*;
 import android.support.design.widget.*;
 import android.support.v4.view.*;
 import android.support.v4.widget.*;
 import android.support.v7.app.*;
 import android.view.*;
 import android.widget.*;
-
 import com.meng.messtool.menu.*;
 import com.meng.messtool.modules.electronic.usbserial2.*;
 import com.meng.messtool.task.*;
 import com.meng.tools.*;
 import com.meng.tools.app.*;
-
+import java.util.*;
 import java.util.concurrent.*;
+import org.jsoup.*;
+
+import android.app.AlertDialog;
+import android.webkit.*;
 
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -34,6 +35,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private boolean firstOpened = false;
     private ActionBarDrawerToggle toggle;
 
+    @JavascriptInterface
     public void openLeftDrawer() {
         mDrawerLayout.openDrawer(Gravity.START);
     }
@@ -48,17 +50,23 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.system_main_activity);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, Constant.REQUEST_CODE_REQUEST_PERMISSION);
-        } else {
-            init();
-        }
-    }
+    public void init() {
+        super.init();
+        if (SharedPreferenceHelper.isFirstUse()) {
+            SharedPreferenceHelper.setFirstUse(false);
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle("Mestool")
+                .setMessage("第一次使用的初始化已经完成，请重启软件")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
 
-    private void init() {
+                    @Override
+                    public void onClick(DialogInterface dia, int which) {
+                        finish();
+                    }
+                }).create();
+            dialog.show();
+        }
+        setContentView(R.layout.system_main_activity);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         rightList = (ListView) findViewById(R.id.right_list);
@@ -90,6 +98,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         intentFilter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
         intentFilter.addAction(Constant.USB_PERMISSION);
         registerReceiver(usbReceiver, intentFilter);//注册receiver
+        ThreadPool.execute(new Runnable(){
+
+                @Override
+                public void run() {
+                    UpdateInfo ui = new UpdateInfo(MainActivity.this);
+                    ui.checkUpdate();
+                }
+            });
     }
 
     private BroadcastReceiver usbReceiver = new BroadcastReceiver() {
@@ -103,16 +119,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 showToast("USB从机已连接");
                 if (MFragmentManager.getInstance().getCurrent().getClass() != DevicesFragment.class && MFragmentManager.getInstance().getCurrent().getClass() != TerminalFragment.class) {
                     ThreadPool.executeAfterTime(new Runnable() {
-                        @Override
-                        public void run() {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    MFragmentManager.getInstance().showFragment(DevicesFragment.class);
-                                }
-                            });
-                        }
-                    }, 1000, TimeUnit.MILLISECONDS);
+                            @Override
+                            public void run() {
+                                runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            MFragmentManager.getInstance().showFragment(DevicesFragment.class);
+                                        }
+                                    });
+                            }
+                        }, 1000, TimeUnit.MILLISECONDS);
                 }
             }
             if (UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action)) { // USB拔插动作
@@ -167,7 +183,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             if (mDrawerLayout.isDrawerOpen(Gravity.END)) {
                 closeDrawer();
             } else if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-                exit();
+                finish();
             } else {
                 openLeftDrawer();
             }
@@ -184,19 +200,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode != Constant.REQUEST_CODE_REQUEST_PERMISSION) {
-            return;
-        }
-        if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-            showToast("缺失权限会使应用工作不正常");
-        } else {
-            init();
-        }
-    }
-
-    public void exit() {
+    public void finish() {
         AbstractDatabaseHelper.releaseAll();
         if (SharedPreferenceHelper.isExit0()) {
             System.exit(0);

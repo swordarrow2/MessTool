@@ -6,6 +6,7 @@
     android:padding="6dp" >
 
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/chatting_item_msg_leftLinearLayout_time"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -24,12 +25,14 @@
     </LinearLayout>
 
     <RelativeLayout
+        android:id="@+id/chatting_item_msg_leftRelativeLayout"
+        android:visibility="gone"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_marginRight="5dp" >
 
-        <hq.king.view.CircleImageView
+        <com.meng.messtool.chat.CircleImageView
             android:id="@+id/iv_userhead" 
             android:layout_width="52dp"
             android:layout_height="52dp"

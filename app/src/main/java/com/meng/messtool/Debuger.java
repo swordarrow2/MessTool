@@ -10,19 +10,14 @@ import com.meng.tools.app.*;
  *@date    2024/7/31 23:29
  */
 public class Debuger {
-    private static boolean isDebugMode = true;
 
     public static void init(Context context) {
         DebugDataBase.getInstance().init(context);
         DebugDataBase.getInstance().addOperate("debug logger init");
     }
 
-    public static void setDebugMode(boolean b) {
-        isDebugMode = b;
-    }
-
     public static void addLog(String s) {
-        if (isDebugMode) {
+        if (SharedPreferenceHelper.isDebugMode()) {
             DebugDataBase.getInstance().addOperate(s);
         }
     }

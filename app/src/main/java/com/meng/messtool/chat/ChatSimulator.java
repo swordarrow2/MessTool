@@ -9,6 +9,7 @@ import android.widget.*;
 import com.meng.messtool.*;
 import com.meng.tools.*;
 import java.util.*;
+import com.meng.tools.app.*;
 
 public class ChatSimulator extends BaseFragment {
 
@@ -21,10 +22,11 @@ public class ChatSimulator extends BaseFragment {
     private TextView chat_title_nick;
     private EditText chat_bottom_edit;
     private ListView mListView;
-    private ChatMsgAdapter mAdapter;
+    private ChatScriptAdapter mAdapter;
     private LinkedList<ChatScriptAction> mDataArrays = new LinkedList<ChatScriptAction>();
     private MessageDatabase messageDB;
     public CharacterManager charaManager;
+    public ChatRoomInfo chatRoomInfo;
 
     @Override
     public String getTitle() {
@@ -33,7 +35,7 @@ public class ChatSimulator extends BaseFragment {
 
     @Override
     public String getVersionName() {
-        return "V1.0.0";
+        return "V1.3.0";
     }
 
     @Override
@@ -45,8 +47,12 @@ public class ChatSimulator extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         findView(view);
+        String[] l = FileTool.getAppFile(FunctionSavePath.chat_script, "").list();
+        if (l.length == 0) {
+            messageDB.createExample();
+        }
         final String[] items = FileTool.getAppFile(FunctionSavePath.chat_script, "").list();
-        AlertDialog dialog = new AlertDialog.Builder(getActivity())
+        new AlertDialog.Builder(getActivity())
             .setTitle("选择脚本")
             .setItems(items, new DialogInterface.OnClickListener() {
 
@@ -54,12 +60,7 @@ public class ChatSimulator extends BaseFragment {
                 public void onClick(DialogInterface dia, int which) {
                     init(items[which]);
                 }
-            })
-            .setPositiveButton("确定", null)
-            .setNegativeButton("取消", null)
-            .create();
-        dialog.show();
-
+            }).create().show();
     } 
 
     private void findView(View view) {
@@ -68,12 +69,14 @@ public class ChatSimulator extends BaseFragment {
         chat_title_back = (Button) view.findViewById(R.id.chat_title_back);
         chat_bottom_send = (Button) view.findViewById(R.id.chat_bottom_send);
         chat_bottom_edit = (EditText) view.findViewById(R.id.chat_bottom_edit);
+        chatRoomInfo = new ChatRoomInfo();
+        chatRoomInfo.setTvTitle(chat_title_nick);
     }
 
     private void init(String scriptName)  {
         messageDB = new MessageDatabase(scriptName);
         charaManager = new CharacterManager();
-        mAdapter = new ChatMsgAdapter(getActivity(), charaManager, mListView, mDataArrays);
+        mAdapter = new ChatScriptAdapter(getActivity(), charaManager, chatRoomInfo, mDataArrays);
         mListView.setAdapter(mAdapter);
 
         chat_bottom_send.setOnClickListener(new OnClickListener() {
@@ -86,14 +89,16 @@ public class ChatSimulator extends BaseFragment {
                         showToast("内容不能为空");
                         return;
                     }
-                    ChatScriptAction entity = new ChatScriptAction();
-                    entity.from = "快乐的清洁工";
-                    entity.content = contString;
+                    ChatScriptAction entity = new ChatScriptAction(
+                        ActionType.TYPE_STRING_MESSAGE,
+                        contString,
+                        "快乐的清洁工",
+                        0);                    
                     onMessage(entity);
                     //            initData();
                 }
             });
-        chat_title_nick.setText("我们是正经群");
+        //       chat_title_nick.setText("我们是正经群");
 
         initData();
 //        new Thread(new Runnable(){
@@ -123,42 +128,39 @@ public class ChatSimulator extends BaseFragment {
         final List<ChatScriptAction> list = messageDB.getMsg("观星".hashCode());
         final Random random = new Random();
         if (list.size() > 0) {
-            new Thread(new Runnable(){
+            ThreadPool.execute(new Runnable(){
 
                     @Override
                     public void run() {
-                        try {
-                            Thread.sleep(2000);
-                        } catch (InterruptedException e) {}
                         for (ChatScriptAction entity : list) {
                             try {
-                                Thread.sleep(entity.delay == -1 ?random.nextInt(3000): entity.delay);
+                                Thread.sleep(entity.wait == -1 ?random.nextInt(3000): entity.wait);
                             } catch (InterruptedException e) {}
                             onMessage(entity);
                         }
 
-                        try {
-                            Thread.sleep(500);
-                        } catch (InterruptedException e) {}
-                        getActivity(). runOnUiThread(new Runnable(){
-
-                                @Override
-                                public void run() {
-                                    new AlertDialog.Builder(getActivity())
-                                        .setTitle("提示")
-                                        .setMessage("该群因传播色情信息已被封禁")
-                                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-
-                                            @Override
-                                            public void onClick(DialogInterface dia, int which) {
-                                                getActivity(). finish();
-                                            }
-                                        })             
-                                        .create().show();
-                                }
-                            });
+//                        try {
+//                            Thread.sleep(500);
+//                        } catch (InterruptedException e) {}
+//                        getActivity(). runOnUiThread(new Runnable(){
+//
+//                                @Override
+//                                public void run() {
+//                                    new AlertDialog.Builder(getActivity())
+//                                        .setTitle("提示")
+//                                        .setMessage("该群因传播色情信息已被封禁")
+//                                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//
+//                                            @Override
+//                                            public void onClick(DialogInterface dia, int which) {
+//                                                getActivity(). finish();
+//                                            }
+//                                        })             
+//                                        .create().show();
+//                                }
+//                            });
                     }
-                }).start();
+                });
 
             //     Collections.reverse(mDataArrays);
         }

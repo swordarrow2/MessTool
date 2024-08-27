@@ -43,8 +43,8 @@ public class EditElementActivity extends BaseActivity implements View.OnClickLis
     private boolean addMode = true;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void init() {
+        super.init();
         setContentView(R.layout.function_electronic_add_element);
         initView();
         initData();

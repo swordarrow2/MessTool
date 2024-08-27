@@ -17,6 +17,8 @@ public enum FunctionGroup {
     GROUP_AUDIO("声音"),
     GROUP_ELECTRONIC("电子开发"),
     GROUP_DEFAULT("默认"),
+    GROUP_TOY("玩具"),
+    GROUP_LONG_TIME_NO_USE("待重验证"),
     GROUP_DEPRECATED("已弃用"),
     GROUP_SYSTEM("系统");
 

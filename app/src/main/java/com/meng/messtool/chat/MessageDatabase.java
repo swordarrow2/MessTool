@@ -1,5 +1,6 @@
 package com.meng.messtool.chat;
 
+import com.google.gson.reflect.*;
 import com.meng.messtool.*;
 import com.meng.tools.*;
 import com.meng.tools.app.*;
@@ -18,42 +19,142 @@ public class MessageDatabase {
     private ArrayList<ChatScriptAction> chatMsg = new ArrayList<>();
 
     public MessageDatabase(String scriptName) {
+        
+        File file = FileTool.getAppFile(FunctionSavePath.chat_script, scriptName);
+        try {
+            ArrayList<ChatScriptAction> list = GSON.fromJson(FileTool.readString(file), new TypeToken<ArrayList<ChatScriptAction>>(){}.getType());
+            chatMsg.addAll(list);
+            FileTool.saveToFile(file, GSON.toJson(list).getBytes(StandardCharsets.UTF_8));              
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void createExample() {
         File file = FileTool.getAppFile(FunctionSavePath.chat_script, "exmaple.json");
         try {
-        //    if (!file.exists()) {
-                ArrayList<ChatScriptAction> list = new ArrayList<>();
-                
-                    ChatScriptAction cs1 = new ChatScriptAction();
-                    cs1.action = ActionType.TYPE_DATE_TIP;
-                    cs1.content = SystemTools.getTimeWithMinute();
-                    cs1.delay = 0;
-                    cs1.from = "";
-                    list.add(cs1);
-                
+            ArrayList<ChatScriptAction> list = new ArrayList<>();
 
-                
-                    ChatScriptAction cs2 = new ChatScriptAction();
-                    cs2.action = ActionType.TYPE_STRING_MESSAGE;
-                    cs2.content = "测试2";
-                    cs2.delay = 500;
-                    cs2.from = "观星";
-                    list.add(cs2); 
-                
-                
-                    ChatScriptAction cs3 = new ChatScriptAction();
-                    cs3.action = ActionType.TYPE_STRING_MESSAGE;
-                    cs3.content = "测试2233";
-                    cs3.delay = 1000;
-                    cs3.from = "月下";
-                    list.add(cs3); 
-                
+            list.add(new ChatScriptAction(
+                         ActionType.TYPE_SET_GROUP_NAME,
+                         "此生无悔入东方来世愿生幻想乡",
+                         "",
+                         0));
+            list.add(new ChatScriptAction(
+                         ActionType.TYPE_CHAT_TIP,
+                         SystemTools.getTimeWithMinute(),
+                         "",
+                         0));
+            list.add(new ChatScriptAction(
+                         ActionType.TYPE_STRING_MESSAGE,
+                         "测试2",
+                         "观星",
+                         1000));
+            list.add(new ChatScriptAction(
+                         ActionType.TYPE_STRING_MESSAGE,
+                         "测试2233",
+                         "月下",
+                         -1)); 
+            list.add(new ChatScriptAction(
+                         ActionType.TYPE_SET_GROUP_NAME,
+                         "朕的煌国",
+                         "",
+                         0));
+            list.add(new ChatScriptAction(
+                         ActionType.TYPE_CHAT_TIP,
+                         "\"观星\"修改了群名为\"朕的煌国\"",
+                         "",
+                         0));
+                         
+            list.add(new ChatScriptAction(
+                         ActionType.TYPE_STRING_MESSAGE,
+                         "刺客先生给我买这个",
+                         "观星",
+                         1000));
+            list.add(new ChatScriptAction(
+                         ActionType.TYPE_STRING_MESSAGE,
+                         "刺客先生给我买",
+                         "观星",
+                         1000));
+            list.add(new ChatScriptAction(
+                         ActionType.TYPE_STRING_MESSAGE,
+                         "人类...晚上老地方见",
+                         "月下",
+                         -1)); 
+            list.add(new ChatScriptAction(
+                         ActionType.TYPE_STRING_MESSAGE,
+                         "？",
+                         "观星",
+                         1000));
+            list.add(new ChatScriptAction(
+                         ActionType.TYPE_STRING_MESSAGE,
+                         "什么老地方",
+                         "观星",
+                         1000));         
 
-                        //      } else {
-                //       ArrayList<ChatScriptAction> list = GSON.fromJson(FileTool.readString(file), new TypeToken<ArrayList<ChatMsgEntity>>(){}.getType());
-                chatMsg.addAll(list);
-                FileTool.saveToFile(file, GSON.toJson(list).getBytes(StandardCharsets.UTF_8));
-                
-       //     }
+                         
+                         
+            list.add(new ChatScriptAction(
+                         ActionType.TYPE_IMAGE_MESSAGE,
+                         "逐火往事.jpg",
+                         "魂钢的优势",
+                         -1));  
+            list.add(new ChatScriptAction(
+                         ActionType.TYPE_IMAGE_MESSAGE,
+                         "神州折剑.jpg",
+                         "你弱爆了",
+                         -1));    
+            list.add(new ChatScriptAction(
+                         ActionType.TYPE_IMAGE_MESSAGE,
+                         "翩然若生.jpg",
+                         "希儿",
+                         -1));     
+
+            list.add(new ChatScriptAction(
+                         ActionType.TYPE_STRING_MESSAGE,
+                         "?",
+                         "仿犹大",
+                         200)); 
+            list.add(new ChatScriptAction(
+                         ActionType.TYPE_STRING_MESSAGE,
+                         "?",
+                         "仿犹大",
+                         200));          
+            list.add(new ChatScriptAction(
+                         ActionType.TYPE_STRING_MESSAGE,
+                         "?",
+                         "仿犹大",
+                         200));                    
+            list.add(new ChatScriptAction(
+                         ActionType.TYPE_STRING_MESSAGE,
+                         "?",
+                         "仿犹大",
+                         200));                   
+            list.add(new ChatScriptAction(
+                         ActionType.TYPE_STRING_MESSAGE,
+                         "?",
+                         "仿犹大",
+                         200));                    
+            list.add(new ChatScriptAction(
+                         ActionType.TYPE_STRING_MESSAGE,
+                         "?",
+                         "仿犹大",
+                         200));          
+            list.add(new ChatScriptAction(
+                         ActionType.TYPE_DIALOG,
+                         "\"仿犹大\"解散了本群",
+                         "提示",
+                         2000));                     
+
+//            ChatScriptAction csDialog = new ChatScriptAction();
+//            csDialog.action = ActionType.TYPE_DIALOG;
+//            csDialog.content = "此群因传播色情信息已被封禁";
+//            csDialog.wait = 0;
+//            csDialog.from = "警告";
+//            list.add(csDialog);
+
+            FileTool.saveToFile(file, GSON.toJson(list).getBytes(StandardCharsets.UTF_8));
+
         } catch (Exception e) {
             e.printStackTrace();
         }

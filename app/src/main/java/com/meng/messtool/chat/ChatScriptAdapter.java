@@ -1,5 +1,6 @@
 package com.meng.messtool.chat;
 
+import android.app.*;
 import android.content.*;
 import android.graphics.*;
 import android.text.*;
@@ -9,10 +10,9 @@ import android.view.animation.*;
 import android.widget.*;
 import com.meng.messtool.*;
 import com.meng.tools.*;
-
 import java.util.*;
 
-public class ChatMsgAdapter extends BaseAdapter {
+public class ChatScriptAdapter extends BaseAdapter {
 
     /*
      *@author 清梦
@@ -25,21 +25,22 @@ public class ChatMsgAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private HashMap<String,Bitmap> headCache = new HashMap<>();
     private Animation animation;
-    private ListView listview;
+    //  private ListView listview;
     private CharacterManager charaManager;
 
     private int mFirstTop, mFirstPosition;  
     private boolean isScrollDown;  
+    private ChatRoomInfo room;
 
-
-    public ChatMsgAdapter(Context context, CharacterManager charaManager, ListView lv, LinkedList<ChatScriptAction> coll) {
+    public ChatScriptAdapter(Context context, CharacterManager charaManager, ChatRoomInfo room, LinkedList<ChatScriptAction> coll) {
         ctx = context;
         this.coll = coll;
-        listview = lv;
+        //  listview = lv;
         mInflater = LayoutInflater.from(context);
         animation = AnimationUtils.loadAnimation(context, R.anim.slide_bottom);
         //  listview.setOnScrollListener(mOnScrollListener);  
         this.charaManager = charaManager;
+        this.room = room;
     }
 
     public int getCount() {
@@ -62,11 +63,11 @@ public class ChatMsgAdapter extends BaseAdapter {
 
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        ChatScriptAction entity = coll.get(position);
+        ChatScriptAction action = coll.get(position);
 
         ViewHolder viewHolder = null;   
         if (convertView == null) {
-            if (entity.isSelf) {
+            if (action.isSelf) {
                 convertView = mInflater.inflate(R.layout.chatting_item_msg_right, null);
             } else {
                 convertView = mInflater.inflate(R.layout.chatting_item_msg_left, null);
@@ -97,25 +98,40 @@ public class ChatMsgAdapter extends BaseAdapter {
         viewHolder.ll.setVisibility(View.GONE);                        
         viewHolder.rl.setVisibility(View.GONE);                        
 
-        switch (entity.action) {
+        switch (action.action) {
+            case TYPE_SET_GROUP_NAME:
+                room.getTvTitle().setText(action.content);
+                break;
             case TYPE_STRING_MESSAGE:
                 viewHolder.rl.setVisibility(View.VISIBLE);                                        
-                viewHolder.tvUserName.setText(entity.from);
-                viewHolder.tvContent.setText(entity.content);
+                viewHolder.tvUserName.setText(action.from);
+                viewHolder.tvContent.setText(action.content);
                 break;
             case TYPE_IMAGE_MESSAGE:
                 viewHolder.rl.setVisibility(View.VISIBLE);                                        
-                viewHolder.tvUserName.setText(entity.from);
-                SpannableString msp = new SpannableString(entity.content);
-                msp.setSpan(new ImageSpan(ctx, BitmapFactory.decodeFile(FileTool.getAppFile(FunctionSavePath.chat_image, entity.content).getAbsolutePath())), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                viewHolder.tvUserName.setText(action.from);
+                SpannableString msp = new SpannableString(action.content);
+                msp.setSpan(new ImageSpan(ctx, BitmapFactory.decodeFile(FileTool.getAppFile(FunctionSavePath.chat_image, action.content).getAbsolutePath())), 0, action.content.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 viewHolder.tvContent.setText(msp);
                 break;
-            case TYPE_DATE_TIP:
+            case TYPE_MESSAGE_RECALL:
+                //TODO
+                break;
+            case TYPE_CHAT_TIP:
                 viewHolder.ll.setVisibility(View.VISIBLE);                        
-                viewHolder.tvSendTime.setText(entity.content);                
+                viewHolder.tvSendTime.setText(action.content);                
                 break;
             case TYPE_DIALOG:
+                new AlertDialog.Builder(ctx)
+                    .setTitle(action.from)
+                    .setMessage(action.content)
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
 
+                        @Override
+                        public void onClick(DialogInterface dia, int which) {
+
+                        }
+                    }).create().show();
                 break;
             default:
 
@@ -123,9 +139,9 @@ public class ChatMsgAdapter extends BaseAdapter {
         }
 
 
-        Bitmap decodeFile = headCache.get(entity.from);
+        Bitmap decodeFile = headCache.get(action.from);
         if (decodeFile == null) {  
-            headCache.put(entity.content, decodeFile = BitmapFactory.decodeFile(FileTool.getAppFile(FunctionSavePath.chat_character, charaManager.get(entity.from).head).getAbsolutePath()));
+            headCache.put(action.content, decodeFile = BitmapFactory.decodeFile(FileTool.getAppFile(FunctionSavePath.chat_character, charaManager.get(action.from).head).getAbsolutePath()));
         }
         viewHolder.img.setImageBitmap(decodeFile);
 

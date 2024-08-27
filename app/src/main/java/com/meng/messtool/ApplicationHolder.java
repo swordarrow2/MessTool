@@ -62,28 +62,8 @@ public class ApplicationHolder extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        Debuger.init(this);
         ExceptionCatcher.getInstance().init(this);
         SharedPreferenceHelper.init(this, "main");
         FileTool.init(this);
-        if (SharedPreferenceHelper.isDebugMode()) {
-            ThreadPool.executeAtFixedRate(new Runnable() {
-
-                @Override
-                public void run() {
-                    final BaseActivity activity = getActivity();
-                    final float maxMemory = (float) (Runtime.getRuntime().maxMemory() * 1.0 / (1024 * 1024));
-                    final float totalMemory = (float) (Runtime.getRuntime().totalMemory() * 1.0 / (1024 * 1024));
-                    final float freeMemory = (float) (Runtime.getRuntime().freeMemory() * 1.0 / (1024 * 1024));
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            activity.setSubtitle(String.format(Locale.CHINA, "max:%.0fM,use:%.2f/%.2fM", maxMemory, freeMemory, totalMemory));
-                        }
-                    });
-                }
-            }, 1000, 1000, TimeUnit.MILLISECONDS);
-        }
     }
 }

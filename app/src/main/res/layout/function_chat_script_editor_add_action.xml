@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<Spinner
+		android:id="@+id/function_chat_script_editor_add_actionSpinner"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"/>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<EditText
+			android:layout_weight="4"
+			android:hint="from"
+			android:layout_width="0dp"
+			android:id="@+id/function_chat_script_editor_add_action_from"
+			android:layout_height="wrap_content"/>
+
+		<Button
+			android:layout_weight="1"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:text="选择"/>
+
+		<CheckBox
+			android:layout_weight="1"
+			android:defaultValue="false"
+			android:text="来自自己"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"/>
+
+	</LinearLayout>
+
+	<EditText
+		android:hint="content"
+		android:layout_width="match_parent"
+		android:id="@+id/function_chat_script_editor_add_action_content"
+		android:layout_height="wrap_content"/>
+
+	<EditText
+		android:hint="wait"
+		android:layout_width="match_parent"
+		android:id="@+id/function_chat_script_editor_add_action_wait"
+		android:layout_height="wrap_content"/>
+
+	<EditText
+		android:hint="message id"
+		android:layout_width="match_parent"
+		android:id="@+id/function_chat_script_editor_add_action_message_id"
+		android:layout_height="wrap_content"/>
+
+</LinearLayout>
+

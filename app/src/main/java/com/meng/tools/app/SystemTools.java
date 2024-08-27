@@ -20,7 +20,7 @@ public class SystemTools {
         return ((ConnectivityManager) ApplicationHolder.getActivity().getSystemService(Context.CONNECTIVITY_SERVICE)).getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected();
     }
 
-    public static String getTime() {
+    public static String getTimeEndWithSeconed() {
         return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
     }
 
@@ -40,6 +40,18 @@ public class SystemTools {
         return getDate(new Date(y, m, d).getTime());
     }
 
+    public static String getDateEN() {
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date1 = format1.format(new Date(System.currentTimeMillis()));
+        return date1;// 2012-10-03 23:41:31
+    }
+
+    public static String getTimeWithMinute() {
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+        String date = format.format(new Date(System.currentTimeMillis()));
+        return date;
+	} 
+    
     public static void doVibrate(Context context, long time) {
         Vibrator vibrator = (Vibrator) context.getSystemService(VIBRATOR_SERVICE);
         if (vibrator != null) {

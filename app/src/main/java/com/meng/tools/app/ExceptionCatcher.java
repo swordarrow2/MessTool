@@ -38,7 +38,6 @@ public class ExceptionCatcher implements Thread.UncaughtExceptionHandler {
 
     public void init(Context context) {
         mContext = context;
-        Debuger.addLog(TAG, "init", context.toString());
         mDefaultHandler = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(this);
     }

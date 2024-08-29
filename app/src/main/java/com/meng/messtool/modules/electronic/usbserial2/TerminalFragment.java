@@ -39,16 +39,6 @@ public class TerminalFragment extends BaseFragment implements SerialInputOutputM
     private UsbPermission usbPermission = UsbPermission.Unknown;
     private boolean connected = false;
 
-    @Override
-    public String getTitle() {
-        return "USB串口通信";
-    }
-
-    @Override
-    public String getVersionName() {
-        return "V0.0.1";
-    }
-
     public TerminalFragment() {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -145,6 +135,7 @@ public class TerminalFragment extends BaseFragment implements SerialInputOutputM
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_terminal, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -442,5 +433,20 @@ public class TerminalFragment extends BaseFragment implements SerialInputOutputM
             cdBtn.setChecked(false);
             riBtn.setChecked(false);
         }
+    }
+
+    @Override
+    public String getTitle() {
+        return "USB串口通信";
+    }
+
+    @Override
+    public String getVersionName() {
+        return "V0.0.1";
+    }
+
+    @Override
+    public CharSequence getDescribe() {
+        return "USB串口界面";
     }
 }

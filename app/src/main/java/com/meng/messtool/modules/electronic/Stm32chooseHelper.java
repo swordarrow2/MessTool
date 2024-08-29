@@ -1,5 +1,10 @@
 package com.meng.messtool.modules.electronic;
 
+import android.os.*;
+import android.support.annotation.*;
+import android.view.*;
+
+import com.meng.messtool.*;
 import com.meng.messtool.system.base.*;
 
 import java.util.*;
@@ -12,16 +17,16 @@ public class Stm32chooseHelper extends BaseFragment {
      */
     public static final String TAG = "stm32choose";
 
+    @Nullable
     @Override
-    public String getTitle() {
-        return "STM32型号对比器";
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.function_video_format_convert, container, false);
     }
 
     @Override
-    public String getVersionName() {
-        return "V0.0.1";
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
-
 
     public String analyze(String model) {
         if (!model.startsWith("STM32")) {
@@ -73,7 +78,6 @@ public class Stm32chooseHelper extends BaseFragment {
 
         return builder.toString();
     }
-
 
     private HashMap<String, String> type = new HashMap<String, String>() {
         {
@@ -185,4 +189,19 @@ public class Stm32chooseHelper extends BaseFragment {
             put("D", "-40℃~150℃");
         }
     };
+
+    @Override
+    public String getTitle() {
+        return "STM32型号对比器";
+    }
+
+    @Override
+    public String getVersionName() {
+        return "V0.0.1";
+    }
+
+    @Override
+    public CharSequence getDescribe() {
+        return "STM32型号选择工具";
+    }
 }

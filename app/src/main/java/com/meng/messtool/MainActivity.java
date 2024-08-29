@@ -53,8 +53,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         super.init();
         if (SharedPreferenceHelper.isFirstUse()) {
             SharedPreferenceHelper.setFirstUse(false);
-            AlertDialog dialog = new AlertDialog.Builder(this)
-                    .setTitle("Mestool")
+            new AlertDialog.Builder(this)
+                    .setTitle("Messtool")
                     .setMessage("第一次使用的初始化已经完成，请重启软件")
                     .setPositiveButton("确定", new DialogInterface.OnClickListener() {
 
@@ -62,8 +62,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         public void onClick(DialogInterface dia, int which) {
                             finish();
                         }
-                    }).create();
-            dialog.show();
+                    }).create().show();
         }
         setContentView(R.layout.system_main_activity);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);

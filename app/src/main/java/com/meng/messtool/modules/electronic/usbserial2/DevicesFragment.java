@@ -22,20 +22,7 @@ public class DevicesFragment extends BaseFragment {
     private ArrayAdapter<ListItem> listAdapter;
     private int baudRate = 115200;
     private boolean withIoManager = true;
-    private ListView listView;
     private PendingIntent mPrtPermissionIntent;
-    private UsbDeviceConnection usbDeviceConnection;
-    private UsbManager usbManager;
-
-    @Override
-    public String getVersionName() {
-        return "V0.0.1";
-    }
-
-    @Override
-    public String getTitle() {
-        return "USB串口设备列表";
-    }
 
     @Nullable
     @Override
@@ -46,7 +33,7 @@ public class DevicesFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        listView = (ListView) view.findViewById(R.id.list);
+        ListView listView = (ListView) view.findViewById(R.id.list);
         setHasOptionsMenu(true);
         listAdapter = new UsbDeviceAdapter(getActivity(), listItems);
         listView.setAdapter(listAdapter);
@@ -157,6 +144,7 @@ public class DevicesFragment extends BaseFragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_devices, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -216,7 +204,7 @@ public class DevicesFragment extends BaseFragment {
     }
 
     private void refresh() {
-        usbManager = (UsbManager) getActivity().getSystemService(Context.USB_SERVICE);
+        UsbManager usbManager = (UsbManager) getActivity().getSystemService(Context.USB_SERVICE);
         UsbSerialProber usbDefaultProber = UsbSerialProber.getDefaultProber();
         UsbSerialProber usbCustomProber = CustomProber.getCustomProber();
         listItems.clear();
@@ -237,5 +225,18 @@ public class DevicesFragment extends BaseFragment {
         listAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public String getVersionName() {
+        return "V0.0.1";
+    }
 
+    @Override
+    public String getTitle() {
+        return "USB串口设备列表";
+    }
+
+    @Override
+    public CharSequence getDescribe() {
+        return "USB串口设备列表";
+    }
 }

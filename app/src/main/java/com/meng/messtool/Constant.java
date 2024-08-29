@@ -19,4 +19,6 @@ public class Constant {
     public static final int REQUEST_CODE_EDIT_ELEMENT = 5;
     public static final int REQUEST_CODE_REQUEST_PERMISSION = 6;
 
+    public static final int FUNCTION_NOTE_MENU_ID = 7;
+
 }

@@ -14,7 +14,6 @@ public abstract class BaseFragment extends Fragment {
      *@date 2024-04-19 09:45:07
      */
     public static final String TAG = "BaseFragment";
-    public static final int FUNCTION_NOTE_MENU_ID = 0x9961;
 
     public abstract String getVersionName();
 
@@ -34,14 +33,18 @@ public abstract class BaseFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        MenuItem item = menu.add(0, 0x9961, 0, "功能说明");
+        MenuItem item = menu.add(0, Constant.FUNCTION_NOTE_MENU_ID, 0, "功能说明");
         item.setIcon(R.drawable.ic_menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == FUNCTION_NOTE_MENU_ID) {
-
+        if (item.getItemId() == Constant.FUNCTION_NOTE_MENU_ID) {
+            new AlertDialog.Builder(getActivity())
+                    .setTitle("Messtool")
+                    .setMessage(getDescribe())
+                    .setPositiveButton("确定", null)
+                    .create().show();
         }
         return super.onOptionsItemSelected(item);
     }

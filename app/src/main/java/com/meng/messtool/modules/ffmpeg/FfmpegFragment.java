@@ -9,11 +9,11 @@ import android.view.*;
 import android.widget.*;
 
 import com.meng.messtool.*;
+import com.meng.messtool.customview.MaterialDesign.*;
 import com.meng.messtool.system.*;
 import com.meng.messtool.system.base.*;
 import com.meng.messtool.system.task.*;
 import com.meng.tools.*;
-import com.meng.messtool.customview.MaterialDesign.*;
 import com.meng.tools.ffmpeg.*;
 
 import java.io.*;
@@ -30,16 +30,6 @@ public class FfmpegFragment extends BaseFragment implements View.OnClickListener
     private CommandBuilder cb;
 
     private View mainView;
-
-    @Override
-    public String getTitle() {
-        return "ffmpeg转换器";
-    }
-
-    @Override
-    public String getVersionName() {
-        return "V1.0.0";
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -111,5 +101,20 @@ public class FfmpegFragment extends BaseFragment implements View.OnClickListener
         String name = ipt.getName() + " → " + opt.getName();
         tvLog = (TextView) mainView.findViewById(R.id.ffmpeg_mainTextView_log);
         new FFmpegBackTask(Runtime.getRuntime().exec(etCommand.getString()), name, tvLog).setTitle(name).start();
+    }
+
+    @Override
+    public String getTitle() {
+        return "ffmpeg转换器";
+    }
+
+    @Override
+    public String getVersionName() {
+        return "V1.0.0";
+    }
+
+    @Override
+    public CharSequence getDescribe() {
+        return "FFmpeg的GUI包装";
     }
 }

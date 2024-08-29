@@ -2,6 +2,7 @@ package com.meng.tools;
 
 import android.content.*;
 import android.database.*;
+import android.graphics.*;
 import android.net.*;
 import android.os.*;
 import android.provider.*;
@@ -10,6 +11,7 @@ import android.webkit.*;
 import com.meng.messtool.*;
 
 import java.io.*;
+import java.nio.charset.*;
 
 public class AndroidContent {
 
@@ -41,26 +43,39 @@ public class AndroidContent {
         ApplicationHolder.getActivity().showToast("已复制到剪贴板");
     }
 
-    public static byte[] readAssets(String fileName) {
-        byte[] buffer = null;
+    public static byte[] readAssets(Context context, String path) {
         try {
-            InputStream in = ApplicationHolder.getActivity().getResources().getAssets().open(fileName);
-            int lenght = in.available();
-            buffer = new byte[lenght];
-            in.read(buffer);
+            byte[] buffer;
+            try (InputStream in = context.getResources().getAssets().open(path)) {
+                int lenght = in.available();
+                buffer = new byte[lenght];
+                in.read(buffer);
+                return buffer;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return buffer;
+        return null;
     }
 
-    public static String readAssetsString(String fileName) {
-        return new String(readAssets(fileName));
+    public static Bitmap readBitmapFromAssets(Context context, String path) {
+        byte[] data = readAssets(context, path);
+        if (data == null) {
+            return null;
+        }
+        return BitmapFactory.decodeByteArray(data, 0, data.length);
+    }
+
+    public static String readAssetsString(Context context, String path) {
+        byte[] data = readAssets(context, path);
+        if (data == null) {
+            return null;
+        }
+        return new String(data, StandardCharsets.UTF_8);
     }
 
     public static String absolutePathFromUri(Context context, Uri uri) {
-        final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
-        if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
+        if (DocumentsContract.isDocumentUri(context, uri)) {
             if (isExternalStorageDocument(uri)) {
                 final String docId = DocumentsContract.getDocumentId(uri);
                 final String[] split = docId.split(":");

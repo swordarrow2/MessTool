@@ -30,7 +30,7 @@ public class About extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.function_system_about, container, false);
+        return inflater.inflate(R.layout.system_about, container, false);
     }
 
     @Override

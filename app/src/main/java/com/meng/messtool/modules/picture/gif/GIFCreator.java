@@ -42,7 +42,7 @@ public class GIFCreator extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.function_picture_encode_gif, container, false);
+        return inflater.inflate(R.layout.picture_encode_gif, container, false);
     }
 
     @Override

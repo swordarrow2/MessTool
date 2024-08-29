@@ -16,7 +16,7 @@ public class CropActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.provider_picture_crop_main);
+        setContentView(R.layout.picture_barcode_picture_crop_main);
         Bitmap bmp = BitmapFactory.decodeFile(getIntent().getStringExtra("path"));
         imageView = (ClipSquareImageView) findViewById(R.id.clipSquareIV);
         imageView.setImageBitmap(bmp);

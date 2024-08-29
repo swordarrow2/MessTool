@@ -37,7 +37,7 @@ public class ElementManagerFragment extends BaseFragment implements View.OnClick
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         ElectronicDatabase.getInstance().init(getActivity());
-        return inflater.inflate(R.layout.function_electronic_main, null);
+        return inflater.inflate(R.layout.electronic_main, null);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class ElementManagerFragment extends BaseFragment implements View.OnClick
         switch (parent.getId()) {
             case R.id.function_electronic_main_list:
                 Element element = eLementAdapter.getItem(position);
-                ScrollView scrollview = (ScrollView) getActivity().getLayoutInflater().inflate(R.layout.function_electronic_show_element, null);
+                ScrollView scrollview = (ScrollView) getActivity().getLayoutInflater().inflate(R.layout.electronic_show_element, null);
                 LinearLayout linearlayout = (LinearLayout) scrollview.getChildAt(0);
                 for (int i = 0; i < linearlayout.getChildCount(); i++) {
                     linearlayout.getChildAt(i).setEnabled(false);

@@ -102,7 +102,7 @@ public class MspV2TestFragment extends BaseFragment implements SerialInputOutput
      */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.function_electronic_usbserial2_msp_terminal, container, false);
+        View view = inflater.inflate(R.layout.electronic_usbserial2_msp_terminal, container, false);
         ListView lvReceiveText = (ListView) view.findViewById(R.id.function_electronic_usbserial2_msp_terminal_list);
         adptReceivedText = new SerialReceiveAdapter(getActivity());
         lvReceiveText.setAdapter(adptReceivedText);

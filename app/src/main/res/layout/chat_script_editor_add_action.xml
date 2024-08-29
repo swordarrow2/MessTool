@@ -19,14 +19,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            android:hint="from" />
+            android:hint="@string/from" />
 
         <Button
             android:id="@+id/function_chat_script_editor_add_actionButton_select_from"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="选择" />
+            android:text="@string/select" />
 
         <CheckBox
             android:id="@+id/function_chat_script_editor_add_actionCheckBox_from_self"
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:defaultValue="false"
-            android:text="来自自己" />
+            android:text="@string/from_self" />
 
     </LinearLayout>
 
@@ -42,19 +42,19 @@
         android:id="@+id/function_chat_script_editor_add_action_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="content" />
+        android:hint="@string/contents" />
 
     <EditText
         android:id="@+id/function_chat_script_editor_add_action_wait"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="wait" />
+        android:hint="@string/wait" />
 
     <EditText
         android:id="@+id/function_chat_script_editor_add_action_message_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="message id" />
+        android:hint="@string/message_id" />
 
 </LinearLayout>
 

@@ -6,7 +6,6 @@ import android.util.*;
 import android.view.*;
 
 public class MengColorPicker extends View {
-    private final float PI = (float) Math.PI;
 
     private Paint paintCirclePhantom;
     private Paint paintCircle;
@@ -183,6 +182,7 @@ public class MengColorPicker extends View {
                     }
                 } else if ((x >= -CenterX && x <= CenterX) && (y >= -CenterY && y <= CenterY)) {
                     float angle = (float) Math.atan2(y, x);
+                    float PI = (float) Math.PI;
                     float unit = angle / (2 * PI);
                     if (unit < 0) unit += 1;
                     paintCenter.setColor(interpColor(arrColorCircle, unit));

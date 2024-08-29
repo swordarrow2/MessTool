@@ -33,7 +33,7 @@ public class PIDSimulator extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.function_electronic_pid_simulator, container, false);
+        return inflater.inflate(R.layout.electronic_pid_simulator, container, false);
     }
 
     @Override

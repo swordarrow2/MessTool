@@ -25,7 +25,7 @@ public class ChatSimulator extends BaseFragment {
     private ListView mListView;
     private ChatScriptAdapter mAdapter;
     private LinkedList<ChatScriptAction> mDataArrays = new LinkedList<ChatScriptAction>();
-    private MessageDatabase messageDB;
+    private MessageManager messageDB;
     public CharacterManager charaManager;
     public ChatRoomInfo chatRoomInfo;
 
@@ -41,7 +41,7 @@ public class ChatSimulator extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_chat, container, false);
+        return inflater.inflate(R.layout.chat_main, container, false);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class ChatSimulator extends BaseFragment {
         findView(view);
         String[] l = FileTool.getAppFile(FunctionSavePath.chat_script, "").list();
         if (l.length == 0) {
-            messageDB.createExample();
+            MessageManager.createExample();
         }
         final String[] items = FileTool.getAppFile(FunctionSavePath.chat_script, "").list();
         new AlertDialog.Builder(getActivity())
@@ -62,7 +62,7 @@ public class ChatSimulator extends BaseFragment {
                     init(items[which]);
                 }
             }).create().show();
-    } 
+    }
 
     private void findView(View view) {
         mListView = (ListView) view.findViewById(R.id.chat_content_list);
@@ -71,11 +71,11 @@ public class ChatSimulator extends BaseFragment {
         chat_bottom_send = (Button) view.findViewById(R.id.chat_bottom_send);
         chat_bottom_edit = (EditText) view.findViewById(R.id.chat_bottom_edit);
         chatRoomInfo = new ChatRoomInfo();
-        chatRoomInfo.setTvTitle(chat_title_nick);
+        chatRoomInfo.setTitleView(chat_title_nick);
     }
 
     private void init(String scriptName)  {
-        messageDB = new MessageDatabase(scriptName);
+        messageDB = new MessageManager(scriptName);
         charaManager = new CharacterManager();
         mAdapter = new ChatScriptAdapter(getActivity(), charaManager, chatRoomInfo, mDataArrays);
         mListView.setAdapter(mAdapter);
@@ -94,7 +94,7 @@ public class ChatSimulator extends BaseFragment {
                         ActionType.TYPE_STRING_MESSAGE,
                         contString,
                         "快乐的清洁工",
-                        0);                    
+                        0);
                     onMessage(entity);
                     //            initData();
                 }
@@ -136,34 +136,11 @@ public class ChatSimulator extends BaseFragment {
                         for (ChatScriptAction entity : list) {
                             try {
                                 Thread.sleep(entity.wait == -1 ?random.nextInt(3000): entity.wait);
-                            } catch (InterruptedException e) {}
+                            } catch (InterruptedException ignore) {}
                             onMessage(entity);
                         }
-
-//                        try {
-//                            Thread.sleep(500);
-//                        } catch (InterruptedException e) {}
-//                        getActivity(). runOnUiThread(new Runnable(){
-//
-//                                @Override
-//                                public void run() {
-//                                    new AlertDialog.Builder(getActivity())
-//                                        .setTitle("提示")
-//                                        .setMessage("该群因传播色情信息已被封禁")
-//                                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//
-//                                            @Override
-//                                            public void onClick(DialogInterface dia, int which) {
-//                                                getActivity(). finish();
-//                                            }
-//                                        })             
-//                                        .create().show();
-//                                }
-//                            });
                     }
                 });
-
-            //     Collections.reverse(mDataArrays);
         }
 
     }
@@ -179,9 +156,9 @@ public class ChatSimulator extends BaseFragment {
         String mins = String.valueOf(c.get(Calendar.MINUTE));
 
 
-        StringBuffer sbBuffer = new StringBuffer();
-        sbBuffer.append(year + "-" + month + "-" + day + " " + hour + ":" + mins); 
-        return sbBuffer.toString();
+        StringBuilder builder = new StringBuilder();
+        builder.append(year + "-" + month + "-" + day + " " + hour + ":" + mins);
+        return builder.toString();
     }
 
     private void onMessage(final ChatScriptAction msg) {
@@ -190,8 +167,8 @@ public class ChatSimulator extends BaseFragment {
                 @Override
                 public void run() {
                     mDataArrays.add(msg);
-                    mAdapter.notifyDataSetChanged();         
-                    //    mListView.setSelection(mListView.getCount() - 1);   
+                    mAdapter.notifyDataSetChanged();
+                    //    mListView.setSelection(mListView.getCount() - 1);
                     mListView.smoothScrollToPosition(mListView.getCount() - 1);
                 }
             });

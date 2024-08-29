@@ -38,7 +38,7 @@ public class DcdcBuckCalculateFragment extends BaseFragment implements View.OnCl
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.function_electronic_dcdc_buck_calculate, container, false);
+        return inflater.inflate(R.layout.electronic_dcdc_buck_calculate, container, false);
     }
 
     @Override

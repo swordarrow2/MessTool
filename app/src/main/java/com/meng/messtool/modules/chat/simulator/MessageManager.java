@@ -7,17 +7,17 @@ import java.io.*;
 import java.nio.charset.*;
 import java.util.*;
 
-public class MessageDatabase {
+public class MessageManager {
 
     /*
      *@author 清梦
      *@date 2024-08-26 17:22:11
      */
-    public static final String TAG = "MessageDatabase";
+    public static final String TAG = "MessageManager";
 
     private ArrayList<ChatScriptAction> chatMsg = new ArrayList<>();
 
-    public MessageDatabase(String scriptName) {
+    public MessageManager(String scriptName) {
         
         File file = FileTool.getAppFile(FunctionSavePath.chat_script, scriptName);
         try {

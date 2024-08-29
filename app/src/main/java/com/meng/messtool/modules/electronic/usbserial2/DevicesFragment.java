@@ -37,7 +37,7 @@ public class DevicesFragment extends BaseFragment {
         setHasOptionsMenu(true);
         listAdapter = new UsbDeviceAdapter(getActivity(), listItems);
         listView.setAdapter(listAdapter);
-        listView.addHeaderView(getActivity().getLayoutInflater().inflate(R.layout.function_electronic_usbserial2_device_list_header, null, false), null, false);
+        listView.addHeaderView(getActivity().getLayoutInflater().inflate(R.layout.electronic_usbserial2_device_list_header, null, false), null, false);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

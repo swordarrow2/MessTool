@@ -16,7 +16,7 @@ class ELementAdapter extends BaseAdapter {
     private WeakHashMap<String, Bitmap> cache = new WeakHashMap<>();
     private Activity activity;
 
-    public ELementAdapter(Activity activity) {
+    ELementAdapter(Activity activity) {
         this.activity = activity;
         this.allElelement = ElectronicDatabase.getInstance().getAllELement();
     }
@@ -49,7 +49,7 @@ class ELementAdapter extends BaseAdapter {
 
         ELementAdapter.ViewHolder holder;
         if (convertView == null) {
-            convertView = activity.getLayoutInflater().inflate(R.layout.function_electronic_element_list_item, null);
+            convertView = activity.getLayoutInflater().inflate(R.layout.electronic_element_list_item, null);
             holder = new ELementAdapter.ViewHolder();
             holder.thumbnail = (ImageView) convertView.findViewById(R.id.list_item_medicine_thumbnail);
             holder.name = (TextView) convertView.findViewById(R.id.list_item_medicine_name);

@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/vits_mainMDEditTextContent"
         android:progress="11"
-        android:text="长度" />
+        android:text="@string/length" />
 
     <com.meng.messtool.customview.MengSeekBar
         android:id="@+id/vits_main_seekbar_noice"
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/vits_main_seekbar_length"
         android:progress="20"
-        android:text="情感起伏" />
+        android:text="@string/noice" />
 
     <com.meng.messtool.customview.MengSeekBar
         android:id="@+id/vits_main_seekbar_noicew"
@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/vits_main_seekbar_noice"
         android:progress="37"
-        android:text="音素长度" />
+        android:text="@string/noicew" />
 
     <Button
         android:id="@+id/vits_mainButton"

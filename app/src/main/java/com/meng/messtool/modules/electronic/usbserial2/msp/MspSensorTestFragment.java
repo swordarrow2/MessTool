@@ -125,7 +125,7 @@ public class MspSensorTestFragment extends BaseFragment implements SerialInputOu
      */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.function_electronic_usbserial2_msp_sensor, container, false);
+        View view = inflater.inflate(R.layout.electronic_usbserial2_msp_sensor, container, false);
 
         sbRangeFinderQuality = (MengSeekBar) view.findViewById(R.id.function_electronic_usbserial2_msp_sensor_range_finder_quality);
         sbRangeFinderDistanceMm = (MengSeekBar) view.findViewById(R.id.function_electronic_usbserial2_msp_sensor_range_finder_distanceMm);

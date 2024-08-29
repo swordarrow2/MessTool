@@ -118,7 +118,7 @@ public class SearchSemieeFragment extends BaseFragment {
         public View getView(final int position, View convertView, ViewGroup parent) {
             final ViewHolder holder;
             if (convertView == null) {
-                convertView = getActivity().getLayoutInflater().inflate(R.layout.function_electronic_search_semiee_result_list_item, null);
+                convertView = getActivity().getLayoutInflater().inflate(R.layout.electronic_search_semiee_result_list_item, null);
                 holder = new ViewHolder();
                 holder.tvId = (TextView) convertView.findViewById(R.id.element_list_itemTextView_id);
                 holder.tvModel = (TextView) convertView.findViewById(R.id.element_list_itemTextView_model);

@@ -40,7 +40,7 @@ public class PictureCrypt extends BaseFragment implements View.OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.function_picture_crypt, container, false);
+        return inflater.inflate(R.layout.picture_crypt, container, false);
     }
 
     @Override

@@ -10,6 +10,7 @@ import android.widget.*;
 import com.meng.messtool.modules.chat.simulator.*;
 import com.meng.tools.*;
 import com.meng.tools.app.*;
+
 import java.util.*;
 
 public class MainAdapter extends BaseAdapter {
@@ -26,10 +27,10 @@ public class MainAdapter extends BaseAdapter {
 
     private int pointer = 0;
 
-    public MainAdapter(Context context, LinkedList<ChatScriptAction> coll) {
+    MainAdapter(Context context, LinkedList<ChatScriptAction> coll) {
         ctx = context;
-        this.coll = coll;       
-        mInflater = LayoutInflater.from(context);      
+        this.coll = coll;
+        mInflater = LayoutInflater.from(context);
     }
 
     public void setPointer(int i) {
@@ -52,12 +53,12 @@ public class MainAdapter extends BaseAdapter {
 
         ChatScriptAction action = coll.get(position);
 
-        ViewHolder viewHolder = null;   
-        if (convertView == null) {               
+        ViewHolder viewHolder = null;
+        if (convertView == null) {
             convertView = mInflater.inflate(android.R.layout.simple_list_item_2, null);
             viewHolder = new ViewHolder();
             viewHolder.tv1 = (TextView) convertView.findViewById(android.R.id.text1);
-            viewHolder.tv2 = (TextView) convertView.findViewById(android.R.id.text1);               
+            viewHolder.tv2 = (TextView) convertView.findViewById(android.R.id.text2);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -67,7 +68,7 @@ public class MainAdapter extends BaseAdapter {
         } else {
             convertView.setBackgroundColor(Color.TRANSPARENT);
         }
-        viewHolder.tv1.setText(action.action.toString()); 
+        viewHolder.tv1.setText(action.action.toString());
         switch (action.action) {
             case TYPE_SET_GROUP_NAME:
                 viewHolder.tv2.setText(action.content);
@@ -87,17 +88,17 @@ public class MainAdapter extends BaseAdapter {
                 viewHolder.tv2.setText(String.format("tip:%s", action.content));
                 break;
             case TYPE_DIALOG:
-                viewHolder.tv2.setText(String.format("dialog-title:%s,content:%s", action.from, action.content));                    
+                viewHolder.tv2.setText(String.format("dialog-title:%s,content:%s", action.from, action.content));
                 break;
             default:
 
                 break;
         }
         return convertView;
-    }         
+    }
 
-    static class ViewHolder { 
-        public TextView tv1;
-        public TextView tv2;
+    static class ViewHolder {
+        TextView tv1;
+        TextView tv2;
     }
 }

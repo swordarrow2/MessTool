@@ -1,4 +1,4 @@
-package com.meng.messtool.modules.chat.simulator;
+package com.meng.messtool.customview;
 
 import android.content.*;
 import android.content.res.*;

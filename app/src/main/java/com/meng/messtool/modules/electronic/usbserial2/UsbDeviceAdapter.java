@@ -28,7 +28,7 @@ public class UsbDeviceAdapter extends ArrayAdapter<ListItem> {
     public View getView(int position, View view, @NonNull ViewGroup parent) {
         ListItem item = listItems.get(position);
         if (view == null) {
-            view = LayoutInflater.from(getContext()).inflate(R.layout.function_electronic_usbserial2_device_list_item, parent, false);
+            view = LayoutInflater.from(getContext()).inflate(R.layout.electronic_usbserial2_device_list_item, parent, false);
         }
         TextView text1 = (TextView) view.findViewById(R.id.text1);
         TextView text2 = (TextView) view.findViewById(R.id.text2);

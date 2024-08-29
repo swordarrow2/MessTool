@@ -39,7 +39,7 @@ public class RtmpFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.function_video_rtmp_main, container, false);
+        return inflater.inflate(R.layout.video_rtmp_main, container, false);
     }
 
     @Override

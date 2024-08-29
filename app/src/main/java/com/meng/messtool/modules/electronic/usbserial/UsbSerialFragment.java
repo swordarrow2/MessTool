@@ -37,7 +37,7 @@ public class UsbSerialFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View inflate = inflater.inflate(R.layout.function_electronic_usbserial2_device_list, null);
+        View inflate = inflater.inflate(R.layout.electronic_usbserial2_device_list, null);
         listView = (ListView) inflate.findViewById(R.id.function_electronic_usbserial2_device_list_main_list);
         adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, devices);
         listView.setAdapter(adapter);

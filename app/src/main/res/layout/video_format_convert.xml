@@ -16,7 +16,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
-            android:text="选择视频" />
+            android:text="@string/select_video" />
 
         <Button
             android:id="@+id/ffmpeg_mainButton_start"
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
             android:enabled="false"
-            android:text="转换并保存" />
+            android:text="@string/convert_and_save" />
 
     </LinearLayout>
 
@@ -68,8 +68,8 @@
         <TextView
             android:id="@+id/ffmpeg_mainTextView_log"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:text="ffmpeg log">
+            android:layout_height="wrap_content"
+            android:text="@string/ffmpeg_log">
 
         </TextView>
 

@@ -18,7 +18,7 @@ public abstract class BaseDcdcCalculate extends BaseFragment {
 
     @Override
     public final View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View inflate = inflater.inflate(R.layout.function_electronic_farad_calculate, null);
+        View inflate = inflater.inflate(R.layout.electronic_farad_calculate, null);
         ll = (LinearLayout) inflate.findViewById(R.id.boost_calculateLinearLayout);
         title = (TextView) inflate.findViewById(R.id.boost_calculateTextView);
         result = (TextView) inflate.findViewById(R.id.boost_calculateTextViewResult);

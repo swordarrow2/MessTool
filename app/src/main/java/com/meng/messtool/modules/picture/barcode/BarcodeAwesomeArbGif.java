@@ -52,7 +52,7 @@ public class BarcodeAwesomeArbGif extends BaseFragment implements View.OnClickLi
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.function_picture_barcode_gif_arb_qr_main, container, false);
+        return inflater.inflate(R.layout.picture_barcode_gif_arb_qr_main, container, false);
     }
 
     @Override
@@ -219,7 +219,7 @@ public class BarcodeAwesomeArbGif extends BaseFragment implements View.OnClickLi
                             @Override
                             public void onClick(DialogInterface p1, int p2) {
                                 qrSize = msb.getProgress();
-                                //ll.addView(new mengSelectRectView(getActivity(),selectedBmp,screenW,screenH));
+                                //linearLayout.addView(new mengSelectRectView(getActivity(),selectedBmp,screenW,screenH));
                                 mengSeekBar.setVisibility(View.VISIBLE);
                                 mengSeekBar.setMax(msb.getMax());
                                 mengSeekBar.setProgress(msb.getProgress());

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ran="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="top|center_horizontal"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/android_tts_Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/generate_voice" />
+    </LinearLayout>
+
+    <com.meng.messtool.customview.MaterialDesign.MDEditText
+        android:id="@+id/android_tts_MDEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        ran:default_value="@string/input_model_id"
+        ran:hint="输入文本" />
+
+    <com.meng.messtool.customview.MengSeekBar
+        android:id="@+id/android_tts_MengSeekBar_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.meng.messtool.customview.MengSeekBar
+        android:id="@+id/android_tts_MengSeekBar_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
+

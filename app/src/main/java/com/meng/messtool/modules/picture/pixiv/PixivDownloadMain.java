@@ -64,7 +64,7 @@ public class PixivDownloadMain extends BaseFragment {
         PixivDatabase.getInstance().init(getActivity());
         database = PixivDatabase.getInstance();
         database.init(getActivity());
-        return inflater.inflate(R.layout.function_picture_pixiv_download, container, false);
+        return inflater.inflate(R.layout.picture_pixiv_download, container, false);
     }
 
     private void init(View view) {

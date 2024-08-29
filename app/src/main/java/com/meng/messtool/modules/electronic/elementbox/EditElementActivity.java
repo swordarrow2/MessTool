@@ -44,7 +44,7 @@ public class EditElementActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void init() {
         super.init();
-        setContentView(R.layout.function_electronic_add_element);
+        setContentView(R.layout.electronic_add_element);
         initView();
         initData();
     }

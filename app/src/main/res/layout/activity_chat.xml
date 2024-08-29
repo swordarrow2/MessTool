@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/chat_title_relative"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
-        android:background="#fff" >
+        android:background="#fff">
 
         <Button
             android:id="@+id/chat_title_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
             android:layout_alignParentLeft="true"
+            android:layout_centerInParent="true"
+            android:background="#fff"
             android:paddingLeft="7dp"
-            android:text="@string/back" 
-            android:background="#fff"/>
+            android:text="@string/back" />
 
         <TextView
             android:id="@+id/chat_title_nick"
@@ -33,34 +33,35 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        android:background="@color/grays" >
-        
+        android:background="@color/grays"
+        android:orientation="horizontal">
+
         <EditText
-            
+
             android:id="@+id/chat_bottom_edit"
             android:layout_width="0dp"
             android:layout_height="44dp"
             android:layout_weight="4"
-            android:background="@drawable/chat_bottom_edit_shape"  >
-        </EditText>
+            android:background="@drawable/chat_bottom_edit_shape"></EditText>
 
         <Button
             android:id="@+id/chat_bottom_send"
             android:layout_width="0dp"
             android:layout_height="44dp"
             android:layout_weight="1"
-            android:text="@string/send"
-            android:background="@drawable/chat_bottom_send" />
+            android:background="@drawable/chat_bottom_send"
+            android:text="@string/send" />
 
     </LinearLayout>
+
     <ListView
         android:id="@+id/chat_content_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@null"
         android:layout_above="@+id/chat_bottom_linear"
-        android:layout_below="@+id/chat_title_relative" >
-        <requestFocus /> 
+        android:layout_below="@+id/chat_title_relative"
+        android:divider="@null">
+
+        <requestFocus />
     </ListView>
 </RelativeLayout>

@@ -6,18 +6,13 @@
 
 package com.hoho.android.usbserial.driver;
 
-import android.hardware.usb.UsbDevice;
-import android.hardware.usb.UsbDeviceConnection;
-import android.hardware.usb.UsbEndpoint;
-import android.hardware.usb.UsbManager;
+import android.hardware.usb.*;
+
+import java.io.*;
+import java.lang.annotation.*;
+import java.util.*;
 
 //import androidx.annotation.IntDef;
-
-import java.io.Closeable;
-import java.io.IOException;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.util.EnumSet;
 
 /**
  * Interface for a single serial port.

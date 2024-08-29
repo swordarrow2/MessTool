@@ -1,9 +1,10 @@
 package com.meng.messtool.modules.electronic;
 
 import com.meng.messtool.system.base.*;
+
 import java.util.*;
 
-public class Stm32choose extends BaseFragment {
+public class Stm32chooseHelper extends BaseFragment {
 
     /*
      *@author 清梦

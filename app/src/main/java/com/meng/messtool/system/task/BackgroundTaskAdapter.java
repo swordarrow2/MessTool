@@ -3,9 +3,11 @@ package com.meng.messtool.system.task;
 import android.app.*;
 import android.view.*;
 import android.widget.*;
+
 import com.meng.messtool.*;
 import com.meng.messtool.system.debug.*;
 import com.meng.tools.app.*;
+
 import java.util.*;
 
 public class BackgroundTaskAdapter extends BaseAdapter {

@@ -5,21 +5,21 @@ import android.content.*;
 import android.graphics.*;
 import android.net.*;
 import android.os.*;
-import android.support.v7.app.*;
+import android.support.v7.app.AlertDialog;
 import android.util.*;
 import android.view.*;
 import android.widget.*;
+
 import com.meng.messtool.*;
 import com.meng.messtool.customview.*;
 import com.meng.messtool.system.base.*;
 import com.meng.messtool.system.task.*;
 import com.meng.tools.*;
-import com.meng.tools.MaterialDesign.*;
+import com.meng.messtool.customview.MaterialDesign.*;
 import com.meng.tools.app.*;
+
 import java.io.*;
 import java.text.*;
-
-import android.support.v7.app.AlertDialog;
 
 public class BarcodeAwesomeArbGif extends BaseFragment implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 

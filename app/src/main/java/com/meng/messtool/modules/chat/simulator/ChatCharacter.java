@@ -1,4 +1,4 @@
-package com.meng.messtool.modules.chat;
+package com.meng.messtool.modules.chat.simulator;
 
 public class ChatCharacter {
 

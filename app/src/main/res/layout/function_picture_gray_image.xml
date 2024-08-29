@@ -1,40 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 
-	<LinearLayout
-		android:orientation="horizontal"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_alignParentBottom="true"
-		android:id="@+id/binmainLinearLayout_buttons">
+    <LinearLayout
+        android:id="@+id/binmainLinearLayout_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
 
-		<Button
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:layout_weight="1.0"
-			android:id="@+id/binmainButton_select"
-			android:text="选择图片"/>
+        <Button
+            android:id="@+id/binmainButton_select"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:text="选择图片" />
 
-		<Button
-			android:enabled="false"
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:layout_weight="1.0"
-			android:id="@+id/binmainButton_start"
-			android:text="转换并保存"/>
+        <Button
+            android:id="@+id/binmainButton_start"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:enabled="false"
+            android:text="转换并保存" />
 
-	</LinearLayout>
+    </LinearLayout>
 
-	<ImageView
-        android:src="@drawable/ic_image_size_select_actual"
-		android:layout_above="@+id/binmainLinearLayout_buttons"
-		android:id="@+id/bin_mainImageView"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
-		android:scaleType="centerInside"/>
+    <ImageView
+        android:id="@+id/bin_mainImageView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/binmainLinearLayout_buttons"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_image_size_select_actual" />
 
 </RelativeLayout>
 

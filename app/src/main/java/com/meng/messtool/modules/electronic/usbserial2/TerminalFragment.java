@@ -7,10 +7,12 @@ import android.os.*;
 import android.support.annotation.*;
 import android.view.*;
 import android.widget.*;
+
 import com.hoho.android.usbserial.driver.*;
 import com.hoho.android.usbserial.util.*;
 import com.meng.messtool.*;
 import com.meng.messtool.system.base.*;
+
 import java.io.*;
 import java.nio.charset.*;
 import java.util.*;

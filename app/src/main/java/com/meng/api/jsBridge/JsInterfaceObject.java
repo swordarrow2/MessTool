@@ -1,14 +1,16 @@
 package com.meng.api.jsBridge;
-import com.meng.messtool.*;
+
 import android.webkit.*;
 
+import com.meng.messtool.*;
+
 public class JsInterfaceObject {
-    
+
     /*
-	*@author 清梦
-	*@date 2024-08-28 19:28:37
-    */
-public static final String TAG = "JsInterfaceObject";
+     *@author 清梦
+     *@date 2024-08-28 19:28:37
+     */
+    public static final String TAG = "JsInterfaceObject";
     private MainActivity mainActivity;
 
     public void setMainActivity(MainActivity mainActivity) {
@@ -19,9 +21,9 @@ public static final String TAG = "JsInterfaceObject";
         return mainActivity;
     }
 
-@JavascriptInterface
-    public void openLeftDrawer(){
+    @JavascriptInterface
+    public void openLeftDrawer() {
         mainActivity.openLeftDrawer();
     }
-    
+
 }

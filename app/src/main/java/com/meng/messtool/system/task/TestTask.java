@@ -1,9 +1,5 @@
 package com.meng.messtool.system.task;
 
-import android.app.*;
-
-import com.meng.messtool.*;
-
 public class TestTask extends BackgroundTask {
 
     /*

@@ -6,13 +6,11 @@
 
 package com.hoho.android.usbserial.driver;
 
-import android.hardware.usb.UsbDevice;
-import android.util.Pair;
+import android.hardware.usb.*;
+import android.util.*;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.lang.reflect.*;
+import java.util.*;
 
 /**
  * Maps (vendor id, product id) pairs to the corresponding serial driver,
@@ -27,13 +25,13 @@ public class ProbeTable {
     /**
      * Adds or updates a (vendor, product) pair in the table.
      *
-     * @param vendorId the USB vendor id
-     * @param productId the USB product id
+     * @param vendorId    the USB vendor id
+     * @param productId   the USB product id
      * @param driverClass the driver class responsible for this pair
      * @return {@code this}, for chaining
      */
     public ProbeTable addProduct(int vendorId, int productId,
-            Class<? extends UsbSerialDriver> driverClass) {
+                                 Class<? extends UsbSerialDriver> driverClass) {
         mVidPidProbeTable.put(Pair.create(vendorId, productId), driverClass);
         return this;
     }
@@ -90,7 +88,7 @@ public class ProbeTable {
             try {
                 Method method = entry.getKey();
                 Object o = method.invoke(null, usbDevice);
-                if((boolean)o)
+                if ((boolean) o)
                     return entry.getValue();
             } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
                 throw new RuntimeException(e);

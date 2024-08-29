@@ -50,8 +50,8 @@ public class SystemTools {
         SimpleDateFormat format = new SimpleDateFormat("HH:mm");
         String date = format.format(new Date(System.currentTimeMillis()));
         return date;
-	} 
-    
+    }
+
     public static void doVibrate(Context context, long time) {
         Vibrator vibrator = (Vibrator) context.getSystemService(VIBRATOR_SERVICE);
         if (vibrator != null) {

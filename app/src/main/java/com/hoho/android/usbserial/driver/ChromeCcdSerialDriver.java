@@ -1,20 +1,12 @@
 package com.hoho.android.usbserial.driver;
 
-import android.hardware.usb.UsbConstants;
-import android.hardware.usb.UsbDevice;
-import android.hardware.usb.UsbEndpoint;
-import android.hardware.usb.UsbInterface;
-import android.util.Log;
+import android.hardware.usb.*;
+import android.util.*;
 
-import java.io.IOException;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.ArrayList;
+import java.io.*;
+import java.util.*;
 
-public class ChromeCcdSerialDriver implements UsbSerialDriver{
+public class ChromeCcdSerialDriver implements UsbSerialDriver {
 
     private final String TAG = ChromeCcdSerialDriver.class.getSimpleName();
 
@@ -67,7 +59,8 @@ public class ChromeCcdSerialDriver implements UsbSerialDriver{
         protected void closeInt() {
             try {
                 mConnection.releaseInterface(mDataInterface);
-            } catch(Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         }
 
         @Override

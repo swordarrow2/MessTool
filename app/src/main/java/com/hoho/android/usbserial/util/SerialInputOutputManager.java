@@ -7,13 +7,12 @@
 package com.hoho.android.usbserial.util;
 
 import android.os.Process;
-import android.util.Log;
+import android.util.*;
 
-import com.hoho.android.usbserial.driver.SerialTimeoutException;
-import com.hoho.android.usbserial.driver.UsbSerialPort;
+import com.hoho.android.usbserial.driver.*;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
+import java.io.*;
+import java.nio.*;
 
 /**
  * Utility class which services a {@link UsbSerialPort} in its {@link #run()} method.
@@ -84,8 +83,8 @@ public class SerialInputOutputManager implements Runnable {
     /**
      * setThreadPriority. By default a higher priority than UI thread is used to prevent data loss
      *
-     * @param threadPriority  see {@link Process#setThreadPriority(int)}
-     * */
+     * @param threadPriority see {@link Process#setThreadPriority(int)}
+     */
     public void setThreadPriority(int threadPriority) {
         if (mState != State.STOPPED)
             throw new IllegalStateException("threadPriority only configurable before SerialInputOutputManager is started");
@@ -97,7 +96,7 @@ public class SerialInputOutputManager implements Runnable {
      */
     public void setReadTimeout(int timeout) {
         // when set if already running, read already blocks and the new value will not become effective now
-        if(mReadTimeout == 0 && timeout != 0 && mState != State.STOPPED)
+        if (mReadTimeout == 0 && timeout != 0 && mState != State.STOPPED)
             throw new IllegalStateException("readTimeout only configurable before SerialInputOutputManager is started");
         mReadTimeout = timeout;
     }
@@ -130,11 +129,11 @@ public class SerialInputOutputManager implements Runnable {
     }
 
     public void setWriteBufferSize(int bufferSize) {
-        if(getWriteBufferSize() == bufferSize)
+        if (getWriteBufferSize() == bufferSize)
             return;
         synchronized (mWriteBufferLock) {
             ByteBuffer newWriteBuffer = ByteBuffer.allocate(bufferSize);
-            if(mWriteBuffer.position() > 0)
+            if (mWriteBuffer.position() > 0)
                 newWriteBuffer.put(mWriteBuffer.array(), 0, mWriteBuffer.position());
             mWriteBuffer = newWriteBuffer;
         }
@@ -158,14 +157,14 @@ public class SerialInputOutputManager implements Runnable {
      * start SerialInputOutputManager in separate thread
      */
     public void start() {
-        if(mState != State.STOPPED)
+        if (mState != State.STOPPED)
             throw new IllegalStateException("already started");
         new Thread(this, this.getClass().getSimpleName()).start();
     }
 
     /**
      * stop SerialInputOutputManager thread
-     *
+     * <p>
      * when using readTimeout == 0 (default), additionally use usbSerialPort.close() to
      * interrupt blocking read
      */
@@ -194,7 +193,7 @@ public class SerialInputOutputManager implements Runnable {
         }
         Log.i(TAG, "Running ...");
         try {
-            if(mThreadPriority != Process.THREAD_PRIORITY_DEFAULT)
+            if (mThreadPriority != Process.THREAD_PRIORITY_DEFAULT)
                 Process.setThreadPriority(mThreadPriority);
             while (true) {
                 if (getState() != State.RUNNING) {
@@ -204,14 +203,14 @@ public class SerialInputOutputManager implements Runnable {
                 step();
             }
         } catch (Exception e) {
-            if(mSerialPort.isOpen()) {
+            if (mSerialPort.isOpen()) {
                 Log.w(TAG, "Run ending due to exception: " + e.getMessage(), e);
             } else {
                 Log.i(TAG, "Socket closed");
             }
             final Listener listener = getListener();
             if (listener != null) {
-              listener.onRunError(e);
+                listener.onRunError(e);
             }
         } finally {
             synchronized (this) {

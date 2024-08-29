@@ -2,6 +2,7 @@ package com.meng.messtool.system;
 
 import android.os.*;
 import android.view.*;
+
 import com.meng.api.jsBridge.*;
 import com.meng.messtool.*;
 import com.meng.messtool.customview.*;
@@ -41,9 +42,9 @@ public class About extends BaseFragment {
 
     private void welcome() {
         JsInterfaceObject jo = new JsInterfaceObject();
-        jo.setMainActivity((MainActivity)getActivity());
+        jo.setMainActivity((MainActivity) getActivity());
         mWebView.loadUrl("file:///android_asset/about/about.html");
-        mWebView.addJavascriptInterface(jo,"obj");
-   
+        mWebView.addJavascriptInterface(jo, "obj");
+
     }
 }

@@ -1,6 +1,6 @@
 package com.meng.messtool;
 
-import android.app.*;
+import android.app.AlertDialog;
 import android.content.*;
 import android.content.res.*;
 import android.hardware.usb.*;
@@ -11,6 +11,7 @@ import android.support.v4.widget.*;
 import android.support.v7.app.*;
 import android.view.*;
 import android.widget.*;
+
 import com.meng.messtool.modules.electronic.usbserial2.*;
 import com.meng.messtool.system.*;
 import com.meng.messtool.system.base.*;
@@ -20,9 +21,8 @@ import com.meng.messtool.system.task.*;
 import com.meng.tools.*;
 import com.meng.tools.app.*;
 import com.meng.tools.update.*;
-import java.util.concurrent.*;
 
-import android.app.AlertDialog;
+import java.util.concurrent.*;
 
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -54,15 +54,15 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         if (SharedPreferenceHelper.isFirstUse()) {
             SharedPreferenceHelper.setFirstUse(false);
             AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Mestool")
-                .setMessage("第一次使用的初始化已经完成，请重启软件")
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    .setTitle("Mestool")
+                    .setMessage("第一次使用的初始化已经完成，请重启软件")
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
 
-                    @Override
-                    public void onClick(DialogInterface dia, int which) {
-                        finish();
-                    }
-                }).create();
+                        @Override
+                        public void onClick(DialogInterface dia, int which) {
+                            finish();
+                        }
+                    }).create();
             dialog.show();
         }
         setContentView(R.layout.system_main_activity);
@@ -79,7 +79,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         navigationView.inflateHeaderView(R.layout.system_drawer_header);
         ColorStateList csl = ColorStateList.valueOf(0xff000000);
         navigationView.setItemTextColor(csl);
-        
+
         navigationView.setItemIconTintList(csl);
         navigationView.getHeaderView(0).setVisibility(SharedPreferenceHelper.isShowSJF() ? View.VISIBLE : View.GONE);
         BackgroundTaskAdapter.getInstance().init(this);
@@ -98,13 +98,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         intentFilter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
         intentFilter.addAction(Constant.USB_PERMISSION);
         registerReceiver(usbReceiver, intentFilter);//注册receiver
-        ThreadPool.execute(new Runnable(){
+        ThreadPool.execute(new Runnable() {
 
-                @Override
-                public void run() {
-                    new UpdateChecker(MainActivity.this).checkUpdate();
-                }
-            });
+            @Override
+            public void run() {
+                new UpdateChecker(MainActivity.this).checkUpdate();
+            }
+        });
     }
 
     private BroadcastReceiver usbReceiver = new BroadcastReceiver() {
@@ -118,16 +118,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 showToast("USB从机已连接");
                 if (MFragmentManager.getInstance().getCurrent().getClass() != DevicesFragment.class && MFragmentManager.getInstance().getCurrent().getClass() != TerminalFragment.class) {
                     ThreadPool.executeAfterTime(new Runnable() {
-                            @Override
-                            public void run() {
-                                runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            MFragmentManager.getInstance().showFragment(DevicesFragment.class);
-                                        }
-                                    });
-                            }
-                        }, 1000, TimeUnit.MILLISECONDS);
+                        @Override
+                        public void run() {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    MFragmentManager.getInstance().showFragment(DevicesFragment.class);
+                                }
+                            });
+                        }
+                    }, 1000, TimeUnit.MILLISECONDS);
                 }
             }
             if (UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action)) { // USB拔插动作

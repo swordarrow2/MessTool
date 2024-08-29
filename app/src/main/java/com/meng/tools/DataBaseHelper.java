@@ -1,11 +1,5 @@
 package com.meng.tools;
 
-import android.content.*;
-import android.database.*;
-import android.database.sqlite.*;
-
-import java.util.*;
-
 /**
  * Created by SJF on 2024/6/30.
  */

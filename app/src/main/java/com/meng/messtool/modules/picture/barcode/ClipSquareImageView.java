@@ -8,7 +8,6 @@ import android.graphics.drawable.*;
 import android.os.*;
 import android.util.*;
 import android.view.*;
-import android.widget.*;
 
 import com.meng.messtool.*;
 

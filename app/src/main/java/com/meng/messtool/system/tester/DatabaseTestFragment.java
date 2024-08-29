@@ -3,6 +3,7 @@ package com.meng.messtool.system.tester;
 import android.os.*;
 import android.view.*;
 import android.widget.*;
+
 import com.meng.messtool.*;
 import com.meng.messtool.system.base.*;
 import com.meng.tools.app.*;
@@ -20,21 +21,21 @@ public class DatabaseTestFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         textView = (TextView) view.findViewById(R.id.aboutTextView);
-        ThreadPool.execute(new Runnable(){
+        ThreadPool.execute(new Runnable() {
 
-                @Override
-                public void run() {
-                    final UpdateChecker uc = new UpdateChecker((BaseActivity)getActivity());
-                    final UpdateNotes updateNotes = uc.getUpdateNotes();                          
-                    getActivity().runOnUiThread(new Runnable(){
+            @Override
+            public void run() {
+                final UpdateChecker uc = new UpdateChecker((BaseActivity) getActivity());
+                final UpdateNotes updateNotes = uc.getUpdateNotes();
+                getActivity().runOnUiThread(new Runnable() {
 
-                            @Override
-                            public void run() {
-                                   textView.setText(updateNotes.toString());
-                            }
-                        });                                                      
-                }
-            });
+                    @Override
+                    public void run() {
+                        textView.setText(updateNotes.toString());
+                    }
+                });
+            }
+        });
         //  DataBaseHelperOld.init(getActivity());
         //  DataBaseHelperOld.insertData(String.valueOf(1234567));
         //textView.setText(DataBaseHelperOld.searchFailedPic().toString());
@@ -64,8 +65,8 @@ public class DatabaseTestFragment extends BaseFragment {
 //        ));
 
         textView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
 //                pdb.addFailed(String.valueOf(System.currentTimeMillis() / 1000));
 //                edb.addELement(new ElectronicDataBase.Element(
@@ -91,11 +92,11 @@ public class DatabaseTestFragment extends BaseFragment {
 //                        10,//_rest integer
 //                        System.currentTimeMillis()//_time long
 //                ));
-                    //ArrayList<String> res = pdb.getAllFailed();
+                //ArrayList<String> res = pdb.getAllFailed();
 //                ArrayList<ElectronicDataBase.Element> res = edb.getAllELement();
 //                textView.setText(res.toString());
-                }
-            });
+            }
+        });
     }
 
     @Override

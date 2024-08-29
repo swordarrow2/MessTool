@@ -5,7 +5,6 @@ import android.graphics.*;
 import android.net.*;
 import android.os.*;
 
-import com.meng.messtool.*;
 import com.meng.tools.app.*;
 import com.meng.tools.hash.*;
 
@@ -323,23 +322,6 @@ public class FileTool {
         return bs;
     }
 
-    public static class Content {
-        public byte[] magic;
-        public String extendName;
-        public FileType describe;
-
-        public Content(String magic, String extendName, FileType describe) {
-            this.magic = getByteArray(magic);
-            this.extendName = extendName;
-            this.describe = describe;
-        }
-
-        @Override
-        public String toString() {
-            return extendName;
-        }
-    }
-
     public enum FileType {
         jpg_JFIF,
         jpg_Exif,
@@ -452,6 +434,23 @@ public class FileTool {
                 default:
                     throw new IllegalArgumentException("not expect value :" + name());
             }
+        }
+    }
+
+    public static class Content {
+        public byte[] magic;
+        public String extendName;
+        public FileType describe;
+
+        public Content(String magic, String extendName, FileType describe) {
+            this.magic = getByteArray(magic);
+            this.extendName = extendName;
+            this.describe = describe;
+        }
+
+        @Override
+        public String toString() {
+            return extendName;
         }
     }
 }

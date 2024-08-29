@@ -4,11 +4,14 @@ import android.app.*;
 import android.content.*;
 import android.content.pm.*;
 import android.net.*;
+
 import com.meng.messtool.system.base.*;
 import com.meng.tools.*;
 import com.meng.tools.app.*;
-import java.util.*;
+
 import org.jsoup.*;
+
+import java.util.*;
 
 public class UpdateChecker {
 
@@ -27,25 +30,25 @@ public class UpdateChecker {
         this.activity = activity;
     }
 
-    private String getLastVersion() {   
+    private String getLastVersion() {
         try {
             PackageInfo packageInfo = activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0);
-            currentVersion = packageInfo.versionName; 
+            currentVersion = packageInfo.versionName;
             packageName = packageInfo.packageName;
             UpdateNotes un = getUpdateNotes();
             if (un == null) {
                 return null;
             }
-            UpdateNotes.Node lastNode = un.getLastNote();        
-            return lastNode.version;        
+            UpdateNotes.Node lastNode = un.getLastNote();
+            return lastNode.version;
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();  
+            e.printStackTrace();
             activity.showToast("检查更新出错:获取版本信息失败");
             return null;
         }
     }
 
-    public String getLastVersionLink() {         
+    public String getLastVersionLink() {
         //return "https://swordarrow2.github.io/" + packageName + "_" + lastVersion + ".apk";           
         try {
             Connection connection = Jsoup.connect("https://github.com/swordarrow2/MessTool/releases/latest");
@@ -53,9 +56,9 @@ public class UpdateChecker {
             connection.ignoreContentType(true).method(Connection.Method.GET).followRedirects(false);
             Connection.Response response = connection.execute();
             Map<String, String> head = response.headers();
-            return head.get("Location");  
+            return head.get("Location");
         } catch (Exception e) {
-            e.printStackTrace();  
+            e.printStackTrace();
             return "https://github.com/swordarrow2/MessTool/releases/latest";
         }
     }
@@ -65,44 +68,44 @@ public class UpdateChecker {
         if (lastVersion == null) {
             return;
         }
-        if (SharedPreferenceHelper.getVersion().equals(lastVersion)) { 
+        if (SharedPreferenceHelper.getVersion().equals(lastVersion)) {
             return;
-        }  
+        }
         if (currentVersion.equals(lastVersion)) {
             return;
         }
-        final String lastVersionDownloadLink = getLastVersionLink();        
+        final String lastVersionDownloadLink = getLastVersionLink();
         final UpdateNotes un = getUpdateNotes();
         if (un == null) {
             return;
         }
         activity.runOnUiThread(new Runnable() {
 
-                @Override
-                public void run() {
-                    new AlertDialog.Builder(activity)
+            @Override
+            public void run() {
+                new AlertDialog.Builder(activity)
                         .setTitle("发现新版本")
                         .setMessage(un.toString())
                         .setPositiveButton("现在更新", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface p1, int p2) {
                                 new AlertDialog.Builder(activity)
-                                    .setTitle("软件更新")
-                                    .setMessage("跳转至软件下载:" + lastVersionDownloadLink)
-                                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                        .setTitle("软件更新")
+                                        .setMessage("跳转至软件下载:" + lastVersionDownloadLink)
+                                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
 
-                                        @Override
-                                        public void onClick(DialogInterface dia, int which) {
-                                            Intent intent = new Intent();
-                                            intent.setAction("android.intent.action.VIEW");
+                                            @Override
+                                            public void onClick(DialogInterface dia, int which) {
+                                                Intent intent = new Intent();
+                                                intent.setAction("android.intent.action.VIEW");
 
-                                            Uri contentUrl = Uri.parse(lastVersionDownloadLink);
-                                            intent.setData(contentUrl);
-                                            activity.startActivity(intent);                                              
-                                        }
-                                    })
-                                    .setNegativeButton("取消", null)
-                                    .create().show();
+                                                Uri contentUrl = Uri.parse(lastVersionDownloadLink);
+                                                intent.setData(contentUrl);
+                                                activity.startActivity(intent);
+                                            }
+                                        })
+                                        .setNegativeButton("取消", null)
+                                        .create().show();
                             }
                         }).setNeutralButton("下次提醒我", null)
                         .setNegativeButton("忽略本次更新", new DialogInterface.OnClickListener() {
@@ -111,8 +114,8 @@ public class UpdateChecker {
                                 SharedPreferenceHelper.setVersion(lastVersion);
                             }
                         }).show();
-                }                   
-            });
+            }
+        });
     }
 
     public UpdateNotes getUpdateNotes() {
@@ -123,7 +126,7 @@ public class UpdateChecker {
             try {
                 fromJson = GSON.fromJson(MNetwork.httpGet("https://swordarrow2.github.io/example.json"), UpdateNotes.class);
             } catch (Exception e2) {
-                return null;  
+                return null;
             }
         }
 //        UpdateNotes fromJson=new UpdateNotes();
@@ -143,13 +146,13 @@ public class UpdateChecker {
         for (UpdateNotes.Node node : fromJson.noteList) {
             index++;
             if (node.version.equals(currentVersion)) {
-                break;  
+                break;
             }
         }
         if (index == fromJson.noteList.size()) {
             index = 0;
         }
         fromJson.noteList = new LinkedList<UpdateNotes.Node>(fromJson.noteList.subList(index, fromJson.noteList.size()));
-        return fromJson;   
+        return fromJson;
     }
 }

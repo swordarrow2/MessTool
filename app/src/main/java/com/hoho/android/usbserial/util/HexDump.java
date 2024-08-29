@@ -16,7 +16,7 @@
 
 package com.hoho.android.usbserial.util;
 
-import java.security.InvalidParameterException;
+import java.security.*;
 
 /**
  * Clone of Android's /core/java/com/android/internal/util/HexDump class, for use in debugging.
@@ -144,7 +144,9 @@ public class HexDump {
         throw new InvalidParameterException("Invalid hex char '" + c + "'");
     }
 
-    /** accepts any separator, e.g. space or newline */
+    /**
+     * accepts any separator, e.g. space or newline
+     */
     public static byte[] hexStringToByteArray(String hexString) {
         int length = hexString.length();
         byte[] buffer = new byte[(length + 1) / 3];

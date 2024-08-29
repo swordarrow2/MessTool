@@ -247,8 +247,8 @@ public class AwesomeQRCode {
             throw new IllegalArgumentException("Found empty contents");
         }
         Map<EncodeHintType, Object> hintMap = new HashMap<>();
-		
-		hintMap.put(EncodeHintType.CHARACTER_SET, "utf-8");
+
+        hintMap.put(EncodeHintType.CHARACTER_SET, "utf-8");
         hintMap.put(EncodeHintType.ERROR_CORRECTION, errorCorrectionLevel);
         return Encoder.encode(contents, errorCorrectionLevel, hintMap);
     }
@@ -318,7 +318,7 @@ public class AwesomeQRCode {
             }
         }
         newBitmap.recycle();
-		c++;
+        c++;
         red = Math.max(0, Math.min(0xFF, red / c));
         green = Math.max(0, Math.min(0xFF, green / c));
         blue = Math.max(0, Math.min(0xFF, blue / c));

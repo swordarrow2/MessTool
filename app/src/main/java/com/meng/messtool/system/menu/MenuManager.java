@@ -1,9 +1,11 @@
 package com.meng.messtool.system.menu;
 
 import android.view.*;
+
 import com.meng.messtool.*;
 import com.meng.messtool.system.debug.*;
 import com.meng.tools.app.*;
+
 import java.util.*;
 
 public class MenuManager {
@@ -47,7 +49,7 @@ public class MenuManager {
                 SubMenu subMenu = menu.addSubMenu(0, entry.getKey().ordinal(), 0, entry.getKey().getName());
                 for (FunctionName fn : entry.getValue()) {
                     MenuItem item = subMenu.add(0, fn.ordinal(), 0, fn.getName());
-                    item.setIcon(R.drawable.ic_menu);              
+                    item.setIcon(R.drawable.ic_menu);
                     Debuger.addLog(TAG, "add function", fn.getName());
                 }
             }

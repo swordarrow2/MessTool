@@ -1,15 +1,15 @@
 package com.hoho.android.usbserial.util;
 
-import android.hardware.usb.UsbDeviceConnection;
+import android.hardware.usb.*;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class UsbUtils {
 
     private UsbUtils() {
     }
 
-    public static  ArrayList<byte[]> getDescriptors(UsbDeviceConnection connection) {
+    public static ArrayList<byte[]> getDescriptors(UsbDeviceConnection connection) {
         ArrayList<byte[]> descriptors = new ArrayList<>();
         byte[] rawDescriptors = connection.getRawDescriptors();
         if (rawDescriptors != null) {

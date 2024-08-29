@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.meng.tools.MaterialDesign.MDEditText
+            <com.meng.messtool.customview.MaterialDesign.MDEditText
                 android:id="@+id/gif_creator_delay"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -27,29 +27,27 @@
                 android:layout_height="match_parent" />
         </LinearLayout>
 
-        <com.meng.tools.MaterialDesign.FloatingButton
+        <com.meng.messtool.customview.MaterialDesign.FloatingButton
             android:id="@+id/fab_add"
-            fab:fab_hideAnimation="@anim/hide_to_bottom"
-            fab:fab_showAnimation="@anim/show_from_bottom" 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
             android:layout_marginBottom="72dp"
             android:layout_marginRight="8dp"
             android:src="@drawable/fab_add"
-            />
-
-        <com.meng.tools.MaterialDesign.FloatingButton
-            android:id="@+id/fab_encode"
             fab:fab_hideAnimation="@anim/hide_to_bottom"
-            fab:fab_showAnimation="@anim/show_from_bottom" 
+            fab:fab_showAnimation="@anim/show_from_bottom" />
+
+        <com.meng.messtool.customview.MaterialDesign.FloatingButton
+            android:id="@+id/fab_encode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
             android:layout_marginBottom="8dp"
             android:layout_marginRight="8dp"
             android:src="@drawable/ic_progress"
-            />
+            fab:fab_hideAnimation="@anim/hide_to_bottom"
+            fab:fab_showAnimation="@anim/show_from_bottom" />
     </FrameLayout>
 
 </RelativeLayout>

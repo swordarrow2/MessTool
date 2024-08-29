@@ -13,10 +13,12 @@ import com.meng.messtool.*;
 import java.io.*;
 
 public class VideoWallpaper extends WallpaperService {
- //   private static final String TAG = VideoWallpaper.class.getName();
+    //   private static final String TAG = VideoWallpaper.class.getName();
     private static String sVideoPath;
+
     /**
      * 设置静音
+     *
      * @param context
      */
     public static void setVoiceSilence(Context context) {
@@ -27,6 +29,7 @@ public class VideoWallpaper extends WallpaperService {
 
     /**
      * 设置有声音
+     *
      * @param context
      */
     public static void setVoiceNormal(Context context) {
@@ -37,6 +40,7 @@ public class VideoWallpaper extends WallpaperService {
 
     /**
      * 设置壁纸
+     *
      * @param context
      */
     public void setToWallPaper(Context context, String videoPath) {
@@ -83,6 +87,7 @@ public class VideoWallpaper extends WallpaperService {
                 mMediaPlayer.pause();
             }
         }
+
         @Override
         public void onSurfaceCreated(SurfaceHolder holder) {
             super.onSurfaceCreated(holder);
@@ -122,6 +127,7 @@ public class VideoWallpaper extends WallpaperService {
                 mMediaPlayer = null;
             }
         }
+
         class VideoVoiceControlReceiver extends BroadcastReceiver {
 
             @Override

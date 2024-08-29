@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="match_parent"
-	android:orientation="vertical"
-	android:layout_height="match_parent">
-	<!--<Spinner
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <!--<Spinner
         android:id="@+id/spinner_simple"
         android:layout_marginTop="10dp"
         android:layout_width="200dp"
         android:layout_height="50dp" />-->
-	<ListView
-		android:id="@+id/function_electronic_main_list"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent" />
+    <ListView
+        android:id="@+id/function_electronic_main_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-	<com.meng.tools.MaterialDesign.FloatingButton
-		android:id="@+id/fab_select"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_gravity="bottom|right"
-		android:layout_marginBottom="12dp"
-		android:layout_marginRight="16dp"
-		android:src="@drawable/fab_add" />
+    <com.meng.messtool.customview.MaterialDesign.FloatingButton
+        android:id="@+id/fab_select"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="12dp"
+        android:layout_marginRight="16dp"
+        android:src="@drawable/fab_add" />
 
 </FrameLayout>

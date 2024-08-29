@@ -130,6 +130,6 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/bottom_ll"
         android:layout_below="@id/top_line" />
-    
+
 </RelativeLayout>
 

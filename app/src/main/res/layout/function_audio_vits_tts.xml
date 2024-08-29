@@ -7,47 +7,48 @@
     android:orientation="vertical">
 
     <Spinner
+        android:id="@+id/vits_mainSpinner_charaId"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/vits_mainSpinner_charaId"/>
+        android:layout_height="wrap_content" />
 
-    <com.meng.tools.MaterialDesign.MDEditText
+    <com.meng.messtool.customview.MaterialDesign.MDEditText
         android:id="@+id/vits_mainMDEditTextContent"
         android:layout_width="match_parent"
-        android:layout_below="@+id/vits_mainSpinner_charaId"
         android:layout_height="wrap_content"
-        ran:default_value="测试"
+        android:layout_below="@+id/vits_mainSpinner_charaId"
         android:maxLength="192"
+        ran:default_value="测试"
         ran:hint="@string/contents" />
 
     <com.meng.messtool.customview.MengSeekBar
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="长度"
-        android:progress="11"
         android:id="@+id/vits_main_seekbar_length"
-        android:layout_below="@+id/vits_mainMDEditTextContent" />
-
-    <com.meng.messtool.customview.MengSeekBar
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"  
-        android:text="情感起伏"
-        android:progress="20"
-        android:id="@+id/vits_main_seekbar_noice"
-        android:layout_below="@+id/vits_main_seekbar_length" />
-
-    <com.meng.messtool.customview.MengSeekBar
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="音素长度"
-        android:progress="37"        
+        android:layout_below="@+id/vits_mainMDEditTextContent"
+        android:progress="11"
+        android:text="长度" />
+
+    <com.meng.messtool.customview.MengSeekBar
+        android:id="@+id/vits_main_seekbar_noice"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/vits_main_seekbar_length"
+        android:progress="20"
+        android:text="情感起伏" />
+
+    <com.meng.messtool.customview.MengSeekBar
         android:id="@+id/vits_main_seekbar_noicew"
-        android:layout_below="@+id/vits_main_seekbar_noice" />
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/vits_main_seekbar_noice"
+        android:progress="37"
+        android:text="音素长度" />
+
     <Button
-        android:layout_below="@+id/vits_main_seekbar_noicew"
         android:id="@+id/vits_mainButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/vits_main_seekbar_noicew"
         android:text="@string/generate_voice" />
 
 </RelativeLayout>

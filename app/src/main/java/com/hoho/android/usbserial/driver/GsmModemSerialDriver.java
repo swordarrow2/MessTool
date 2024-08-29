@@ -1,19 +1,12 @@
 package com.hoho.android.usbserial.driver;
 
-import android.hardware.usb.UsbConstants;
-import android.hardware.usb.UsbDevice;
-import android.hardware.usb.UsbEndpoint;
-import android.hardware.usb.UsbInterface;
-import android.util.Log;
+import android.hardware.usb.*;
+import android.util.*;
 
-import java.io.IOException;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
-public class GsmModemSerialDriver implements UsbSerialDriver{
+public class GsmModemSerialDriver implements UsbSerialDriver {
 
     private final String TAG = GsmModemSerialDriver.class.getSimpleName();
 
@@ -66,14 +59,15 @@ public class GsmModemSerialDriver implements UsbSerialDriver{
         protected void closeInt() {
             try {
                 mConnection.releaseInterface(mDataInterface);
-            } catch(Exception ignored) {}
+            } catch (Exception ignored) {
+            }
 
         }
 
         private int initGsmModem() throws IOException {
             int len = mConnection.controlTransfer(
                     0x21, 0x22, 0x01, 0, null, 0, 5000);
-            if(len < 0) {
+            if (len < 0) {
                 throw new IOException("init failed");
             }
             return len;

@@ -1,80 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:ran="http://schemas.android.com/apk/res-auto"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ran="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 
-	<LinearLayout
-		android:orientation="horizontal"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_alignParentBottom="true"
-		android:id="@+id/ffmpeg_mainLinearLayout_buttons">
+    <LinearLayout
+        android:id="@+id/ffmpeg_mainLinearLayout_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
 
-		<Button
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:layout_weight="1.0"
-			android:id="@+id/ffmpeg_mainButton_select"
-			android:text="选择视频"/>
+        <Button
+            android:id="@+id/ffmpeg_mainButton_select"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:text="选择视频" />
 
-		<Button
-			android:enabled="false"
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:layout_weight="1.0"
-			android:id="@+id/ffmpeg_mainButton_start"
-			android:text="转换并保存"/>
+        <Button
+            android:id="@+id/ffmpeg_mainButton_start"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:enabled="false"
+            android:text="转换并保存" />
 
-	</LinearLayout>
+    </LinearLayout>
 
-	<LinearLayout
-		android:layout_above="@+id/ffmpeg_mainLinearLayout_buttons"
-		android:id="@+id/ffmpeg_mainLinearLayout_select_output"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:orientation="horizontal">
+    <LinearLayout
+        android:id="@+id/ffmpeg_mainLinearLayout_select_output"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ffmpeg_mainLinearLayout_buttons"
+        android:orientation="horizontal">
 
-		<com.meng.tools.MaterialDesign.MDEditText
-			android:layout_width="0dp"
-			android:layout_weight="3"
-			android:id="@+id/ffmpeg_mainMDEditText_output_name"
-			android:layout_height="wrap_content"
-			ran:default_value=""
-			ran:hint="命令行"/>
+        <com.meng.messtool.customview.MaterialDesign.MDEditText
+            android:id="@+id/ffmpeg_mainMDEditText_output_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            ran:default_value=""
+            ran:hint="命令行" />
 
-		<Spinner
-			android:visibility="gone"
-			android:layout_width="0dp"
-			android:layout_weight="1"
-			android:layout_height="wrap_content"
-			android:id="@+id/ffmpeg_mainSpinner_format"/>
+        <Spinner
+            android:id="@+id/ffmpeg_mainSpinner_format"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:visibility="gone" />
 
-	</LinearLayout>
+    </LinearLayout>
 
-	<ImageView
-		android:layout_above="@+id/ffmpeg_mainLinearLayout_select_output"
-		android:id="@+id/ffmpeg_mainImageView"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:scaleType="fitCenter"/>
+    <ImageView
+        android:id="@+id/ffmpeg_mainImageView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ffmpeg_mainLinearLayout_select_output"
+        android:scaleType="fitCenter" />
 
-	<ScrollView
-		android:layout_above="@+id/ffmpeg_mainImageView"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
-		android:id="@+id/ffmpeg_mainScrollView1">
+    <ScrollView
+        android:id="@+id/ffmpeg_mainScrollView1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/ffmpeg_mainImageView">
 
-		<TextView
-			android:id="@+id/ffmpeg_mainTextView_log"
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
-			android:text="ffmpeg log">
+        <TextView
+            android:id="@+id/ffmpeg_mainTextView_log"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="ffmpeg log">
 
-		</TextView>
+        </TextView>
 
-	</ScrollView>
+    </ScrollView>
 
 </RelativeLayout>
 

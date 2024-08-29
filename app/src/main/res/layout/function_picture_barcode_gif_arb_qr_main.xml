@@ -42,14 +42,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <com.meng.tools.MaterialDesign.MDEditText
+            <com.meng.messtool.customview.MaterialDesign.MDEditText
                 android:id="@+id/gif_arb_qr_mainmengTextview_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 ran:default_value="@string/contents"
                 ran:hint="@string/input_text" />
 
-            <com.meng.tools.MaterialDesign.MDEditText
+            <com.meng.messtool.customview.MaterialDesign.MDEditText
                 android:id="@+id/gif_arb_qr_mengEdittext_dotScale"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

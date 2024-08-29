@@ -7,12 +7,11 @@ import com.meng.messtool.*;
 import com.meng.tools.app.*;
 
 import java.io.*;
+import java.lang.Process;
 import java.nio.charset.*;
 import java.util.*;
 
-import java.lang.Process;
-
-import static com.meng.messtool.ApplicationHolder.showToast;
+import static com.meng.messtool.ApplicationHolder.*;
 
 public class FFmpegBackTask extends BackgroundTask {
 

@@ -16,20 +16,20 @@ public enum FunctionSavePath {
     TtsVoice("tts"),
     database("database"),
     electronic("eletronic"),
-//  chat("chat"),
+    //  chat("chat"),
     chat_image("chat/image"),
     chat_script("chat/script"),
     chat_character("chat/character"),
     cache("cache"),
     log("crash_log");
 
-    
+
     private String path;
 
-    FunctionSavePath(String path){
+    FunctionSavePath(String path) {
         this.path = path;
     }
-    
+
     public String getPath() {
         return path;
     }

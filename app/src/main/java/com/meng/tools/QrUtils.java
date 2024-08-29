@@ -256,8 +256,8 @@ public class QrUtils {
         Bitmap bitmap = QrUtils.decodeSampledBitmapFromFile(path, 256, 256);
         // Google Photo 相册中选取云照片是会出现 Bitmap == null
         if (bitmap == null) {
-			return null;
-		}
+            return null;
+        }
         return decodeImage(bitmap);
     }
 
@@ -289,19 +289,19 @@ public class QrUtils {
      * @param mBitmap 图片对像
      *                return 生成压缩图片后的图片路径
      *
-	 public static String saveMyBitmap(String bitName, Bitmap mBitmap) throws IOException {
-	 File f = new File(bitName);
-	 if (!f.getParentFile().exists()) {
-	 f.getParentFile().mkdirs();
-	 }
-	 f.createNewFile();
-	 FileOutputStream fOut = null;
-	 fOut = new FileOutputStream(f);
-	 mBitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
-	 fOut.flush();
-	 fOut.close();
-	 return f.getAbsolutePath();
-	 }
+    public static String saveMyBitmap(String bitName, Bitmap mBitmap) throws IOException {
+    File f = new File(bitName);
+    if (!f.getParentFile().exists()) {
+    f.getParentFile().mkdirs();
+    }
+    f.createNewFile();
+    FileOutputStream fOut = null;
+    fOut = new FileOutputStream(f);
+    mBitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+    fOut.flush();
+    fOut.close();
+    return f.getAbsolutePath();
+    }
      */
 
     /**
@@ -398,19 +398,19 @@ public class QrUtils {
             //设置缩放信息
             //将logo图片按martix设置的信息缩放
             mBitmap = Bitmap.createBitmap(mBitmap, 0, 0,
-										  mBitmap.getWidth(), mBitmap.getHeight(), m, false);
+                    mBitmap.getWidth(), mBitmap.getHeight(), m, false);
 
             int[] pixels = new int[size * size];
             for (int y = 0; y < size; y++) {
                 for (int x = 0; x < size; x++) {
                     if (x > halfW - IMAGE_HALFWIDTH &&
-						x < halfW + IMAGE_HALFWIDTH &&
-						y > halfH - IMAGE_HALFWIDTH &&
-						y < halfH + IMAGE_HALFWIDTH) {
+                            x < halfW + IMAGE_HALFWIDTH &&
+                            y > halfH - IMAGE_HALFWIDTH &&
+                            y < halfH + IMAGE_HALFWIDTH) {
                         //该位置用于存放图片信息
                         //记录图片每个像素信息
                         pixels[y * width + x] = mBitmap.getPixel(x - halfW
-																 + IMAGE_HALFWIDTH, y - halfH + IMAGE_HALFWIDTH);
+                                + IMAGE_HALFWIDTH, y - halfH + IMAGE_HALFWIDTH);
                     } else {
                         if (bitMatrix.get(x, y)) {
                             pixels[y * size + x] = true_dot_argb;
@@ -421,7 +421,7 @@ public class QrUtils {
                 }
             }
             Bitmap bitmap = Bitmap.createBitmap(size, size,
-												Bitmap.Config.ARGB_8888);
+                    Bitmap.Config.ARGB_8888);
             bitmap.setPixels(pixels, 0, size, 0, 0, size, size);
             return bitmap;
         } catch (WriterException e) {
@@ -454,11 +454,11 @@ public class QrUtils {
         //int cutX=between(mv.getSelectLeft()/mv.getXishu(),0,finallyBmp.getWidth()-qrSize);
         //int cutY=between(mv.getSelectTop()/mv.getXishu(),0,finallyBmp.getHeight()-qrSize);
         Bitmap bmpQRcode = AwesomeQRCode.create(contents, qrSize, 0, dotScale, colorDark, colorLight,
-												Bitmap.createBitmap(background, cutX, cutY, qrSize, qrSize),
-												false,
-												autoColor,
-												false,
-												128);
+                Bitmap.createBitmap(background, cutX, cutY, qrSize, qrSize),
+                false,
+                autoColor,
+                false,
+                128);
         Bitmap finallyBmp = background.copy(Bitmap.Config.ARGB_8888, true);
         Canvas c = new Canvas(finallyBmp);
         c.drawBitmap(bmpQRcode, cutX, cutY, new Paint());

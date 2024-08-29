@@ -12,22 +12,22 @@ public class UpdateNotes {
 
     public LinkedList<Node> noteList;
 
-    public Node getLastNote(){
+    public Node getLastNote() {
         return noteList.getLast();
     }
-    
-    
+
+
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();              
+        StringBuilder builder = new StringBuilder();
         for (Node node : noteList) {
             builder.append("v").append(node.version).append("\n");
-            for (String s: node.note) {
+            for (String s : node.note) {
                 builder.append("●").append(s).append("\n");
             }
             builder.append("\n");
-        }                
-        return builder.toString();        
+        }
+        return builder.toString();
     }
 
     public static class Node {

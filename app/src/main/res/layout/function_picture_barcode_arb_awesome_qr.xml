@@ -22,14 +22,14 @@
             android:orientation="vertical"
             android:padding="8dp">
 
-            <com.meng.tools.MaterialDesign.MDEditText
+            <com.meng.messtool.customview.MaterialDesign.MDEditText
                 android:id="@+id/awesomeqr_main_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 ran:default_value="@string/input_text"
                 ran:hint="@string/contents" />
 
-            <com.meng.tools.MaterialDesign.MDEditText
+            <com.meng.messtool.customview.MaterialDesign.MDEditText
                 android:id="@+id/awesomeqr_main_dotScale"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -4,8 +4,10 @@ import android.app.*;
 import android.graphics.*;
 import android.view.*;
 import android.widget.*;
+
 import com.meng.messtool.*;
 import com.meng.tools.app.*;
+
 import java.net.*;
 import java.util.*;
 
@@ -13,7 +15,7 @@ import java.util.*;
 public class ResultAdapter extends BaseAdapter {
     private Activity activity;
     private ArrayList<PicResults.Result> resultArrayList;
-    private Map<String,Bitmap> bmpCache = new WeakHashMap<String,Bitmap>();
+    private Map<String, Bitmap> bmpCache = new WeakHashMap<String, Bitmap>();
 
     public ResultAdapter(Activity context, ArrayList<PicResults.Result> resultArrayList) {
         this.activity = context;
@@ -84,11 +86,11 @@ public class ResultAdapter extends BaseAdapter {
                 final Bitmap bmp = BitmapFactory.decodeStream(connection.getInputStream());
                 bmpCache.put(strUrl, bmp);
                 activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            imageView.setImageBitmap(bmp);
-                        }
-                    });
+                    @Override
+                    public void run() {
+                        imageView.setImageBitmap(bmp);
+                    }
+                });
             } catch (Exception e) {
                 ExceptionCatcher.getInstance().uncaughtException(Thread.currentThread(), e);
             }

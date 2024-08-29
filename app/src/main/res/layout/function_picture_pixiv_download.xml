@@ -29,8 +29,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="1">
 
-                    <LinearLayout 
-                        xmlns:fab="http://schemas.android.com/apk/res-auto"
+                    <LinearLayout xmlns:fab="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/pixiv_download_main_browser"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -54,7 +53,7 @@
                                 <CheckBox
                                     android:id="@+id/pixiv_download_main_checkbox_user"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"   
+                                    android:layout_height="wrap_content"
                                     android:text="@string/get_all_pictures" />
 
                                 <ImageView
@@ -64,7 +63,7 @@
 
                             </LinearLayout>
 
-                            <com.meng.tools.MaterialDesign.FloatingMenu
+                            <com.meng.messtool.customview.MaterialDesign.FloatingMenu
                                 android:id="@+id/menu_star"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
@@ -77,25 +76,25 @@
                                 fab:menu_fab_size="normal"
                                 fab:menu_icon="@drawable/ic_star">
 
-                                <com.meng.tools.MaterialDesign.FloatingButton
+                                <com.meng.messtool.customview.MaterialDesign.FloatingButton
                                     android:id="@+id/fab_add_mine"
                                     style="@style/MenuButtonsSmall"
                                     android:layout_width="wrap_content"
-                                    fab:fab_label="fafafa"
                                     android:layout_height="wrap_content"
-                                    android:src="@drawable/ic_star" />
+                                    android:src="@drawable/ic_star"
+                                    fab:fab_label="fafafa" />
 
-                                <com.meng.tools.MaterialDesign.FloatingButton
+                                <com.meng.messtool.customview.MaterialDesign.FloatingButton
                                     android:id="@+id/fab_add_pixiv"
                                     style="@style/MenuButtonsSmall"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    fab:fab_label="pixiv"
-                                    android:src="@drawable/ic_star" />
+                                    android:src="@drawable/ic_star"
+                                    fab:fab_label="pixiv" />
 
-                            </com.meng.tools.MaterialDesign.FloatingMenu>
+                            </com.meng.messtool.customview.MaterialDesign.FloatingMenu>
 
-                            <com.meng.tools.MaterialDesign.FloatingButton
+                            <com.meng.messtool.customview.MaterialDesign.FloatingButton
                                 android:id="@+id/fab_start_download"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -108,7 +107,7 @@
                         </FrameLayout>
                     </LinearLayout>
 
-                    <LinearLayout 
+                    <LinearLayout
                         android:id="@+id/pixiv_download_main_downloading"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -128,7 +127,7 @@
                         </ScrollView>
                     </LinearLayout>
 
-                    <LinearLayout 
+                    <LinearLayout
                         android:id="@+id/pixiv_download_main_downloaded"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -140,7 +139,7 @@
                             android:layout_height="match_parent" />
                     </LinearLayout>
 
-                    <LinearLayout 
+                    <LinearLayout
                         android:id="@+id/pixiv_download_main_like"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"

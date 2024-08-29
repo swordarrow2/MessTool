@@ -10,13 +10,14 @@ import android.os.*;
 import android.text.*;
 import android.view.*;
 import android.widget.*;
+
 import com.meng.messtool.*;
+import com.meng.messtool.R;
 import com.meng.messtool.system.base.*;
 import com.meng.tools.*;
 import com.meng.tools.app.*;
-import java.io.*;
 
-import com.meng.messtool.R;
+import java.io.*;
 
 
 public class PictureCrypt extends BaseFragment implements View.OnClickListener {

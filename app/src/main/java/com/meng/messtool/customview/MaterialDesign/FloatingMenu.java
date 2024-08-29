@@ -1,4 +1,4 @@
-package com.meng.tools.MaterialDesign;
+package com.meng.messtool.customview.MaterialDesign;
 
 import android.animation.*;
 import android.content.*;
@@ -10,11 +10,12 @@ import android.text.*;
 import android.util.*;
 import android.view.*;
 import android.view.animation.*;
-import android.widget.*;
-import com.meng.messtool.*;
-import java.util.*;
-
 import android.view.animation.Interpolator;
+import android.widget.*;
+
+import com.meng.messtool.*;
+
+import java.util.*;
 
 public class FloatingMenu extends ViewGroup {
 

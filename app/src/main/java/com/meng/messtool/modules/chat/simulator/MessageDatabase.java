@@ -1,7 +1,6 @@
-package com.meng.messtool.modules.chat;
+package com.meng.messtool.modules.chat.simulator;
 
 import com.google.gson.reflect.*;
-import com.meng.messtool.*;
 import com.meng.tools.*;
 import com.meng.tools.app.*;
 import java.io.*;

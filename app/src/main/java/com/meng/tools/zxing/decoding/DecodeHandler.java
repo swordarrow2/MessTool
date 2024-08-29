@@ -16,25 +16,17 @@
 
 package com.meng.tools.zxing.decoding;
 
-import android.app.*;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-import android.util.Log;
+import android.os.*;
+import android.util.*;
 
-import com.google.zxing.BinaryBitmap;
-import com.google.zxing.DecodeHintType;
-import com.google.zxing.MultiFormatReader;
-import com.google.zxing.ReaderException;
-import com.google.zxing.Result;
-import com.google.zxing.common.HybridBinarizer;
-import com.meng.messtool.R;
+import com.google.zxing.*;
+import com.google.zxing.common.*;
+import com.meng.messtool.*;
 import com.meng.messtool.modules.picture.barcode.*;
-import com.meng.tools.zxing.camera.CameraManager;
+import com.meng.tools.zxing.camera.*;
 import com.meng.tools.zxing.camera.PlanarYUVLuminanceSource;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.*;
 
 
 final class DecodeHandler extends Handler {

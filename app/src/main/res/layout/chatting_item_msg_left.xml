@@ -11,18 +11,18 @@
         android:id="@+id/chatting_item_msg_leftLinearLayout_time"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" 
-        android:visibility="gone"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/tv_sendtime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="#bfbfbf"
             android:padding="2dp"
             android:textColor="#ffffff"
-            android:textSize="12sp"
-            android:background="#bfbfbf"/>
+            android:textSize="12sp" />
 
     </LinearLayout>
 
@@ -30,41 +30,42 @@
     <RelativeLayout
         android:id="@+id/chatting_item_msg_leftRelativeLayout"
         android:layout_width="fill_parent"
-        android:visibility="gone"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
-        android:layout_marginLeft="5dp" >
+        android:visibility="gone">
 
         <com.meng.messtool.chat.CircleImageView
-            android:id="@+id/iv_userhead" 
+            android:id="@+id/iv_userhead"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
             android:clickable="true"
-            android:layout_alignParentLeft="true" 
-            android:layout_alignParentTop="true" 
             android:src="@drawable/icon"
-            app:civ_border_width="1dp"
-            app:civ_border_color="@color/whites" />
+            app:civ_border_color="@color/whites"
+            app:civ_border_width="1dp" />
 
         <TextView
-            android:id="@+id/tv_username" 
-            android:textSize="12sp"
+            android:id="@+id/tv_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/iv_userhead"
-            android:paddingLeft="20dp" />
-        <TextView 
-            android:textSize="16sp"
-            android:id="@+id/tv_chatcontent" 
-            android:layout_toRightOf="@id/iv_userhead"
+            android:paddingLeft="20dp"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_chatcontent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/tv_username"
             android:layout_marginLeft="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/iv_userhead"
+            android:background="@drawable/chatfrom_bg"
+            android:gravity="center"
             android:paddingLeft="20dp"
             android:paddingRight="12dp"
-            android:gravity="center"
-            android:background="@drawable/chatfrom_bg"  />   
+            android:textSize="16sp" />
 
 
     </RelativeLayout>

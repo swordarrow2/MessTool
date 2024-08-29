@@ -1,4 +1,4 @@
-package com.meng.messtool.modules.chat;
+package com.meng.messtool.modules.chat.simulator;
 
 import android.app.*;
 import android.content.*;

@@ -1,14 +1,5 @@
 package com.meng.messtool;
 
-import android.app.*;
-import android.content.*;
-import android.content.pm.*;
-import android.net.*;
-import com.meng.tools.app.*;
-import com.meng.tools.functional.*;
-import java.util.*;
-import org.jsoup.*;
-
 //public class UpdateInfo {
 //
 //    /*

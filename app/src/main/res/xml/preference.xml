@@ -26,10 +26,10 @@
             android:summary="重启生效"
             android:title="导航栏颜色" />
         <CheckBoxPreference
+            android:defaultValue="true"
             android:key="show_group_name"
             android:summaryOff="隐藏"
             android:summaryOn="显示"
-            android:defaultValue="true"
             android:title="显示或隐藏分组名，重启生效" />
         <PreferenceScreen
             android:summary="重启生效"

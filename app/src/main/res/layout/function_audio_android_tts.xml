@@ -23,7 +23,7 @@
                 android:text="@string/generate_voice" />
         </LinearLayout>
 
-        <com.meng.tools.MaterialDesign.MDEditText
+        <com.meng.messtool.customview.MaterialDesign.MDEditText
             android:id="@+id/android_tts_MDEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -33,15 +33,13 @@
         <com.meng.messtool.customview.MengSeekBar
             android:id="@+id/android_tts_MengSeekBar_1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-             />
-        
+            android:layout_height="wrap_content" />
+
         <com.meng.messtool.customview.MengSeekBar
             android:id="@+id/android_tts_MengSeekBar_2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-             />
-        
+            android:layout_height="wrap_content" />
+
     </LinearLayout>
 </RelativeLayout>
 

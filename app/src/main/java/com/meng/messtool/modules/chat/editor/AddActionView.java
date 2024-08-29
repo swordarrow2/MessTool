@@ -4,7 +4,7 @@ import android.util.*;
 import android.view.*;
 import android.widget.*;
 import com.meng.messtool.*;
-import com.meng.messtool.modules.chat.*;
+import com.meng.messtool.modules.chat.simulator.*;
 
 public class AddActionView extends LinearLayout {
 

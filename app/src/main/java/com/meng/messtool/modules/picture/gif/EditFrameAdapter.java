@@ -3,32 +3,34 @@ package com.meng.messtool.modules.picture.gif;
 import android.app.*;
 import android.view.*;
 import android.widget.*;
+
 import com.meng.messtool.*;
+
 import java.io.*;
 import java.util.*;
 
 public class EditFrameAdapter extends BaseAdapter {
     private Activity context;
     private ArrayList<GIFFrame> frames;
-	private boolean showAll;
+    private boolean showAll;
 
-    public EditFrameAdapter(Activity context, ArrayList<GIFFrame> infos,boolean showFullPath) {
+    public EditFrameAdapter(Activity context, ArrayList<GIFFrame> infos, boolean showFullPath) {
         this.context = context;
         this.frames = infos;
-		showAll=showFullPath;
-	  }
+        showAll = showFullPath;
+    }
 
     public int getCount() {
         return frames.size();
-	  }
+    }
 
     public Object getItem(int position) {
         return frames.get(position);
-	  }
+    }
 
     public long getItemId(int position) {
         return frames.get(position).hashCode();
-	  }
+    }
 
     public View getView(final int position, View convertView, ViewGroup parent) {
 
@@ -40,24 +42,24 @@ public class EditFrameAdapter extends BaseAdapter {
             holder.tvFileName = (TextView) convertView.findViewById(R.id.textView_bilibiliUid);
             holder.tvDelay = (TextView) convertView.findViewById(R.id.textView_bilibiliLiveId);
             convertView.setTag(holder);
-		  } else {
+        } else {
             holder = (ViewHolder) convertView.getTag();
-		  }
+        }
         GIFFrame gifFrame = frames.get(position);
-		if(showAll){
-        holder.tvFileName.setText(gifFrame.filePath);
-		}else{
-			holder.tvFileName.setText(new File(gifFrame.filePath).getName());
-		}
+        if (showAll) {
+            holder.tvFileName.setText(gifFrame.filePath);
+        } else {
+            holder.tvFileName.setText(new File(gifFrame.filePath).getName());
+        }
         holder.tvDelay.setText("delay:" + gifFrame.delay + "ms");
         holder.imageView.setImageBitmap(gifFrame.thumb);
 
         return convertView;
-	  }
+    }
 
     private final class ViewHolder {
         private ImageView imageView;
         private TextView tvFileName;
         private TextView tvDelay;
-	  }
-  }
+    }
+}

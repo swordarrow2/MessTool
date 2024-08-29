@@ -7,18 +7,13 @@
 
 package com.hoho.android.usbserial.driver;
 
-import android.hardware.usb.UsbConstants;
-import android.hardware.usb.UsbDevice;
-import android.util.Log;
+import android.hardware.usb.*;
+import android.util.*;
 
-import com.hoho.android.usbserial.util.MonotonicClock;
+import com.hoho.android.usbserial.util.*;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
 /*
  * driver is implemented from various information scattered over FTDI documentation
@@ -39,7 +34,7 @@ public class FtdiSerialDriver implements UsbSerialDriver {
     public FtdiSerialDriver(UsbDevice device) {
         mDevice = device;
         mPorts = new ArrayList<>();
-        for( int port = 0; port < device.getInterfaceCount(); port++) {
+        for (int port = 0; port < device.getInterfaceCount(); port++) {
             mPorts.add(new FtdiSerialPort(mDevice, port));
         }
     }
@@ -109,21 +104,21 @@ public class FtdiSerialDriver implements UsbSerialDriver {
             mWriteEndpoint = mDevice.getInterface(mPortNumber).getEndpoint(1);
 
             int result = mConnection.controlTransfer(REQTYPE_HOST_TO_DEVICE, RESET_REQUEST,
-                    RESET_ALL, mPortNumber+1, null, 0, USB_WRITE_TIMEOUT_MILLIS);
+                    RESET_ALL, mPortNumber + 1, null, 0, USB_WRITE_TIMEOUT_MILLIS);
             if (result != 0) {
                 throw new IOException("Reset failed: result=" + result);
             }
             result = mConnection.controlTransfer(REQTYPE_HOST_TO_DEVICE, MODEM_CONTROL_REQUEST,
                     (dtr ? MODEM_CONTROL_DTR_ENABLE : MODEM_CONTROL_DTR_DISABLE) |
                             (rts ? MODEM_CONTROL_RTS_ENABLE : MODEM_CONTROL_RTS_DISABLE),
-                    mPortNumber+1, null, 0, USB_WRITE_TIMEOUT_MILLIS);
+                    mPortNumber + 1, null, 0, USB_WRITE_TIMEOUT_MILLIS);
             if (result != 0) {
                 throw new IOException("Init RTS,DTR failed: result=" + result);
             }
 
             // mDevice.getVersion() would require API 23
             byte[] rawDescriptors = mConnection.getRawDescriptors();
-            if(rawDescriptors == null || rawDescriptors.length < 14) {
+            if (rawDescriptors == null || rawDescriptors.length < 14) {
                 throw new IOException("Could not get device descriptors");
             }
             int deviceType = rawDescriptors[13];
@@ -135,13 +130,13 @@ public class FtdiSerialDriver implements UsbSerialDriver {
         protected void closeInt() {
             try {
                 mConnection.releaseInterface(mDevice.getInterface(mPortNumber));
-            } catch(Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         }
 
         @Override
-        public int read(final byte[] dest, final int timeout) throws IOException
-        {
-            if(dest.length <= READ_HEADER_LENGTH) {
+        public int read(final byte[] dest, final int timeout) throws IOException {
+            if (dest.length <= READ_HEADER_LENGTH) {
                 throw new IllegalArgumentException("Read buffer too small");
                 // could allocate larger buffer, including space for 2 header bytes, but this would
                 // result in buffers not being 64 byte aligned any more, causing data loss at continuous
@@ -152,7 +147,7 @@ public class FtdiSerialDriver implements UsbSerialDriver {
 
         @Override
         public int read(final byte[] dest, int length, final int timeout) throws IOException {
-            if(length <= READ_HEADER_LENGTH) {
+            if (length <= READ_HEADER_LENGTH) {
                 throw new IllegalArgumentException("Read length too small");
                 // could allocate larger buffer, including space for 2 header bytes, but this would
                 // result in buffers not being 64 byte aligned any more, causing data loss at continuous
@@ -163,9 +158,9 @@ public class FtdiSerialDriver implements UsbSerialDriver {
             if (timeout != 0) {
                 long endTime = MonotonicClock.millis() + timeout;
                 do {
-                    nread = super.read(dest, length, Math.max(1, (int)(endTime - MonotonicClock.millis())), false);
+                    nread = super.read(dest, length, Math.max(1, (int) (endTime - MonotonicClock.millis())), false);
                 } while (nread == READ_HEADER_LENGTH && MonotonicClock.millis() < endTime);
-                if(nread <= 0)
+                if (nread <= 0)
                     testConnection(MonotonicClock.millis() < endTime);
             } else {
                 do {
@@ -178,7 +173,7 @@ public class FtdiSerialDriver implements UsbSerialDriver {
         protected int readFilter(byte[] buffer, int totalBytesRead) throws IOException {
             final int maxPacketSize = mReadEndpoint.getMaxPacketSize();
             int destPos = 0;
-            for(int srcPos = 0; srcPos < totalBytesRead; srcPos += maxPacketSize) {
+            for (int srcPos = 0; srcPos < totalBytesRead; srcPos += maxPacketSize) {
                 int length = Math.min(srcPos + maxPacketSize, totalBytesRead) - (srcPos + READ_HEADER_LENGTH);
                 if (length < 0)
                     throw new IOException("Expected at least " + READ_HEADER_LENGTH + " bytes");
@@ -193,11 +188,11 @@ public class FtdiSerialDriver implements UsbSerialDriver {
             int divisor, subdivisor, effectiveBaudRate;
             if (baudRate > 3500000) {
                 throw new UnsupportedOperationException("Baud rate to high");
-            } else if(baudRate >= 2500000) {
+            } else if (baudRate >= 2500000) {
                 divisor = 0;
                 subdivisor = 0;
                 effectiveBaudRate = 3000000;
-            } else if(baudRate >= 1750000) {
+            } else if (baudRate >= 1750000) {
                 divisor = 1;
                 subdivisor = 0;
                 effectiveBaudRate = 2000000;
@@ -209,29 +204,48 @@ public class FtdiSerialDriver implements UsbSerialDriver {
                 if (divisor > 0x3fff) // exceeds bit 13 at 183 baud
                     throw new UnsupportedOperationException("Baud rate to low");
                 effectiveBaudRate = (24000000 << 1) / ((divisor << 3) + subdivisor);
-                effectiveBaudRate = (effectiveBaudRate +1) >> 1;
+                effectiveBaudRate = (effectiveBaudRate + 1) >> 1;
             }
-            double baudRateError = Math.abs(1.0 - (effectiveBaudRate / (double)baudRate));
-            if(baudRateError >= 0.031) // can happen only > 1.5Mbaud
-                throw new UnsupportedOperationException(String.format("Baud rate deviation %.1f%% is higher than allowed 3%%", baudRateError*100));
+            double baudRateError = Math.abs(1.0 - (effectiveBaudRate / (double) baudRate));
+            if (baudRateError >= 0.031) // can happen only > 1.5Mbaud
+                throw new UnsupportedOperationException(String.format("Baud rate deviation %.1f%% is higher than allowed 3%%", baudRateError * 100));
             int value = divisor;
             int index = 0;
-            switch(subdivisor) {
-                case 0:                              break; // 16,15,14 = 000 - sub-integer divisor = 0
-                case 4: value |= 0x4000;             break; // 16,15,14 = 001 - sub-integer divisor = 0.5
-                case 2: value |= 0x8000;             break; // 16,15,14 = 010 - sub-integer divisor = 0.25
-                case 1: value |= 0xc000;             break; // 16,15,14 = 011 - sub-integer divisor = 0.125
-                case 3: value |= 0x0000; index |= 1; break; // 16,15,14 = 100 - sub-integer divisor = 0.375
-                case 5: value |= 0x4000; index |= 1; break; // 16,15,14 = 101 - sub-integer divisor = 0.625
-                case 6: value |= 0x8000; index |= 1; break; // 16,15,14 = 110 - sub-integer divisor = 0.75
-                case 7: value |= 0xc000; index |= 1; break; // 16,15,14 = 111 - sub-integer divisor = 0.875
+            switch (subdivisor) {
+                case 0:
+                    break; // 16,15,14 = 000 - sub-integer divisor = 0
+                case 4:
+                    value |= 0x4000;
+                    break; // 16,15,14 = 001 - sub-integer divisor = 0.5
+                case 2:
+                    value |= 0x8000;
+                    break; // 16,15,14 = 010 - sub-integer divisor = 0.25
+                case 1:
+                    value |= 0xc000;
+                    break; // 16,15,14 = 011 - sub-integer divisor = 0.125
+                case 3:
+                    value |= 0x0000;
+                    index |= 1;
+                    break; // 16,15,14 = 100 - sub-integer divisor = 0.375
+                case 5:
+                    value |= 0x4000;
+                    index |= 1;
+                    break; // 16,15,14 = 101 - sub-integer divisor = 0.625
+                case 6:
+                    value |= 0x8000;
+                    index |= 1;
+                    break; // 16,15,14 = 110 - sub-integer divisor = 0.75
+                case 7:
+                    value |= 0xc000;
+                    index |= 1;
+                    break; // 16,15,14 = 111 - sub-integer divisor = 0.875
             }
-            if(baudRateWithPort) {
+            if (baudRateWithPort) {
                 index <<= 8;
-                index |= mPortNumber+1;
+                index |= mPortNumber + 1;
             }
             Log.d(TAG, String.format("baud rate=%d, effective=%d, error=%.1f%%, value=0x%04x, index=0x%04x, divisor=%d, subdivisor=%d",
-                    baudRate, effectiveBaudRate, baudRateError*100, value, index, divisor, subdivisor));
+                    baudRate, effectiveBaudRate, baudRateError * 100, value, index, divisor, subdivisor));
 
             int result = mConnection.controlTransfer(REQTYPE_HOST_TO_DEVICE, SET_BAUD_RATE_REQUEST,
                     value, index, null, 0, USB_WRITE_TIMEOUT_MILLIS);
@@ -242,7 +256,7 @@ public class FtdiSerialDriver implements UsbSerialDriver {
 
         @Override
         public void setParameters(int baudRate, int dataBits, int stopBits, @Parity int parity) throws IOException {
-            if(baudRate <= 0) {
+            if (baudRate <= 0) {
                 throw new IllegalArgumentException("Invalid baud rate: " + baudRate);
             }
             setBaudrate(baudRate);
@@ -292,7 +306,7 @@ public class FtdiSerialDriver implements UsbSerialDriver {
             }
 
             int result = mConnection.controlTransfer(REQTYPE_HOST_TO_DEVICE, SET_DATA_REQUEST,
-                    config, mPortNumber+1,null, 0, USB_WRITE_TIMEOUT_MILLIS);
+                    config, mPortNumber + 1, null, 0, USB_WRITE_TIMEOUT_MILLIS);
             if (result != 0) {
                 throw new IOException("Setting parameters failed: result=" + result);
             }
@@ -302,7 +316,7 @@ public class FtdiSerialDriver implements UsbSerialDriver {
         private int getStatus() throws IOException {
             byte[] data = new byte[2];
             int result = mConnection.controlTransfer(REQTYPE_DEVICE_TO_HOST, GET_MODEM_STATUS_REQUEST,
-                    0, mPortNumber+1, data, data.length, USB_WRITE_TIMEOUT_MILLIS);
+                    0, mPortNumber + 1, data, data.length, USB_WRITE_TIMEOUT_MILLIS);
             if (result != data.length) {
                 throw new IOException("Get modem status failed: result=" + result);
             }
@@ -332,7 +346,7 @@ public class FtdiSerialDriver implements UsbSerialDriver {
         @Override
         public void setDTR(boolean value) throws IOException {
             int result = mConnection.controlTransfer(REQTYPE_HOST_TO_DEVICE, MODEM_CONTROL_REQUEST,
-                    value ? MODEM_CONTROL_DTR_ENABLE : MODEM_CONTROL_DTR_DISABLE, mPortNumber+1, null, 0, USB_WRITE_TIMEOUT_MILLIS);
+                    value ? MODEM_CONTROL_DTR_ENABLE : MODEM_CONTROL_DTR_DISABLE, mPortNumber + 1, null, 0, USB_WRITE_TIMEOUT_MILLIS);
             if (result != 0) {
                 throw new IOException("Set DTR failed: result=" + result);
             }
@@ -352,7 +366,7 @@ public class FtdiSerialDriver implements UsbSerialDriver {
         @Override
         public void setRTS(boolean value) throws IOException {
             int result = mConnection.controlTransfer(REQTYPE_HOST_TO_DEVICE, MODEM_CONTROL_REQUEST,
-                    value ? MODEM_CONTROL_RTS_ENABLE : MODEM_CONTROL_RTS_DISABLE, mPortNumber+1, null, 0, USB_WRITE_TIMEOUT_MILLIS);
+                    value ? MODEM_CONTROL_RTS_ENABLE : MODEM_CONTROL_RTS_DISABLE, mPortNumber + 1, null, 0, USB_WRITE_TIMEOUT_MILLIS);
             if (result != 0) {
                 throw new IOException("Set DTR failed: result=" + result);
             }
@@ -363,12 +377,12 @@ public class FtdiSerialDriver implements UsbSerialDriver {
         public EnumSet<ControlLine> getControlLines() throws IOException {
             int status = getStatus();
             EnumSet<ControlLine> set = EnumSet.noneOf(ControlLine.class);
-            if(rts) set.add(ControlLine.RTS);
-            if((status & MODEM_STATUS_CTS) != 0) set.add(ControlLine.CTS);
-            if(dtr) set.add(ControlLine.DTR);
-            if((status & MODEM_STATUS_DSR) != 0) set.add(ControlLine.DSR);
-            if((status & MODEM_STATUS_CD) != 0) set.add(ControlLine.CD);
-            if((status & MODEM_STATUS_RI) != 0) set.add(ControlLine.RI);
+            if (rts) set.add(ControlLine.RTS);
+            if ((status & MODEM_STATUS_CTS) != 0) set.add(ControlLine.CTS);
+            if (dtr) set.add(ControlLine.DTR);
+            if ((status & MODEM_STATUS_DSR) != 0) set.add(ControlLine.DSR);
+            if ((status & MODEM_STATUS_CD) != 0) set.add(ControlLine.CD);
+            if ((status & MODEM_STATUS_RI) != 0) set.add(ControlLine.RI);
             return set;
         }
 
@@ -381,7 +395,7 @@ public class FtdiSerialDriver implements UsbSerialDriver {
         public void purgeHwBuffers(boolean purgeWriteBuffers, boolean purgeReadBuffers) throws IOException {
             if (purgeWriteBuffers) {
                 int result = mConnection.controlTransfer(REQTYPE_HOST_TO_DEVICE, RESET_REQUEST,
-                        RESET_PURGE_RX, mPortNumber+1, null, 0, USB_WRITE_TIMEOUT_MILLIS);
+                        RESET_PURGE_RX, mPortNumber + 1, null, 0, USB_WRITE_TIMEOUT_MILLIS);
                 if (result != 0) {
                     throw new IOException("Purge write buffer failed: result=" + result);
                 }
@@ -389,7 +403,7 @@ public class FtdiSerialDriver implements UsbSerialDriver {
 
             if (purgeReadBuffers) {
                 int result = mConnection.controlTransfer(REQTYPE_HOST_TO_DEVICE, RESET_REQUEST,
-                        RESET_PURGE_TX, mPortNumber+1, null, 0, USB_WRITE_TIMEOUT_MILLIS);
+                        RESET_PURGE_TX, mPortNumber + 1, null, 0, USB_WRITE_TIMEOUT_MILLIS);
                 if (result != 0) {
                     throw new IOException("Purge read buffer failed: result=" + result);
                 }
@@ -399,9 +413,9 @@ public class FtdiSerialDriver implements UsbSerialDriver {
         @Override
         public void setBreak(boolean value) throws IOException {
             int config = breakConfig;
-            if(value) config |= 0x4000;
+            if (value) config |= 0x4000;
             int result = mConnection.controlTransfer(REQTYPE_HOST_TO_DEVICE, SET_DATA_REQUEST,
-                    config, mPortNumber+1,null, 0, USB_WRITE_TIMEOUT_MILLIS);
+                    config, mPortNumber + 1, null, 0, USB_WRITE_TIMEOUT_MILLIS);
             if (result != 0) {
                 throw new IOException("Setting BREAK failed: result=" + result);
             }
@@ -409,7 +423,7 @@ public class FtdiSerialDriver implements UsbSerialDriver {
 
         public void setLatencyTimer(int latencyTime) throws IOException {
             int result = mConnection.controlTransfer(REQTYPE_HOST_TO_DEVICE, SET_LATENCY_TIMER_REQUEST,
-                    latencyTime, mPortNumber+1, null, 0, USB_WRITE_TIMEOUT_MILLIS);
+                    latencyTime, mPortNumber + 1, null, 0, USB_WRITE_TIMEOUT_MILLIS);
             if (result != 0) {
                 throw new IOException("Set latency timer failed: result=" + result);
             }
@@ -418,7 +432,7 @@ public class FtdiSerialDriver implements UsbSerialDriver {
         public int getLatencyTimer() throws IOException {
             byte[] data = new byte[1];
             int result = mConnection.controlTransfer(REQTYPE_DEVICE_TO_HOST, GET_LATENCY_TIMER_REQUEST,
-                    0, mPortNumber+1, data, data.length, USB_WRITE_TIMEOUT_MILLIS);
+                    0, mPortNumber + 1, data, data.length, USB_WRITE_TIMEOUT_MILLIS);
             if (result != data.length) {
                 throw new IOException("Get latency timer failed: result=" + result);
             }
@@ -431,12 +445,12 @@ public class FtdiSerialDriver implements UsbSerialDriver {
     public static Map<Integer, int[]> getSupportedDevices() {
         final Map<Integer, int[]> supportedDevices = new LinkedHashMap<>();
         supportedDevices.put(UsbId.VENDOR_FTDI,
-                new int[] {
-                    UsbId.FTDI_FT232R,
-                    UsbId.FTDI_FT232H,
-                    UsbId.FTDI_FT2232H,
-                    UsbId.FTDI_FT4232H,
-                    UsbId.FTDI_FT231X,  // same ID for FT230X, FT231X, FT234XD
+                new int[]{
+                        UsbId.FTDI_FT232R,
+                        UsbId.FTDI_FT232H,
+                        UsbId.FTDI_FT2232H,
+                        UsbId.FTDI_FT4232H,
+                        UsbId.FTDI_FT231X,  // same ID for FT230X, FT231X, FT234XD
                 });
         return supportedDevices;
     }

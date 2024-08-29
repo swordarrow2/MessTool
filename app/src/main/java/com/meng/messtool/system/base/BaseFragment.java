@@ -2,9 +2,10 @@ package com.meng.messtool.system.base;
 
 import android.app.*;
 import android.content.*;
-import android.view.*;
-import com.meng.messtool.*;
 import android.os.*;
+import android.view.*;
+
+import com.meng.messtool.*;
 
 public abstract class BaseFragment extends Fragment {
 
@@ -18,33 +19,33 @@ public abstract class BaseFragment extends Fragment {
     public abstract String getVersionName();
 
     public abstract String getTitle();
-    
-    public CharSequence getDescribe(){
+
+    public CharSequence getDescribe() {
         return null;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if(getDescribe()!=null){
+        if (getDescribe() != null) {
             setHasOptionsMenu(true);
         }
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {    
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         MenuItem item = menu.add(0, 0x9961, 0, "功能说明");
-        item.setIcon(R.drawable.ic_menu);              
+        item.setIcon(R.drawable.ic_menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == FUNCTION_NOTE_MENU_ID){
-            
+        if (item.getItemId() == FUNCTION_NOTE_MENU_ID) {
+
         }
         return super.onOptionsItemSelected(item);
     }
-    
+
     public void showToast(final String msgAbbr, final String msgOrigin) {
         BaseActivity activity = (BaseActivity) getActivity();
         if (activity != null) {

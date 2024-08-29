@@ -1,7 +1,6 @@
 package com.meng.messtool.modules.electronic.elementbox;
 
 import java.io.*;
-import java.util.*;
 
 class Element implements Serializable {
 

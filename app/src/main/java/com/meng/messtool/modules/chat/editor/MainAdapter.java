@@ -6,7 +6,8 @@ import android.text.*;
 import android.text.style.*;
 import android.view.*;
 import android.widget.*;
-import com.meng.messtool.modules.chat.*;
+
+import com.meng.messtool.modules.chat.simulator.*;
 import com.meng.tools.*;
 import com.meng.tools.app.*;
 import java.util.*;

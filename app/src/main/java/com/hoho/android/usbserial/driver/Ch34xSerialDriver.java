@@ -8,6 +8,7 @@ package com.hoho.android.usbserial.driver;
 import android.hardware.usb.*;
 import android.support.design.*;
 import android.util.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -18,21 +19,21 @@ public class Ch34xSerialDriver implements UsbSerialDriver {
     private final UsbDevice mDevice;
     private final UsbSerialPort mPort;
 
-    private static final int LCR_ENABLE_RX   = 0x80;
-    private static final int LCR_ENABLE_TX   = 0x40;
-    private static final int LCR_MARK_SPACE  = 0x20;
-    private static final int LCR_PAR_EVEN    = 0x10;
-    private static final int LCR_ENABLE_PAR  = 0x08;
+    private static final int LCR_ENABLE_RX = 0x80;
+    private static final int LCR_ENABLE_TX = 0x40;
+    private static final int LCR_MARK_SPACE = 0x20;
+    private static final int LCR_PAR_EVEN = 0x10;
+    private static final int LCR_ENABLE_PAR = 0x08;
     private static final int LCR_STOP_BITS_2 = 0x04;
-    private static final int LCR_CS8         = 0x03;
-    private static final int LCR_CS7         = 0x02;
-    private static final int LCR_CS6         = 0x01;
-    private static final int LCR_CS5         = 0x00;
+    private static final int LCR_CS8 = 0x03;
+    private static final int LCR_CS7 = 0x02;
+    private static final int LCR_CS6 = 0x01;
+    private static final int LCR_CS5 = 0x00;
 
     private static final int GCL_CTS = 0x01;
     private static final int GCL_DSR = 0x02;
-    private static final int GCL_RI  = 0x04;
-    private static final int GCL_CD  = 0x08;
+    private static final int GCL_RI = 0x04;
+    private static final int GCL_CD = 0x08;
     private static final int SCL_DTR = 0x20;
     private static final int SCL_RTS = 0x40;
 
@@ -99,7 +100,8 @@ public class Ch34xSerialDriver implements UsbSerialDriver {
             try {
                 for (int i = 0; i < mDevice.getInterfaceCount(); i++)
                     mConnection.releaseInterface(mDevice.getInterface(i));
-            } catch(Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         }
 
         private int controlOut(int request, int value, int index) {
@@ -194,8 +196,8 @@ public class Ch34xSerialDriver implements UsbSerialDriver {
                 final long BAUDBASE_FACTOR = 1532620800;
                 final int BAUDBASE_DIVMAX = 3;
 
-                if(BuildConfig.DEBUG && (baudRate & (3<<29)) == (1<<29))
-                    baudRate &= ~(1<<29); // for testing purpose bypass dedicated baud rate handling
+                if (BuildConfig.DEBUG && (baudRate & (3 << 29)) == (1 << 29))
+                    baudRate &= ~(1 << 29); // for testing purpose bypass dedicated baud rate handling
                 factor = BAUDBASE_FACTOR / baudRate;
                 divisor = BAUDBASE_DIVMAX;
                 while ((factor > 0xfff0) && divisor > 0) {
@@ -224,7 +226,7 @@ public class Ch34xSerialDriver implements UsbSerialDriver {
 
         @Override
         public void setParameters(int baudRate, int dataBits, int stopBits, @Parity int parity) throws IOException {
-            if(baudRate <= 0) {
+            if (baudRate <= 0) {
                 throw new IllegalArgumentException("Invalid baud rate: " + baudRate);
             }
             setBaudRate(baudRate);
@@ -331,12 +333,12 @@ public class Ch34xSerialDriver implements UsbSerialDriver {
         public EnumSet<ControlLine> getControlLines() throws IOException {
             int status = getStatus();
             EnumSet<ControlLine> set = EnumSet.noneOf(ControlLine.class);
-            if(rts) set.add(ControlLine.RTS);
-            if((status & GCL_CTS) == 0) set.add(ControlLine.CTS);
-            if(dtr) set.add(ControlLine.DTR);
-            if((status & GCL_DSR) == 0) set.add(ControlLine.DSR);
-            if((status & GCL_CD) == 0) set.add(ControlLine.CD);
-            if((status & GCL_RI) == 0) set.add(ControlLine.RI);
+            if (rts) set.add(ControlLine.RTS);
+            if ((status & GCL_CTS) == 0) set.add(ControlLine.CTS);
+            if (dtr) set.add(ControlLine.DTR);
+            if ((status & GCL_DSR) == 0) set.add(ControlLine.DSR);
+            if ((status & GCL_CD) == 0) set.add(ControlLine.CD);
+            if ((status & GCL_RI) == 0) set.add(ControlLine.RI);
             return set;
         }
 
@@ -348,10 +350,10 @@ public class Ch34xSerialDriver implements UsbSerialDriver {
         @Override
         public void setBreak(boolean value) throws IOException {
             byte[] req = new byte[2];
-            if(controlIn(0x95, 0x1805, 0, req) < 0) {
+            if (controlIn(0x95, 0x1805, 0, req) < 0) {
                 throw new IOException("Error getting BREAK condition");
             }
-            if(value) {
+            if (value) {
                 req[0] &= ~1;
                 req[1] &= ~0x40;
             } else {
@@ -359,7 +361,7 @@ public class Ch34xSerialDriver implements UsbSerialDriver {
                 req[1] |= 0x40;
             }
             int val = (req[1] & 0xff) << 8 | (req[0] & 0xff);
-            if(controlOut(0x9a, 0x1805, val) < 0) {
+            if (controlOut(0x9a, 0x1805, val) < 0) {
                 throw new IOException("Error setting BREAK condition");
             }
         }

@@ -6,29 +6,21 @@
 
 package com.hoho.android.usbserial.driver;
 
-import android.hardware.usb.UsbConstants;
-import android.hardware.usb.UsbDevice;
-import android.hardware.usb.UsbEndpoint;
-import android.hardware.usb.UsbInterface;
-import android.util.Log;
+import android.hardware.usb.*;
+import android.util.*;
 
-import com.hoho.android.usbserial.util.HexDump;
-import com.hoho.android.usbserial.util.UsbUtils;
+import com.hoho.android.usbserial.util.*;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
 /**
  * USB CDC/ACM serial driver implementation.
  *
  * @author mike wakerly (opensource@hoho.com)
  * @see <a
- *      href="http://www.usb.org/developers/devclass_docs/usbcdc11.pdf">Universal
- *      Serial Bus Class Definitions for Communication Devices, v1.1</a>
+ * href="http://www.usb.org/developers/devclass_docs/usbcdc11.pdf">Universal
+ * Serial Bus Class Definitions for Communication Devices, v1.1</a>
  */
 public class CdcAcmSerialDriver implements UsbSerialDriver {
 
@@ -41,10 +33,9 @@ public class CdcAcmSerialDriver implements UsbSerialDriver {
 
     @Override
     public String toString() {
-        return mDevice.getDeviceName()+" "+mDevice.getSerialNumber()+" "+mPorts.toString();
+        return mDevice.getDeviceName() + " " + mDevice.getSerialNumber() + " " + mPorts.toString();
     }
-    
-    
+
 
     public CdcAcmSerialDriver(UsbDevice device) {
         mDevice = device;
@@ -122,10 +113,10 @@ public class CdcAcmSerialDriver implements UsbSerialDriver {
                 Log.d(TAG, mDevice.getInterface(i).toString());
             }
             if (mPortNumber == -1) {
-                Log.d(TAG,"device might be castrated ACM device, trying single interface logic");
+                Log.d(TAG, "device might be castrated ACM device, trying single interface logic");
                 openSingleInterface();
             } else {
-                Log.d(TAG,"trying default interface logic");
+                Log.d(TAG, "trying default interface logic");
                 openInterface();
             }
         }
@@ -164,7 +155,7 @@ public class CdcAcmSerialDriver implements UsbSerialDriver {
             if (j >= 0) {
                 for (int i = 0; i < mDevice.getInterfaceCount(); i++) {
                     UsbInterface usbInterface = mDevice.getInterface(i);
-                    if (usbInterface.getId() == j || usbInterface.getId() == j+1) {
+                    if (usbInterface.getId() == j || usbInterface.getId() == j + 1) {
                         if (usbInterface.getInterfaceClass() == UsbConstants.USB_CLASS_COMM &&
                                 usbInterface.getInterfaceSubclass() == USB_SUBCLASS_ACM) {
                             mControlIndex = usbInterface.getId();
@@ -199,7 +190,7 @@ public class CdcAcmSerialDriver implements UsbSerialDriver {
                 }
             }
 
-            if(mControlInterface == null) {
+            if (mControlInterface == null) {
                 throw new IOException("No control interface");
             }
             Log.d(TAG, "Control interface id " + mControlInterface.getId());
@@ -212,7 +203,7 @@ public class CdcAcmSerialDriver implements UsbSerialDriver {
                 throw new IOException("Invalid control endpoint");
             }
 
-            if(mDataInterface == null) {
+            if (mDataInterface == null) {
                 throw new IOException("No data interface");
             }
             Log.d(TAG, "data interface id " + mDataInterface.getId());
@@ -231,13 +222,13 @@ public class CdcAcmSerialDriver implements UsbSerialDriver {
         private int getInterfaceIdFromDescriptors() {
             ArrayList<byte[]> descriptors = UsbUtils.getDescriptors(mConnection);
             Log.d(TAG, "USB descriptor:");
-            for(byte[] descriptor : descriptors)
+            for (byte[] descriptor : descriptors)
                 Log.d(TAG, HexDump.toHexString(descriptor));
 
             if (descriptors.size() > 0 &&
                     descriptors.get(0).length == 18 &&
                     descriptors.get(0)[1] == 1 && // bDescriptorType
-                    descriptors.get(0)[4] == (byte)(UsbConstants.USB_CLASS_MISC) && //bDeviceClass
+                    descriptors.get(0)[4] == (byte) (UsbConstants.USB_CLASS_MISC) && //bDeviceClass
                     descriptors.get(0)[5] == 2 && // bDeviceSubClass
                     descriptors.get(0)[6] == 1) { // bDeviceProtocol
                 // is IAD device, see https://www.usb.org/sites/default/files/iadclasscode_r10.pdf
@@ -261,7 +252,7 @@ public class CdcAcmSerialDriver implements UsbSerialDriver {
         private int sendAcmControlMessage(int request, int value, byte[] buf) throws IOException {
             int len = mConnection.controlTransfer(
                     USB_RT_ACM, request, value, mControlIndex, buf, buf != null ? buf.length : 0, 5000);
-            if(len < 0) {
+            if (len < 0) {
                 throw new IOException("controlTransfer failed");
             }
             return len;
@@ -272,37 +263,56 @@ public class CdcAcmSerialDriver implements UsbSerialDriver {
             try {
                 mConnection.releaseInterface(mControlInterface);
                 mConnection.releaseInterface(mDataInterface);
-            } catch(Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         }
 
         @Override
         public void setParameters(int baudRate, int dataBits, int stopBits, @Parity int parity) throws IOException {
-            if(baudRate <= 0) {
+            if (baudRate <= 0) {
                 throw new IllegalArgumentException("Invalid baud rate: " + baudRate);
             }
-            if(dataBits < DATABITS_5 || dataBits > DATABITS_8) {
+            if (dataBits < DATABITS_5 || dataBits > DATABITS_8) {
                 throw new IllegalArgumentException("Invalid data bits: " + dataBits);
             }
             byte stopBitsByte;
             switch (stopBits) {
-                case STOPBITS_1: stopBitsByte = 0; break;
-                case STOPBITS_1_5: stopBitsByte = 1; break;
-                case STOPBITS_2: stopBitsByte = 2; break;
-                default: throw new IllegalArgumentException("Invalid stop bits: " + stopBits);
+                case STOPBITS_1:
+                    stopBitsByte = 0;
+                    break;
+                case STOPBITS_1_5:
+                    stopBitsByte = 1;
+                    break;
+                case STOPBITS_2:
+                    stopBitsByte = 2;
+                    break;
+                default:
+                    throw new IllegalArgumentException("Invalid stop bits: " + stopBits);
             }
 
             byte parityBitesByte;
             switch (parity) {
-                case PARITY_NONE: parityBitesByte = 0; break;
-                case PARITY_ODD: parityBitesByte = 1; break;
-                case PARITY_EVEN: parityBitesByte = 2; break;
-                case PARITY_MARK: parityBitesByte = 3; break;
-                case PARITY_SPACE: parityBitesByte = 4; break;
-                default: throw new IllegalArgumentException("Invalid parity: " + parity);
+                case PARITY_NONE:
+                    parityBitesByte = 0;
+                    break;
+                case PARITY_ODD:
+                    parityBitesByte = 1;
+                    break;
+                case PARITY_EVEN:
+                    parityBitesByte = 2;
+                    break;
+                case PARITY_MARK:
+                    parityBitesByte = 3;
+                    break;
+                case PARITY_SPACE:
+                    parityBitesByte = 4;
+                    break;
+                default:
+                    throw new IllegalArgumentException("Invalid parity: " + parity);
             }
             byte[] msg = {
-                    (byte) ( baudRate & 0xff),
-                    (byte) ((baudRate >> 8 ) & 0xff),
+                    (byte) (baudRate & 0xff),
+                    (byte) ((baudRate >> 8) & 0xff),
                     (byte) ((baudRate >> 16) & 0xff),
                     (byte) ((baudRate >> 24) & 0xff),
                     stopBitsByte,
@@ -341,8 +351,8 @@ public class CdcAcmSerialDriver implements UsbSerialDriver {
         @Override
         public EnumSet<ControlLine> getControlLines() throws IOException {
             EnumSet<ControlLine> set = EnumSet.noneOf(ControlLine.class);
-            if(mRts) set.add(ControlLine.RTS);
-            if(mDtr) set.add(ControlLine.DTR);
+            if (mRts) set.add(ControlLine.RTS);
+            if (mDtr) set.add(ControlLine.DTR);
             return set;
         }
 

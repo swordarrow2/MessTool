@@ -6,17 +6,10 @@
 
 package com.hoho.android.usbserial.driver;
 
-import android.hardware.usb.UsbConstants;
-import android.hardware.usb.UsbDevice;
-import android.hardware.usb.UsbEndpoint;
-import android.hardware.usb.UsbInterface;
+import android.hardware.usb.*;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
 public class Cp21xxSerialDriver implements UsbSerialDriver {
 
@@ -28,7 +21,7 @@ public class Cp21xxSerialDriver implements UsbSerialDriver {
     public Cp21xxSerialDriver(UsbDevice device) {
         mDevice = device;
         mPorts = new ArrayList<>();
-        for( int port = 0; port < device.getInterfaceCount(); port++) {
+        for (int port = 0; port < device.getInterfaceCount(); port++) {
             mPorts.add(new Cp21xxSerialPort(mDevice, port));
         }
     }
@@ -82,7 +75,7 @@ public class Cp21xxSerialDriver implements UsbSerialDriver {
         private static final int RTS_DISABLE = 0x200;
 
         /*
-        * SILABSER_GET_MDMSTS_REQUEST_CODE
+         * SILABSER_GET_MDMSTS_REQUEST_CODE
          */
         private static final int STATUS_CTS = 0x10;
         private static final int STATUS_DSR = 0x20;
@@ -127,7 +120,7 @@ public class Cp21xxSerialDriver implements UsbSerialDriver {
         @Override
         protected void openInt() throws IOException {
             mIsRestrictedPort = mDevice.getInterfaceCount() == 2 && mPortNumber == 1;
-            if(mPortNumber >= mDevice.getInterfaceCount()) {
+            if (mPortNumber >= mDevice.getInterfaceCount()) {
                 throw new IOException("Unknown port number");
             }
             UsbInterface dataIface = mDevice.getInterface(mPortNumber);
@@ -153,16 +146,18 @@ public class Cp21xxSerialDriver implements UsbSerialDriver {
         protected void closeInt() {
             try {
                 setConfigSingle(SILABSER_IFC_ENABLE_REQUEST_CODE, UART_DISABLE);
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
             try {
                 mConnection.releaseInterface(mDevice.getInterface(mPortNumber));
-            } catch(Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         }
 
         private void setBaudRate(int baudRate) throws IOException {
-            byte[] data = new byte[] {
-                    (byte) ( baudRate & 0xff),
-                    (byte) ((baudRate >> 8 ) & 0xff),
+            byte[] data = new byte[]{
+                    (byte) (baudRate & 0xff),
+                    (byte) ((baudRate >> 8) & 0xff),
                     (byte) ((baudRate >> 16) & 0xff),
                     (byte) ((baudRate >> 24) & 0xff)
             };
@@ -175,7 +170,7 @@ public class Cp21xxSerialDriver implements UsbSerialDriver {
 
         @Override
         public void setParameters(int baudRate, int dataBits, int stopBits, @Parity int parity) throws IOException {
-            if(baudRate <= 0) {
+            if (baudRate <= 0) {
                 throw new IllegalArgumentException("Invalid baud rate: " + baudRate);
             }
             setBaudRate(baudRate);
@@ -183,17 +178,17 @@ public class Cp21xxSerialDriver implements UsbSerialDriver {
             int configDataBits = 0;
             switch (dataBits) {
                 case DATABITS_5:
-                    if(mIsRestrictedPort)
+                    if (mIsRestrictedPort)
                         throw new UnsupportedOperationException("Unsupported data bits: " + dataBits);
                     configDataBits |= 0x0500;
                     break;
                 case DATABITS_6:
-                    if(mIsRestrictedPort)
+                    if (mIsRestrictedPort)
                         throw new UnsupportedOperationException("Unsupported data bits: " + dataBits);
                     configDataBits |= 0x0600;
                     break;
                 case DATABITS_7:
-                    if(mIsRestrictedPort)
+                    if (mIsRestrictedPort)
                         throw new UnsupportedOperationException("Unsupported data bits: " + dataBits);
                     configDataBits |= 0x0700;
                     break;
@@ -203,7 +198,7 @@ public class Cp21xxSerialDriver implements UsbSerialDriver {
                 default:
                     throw new IllegalArgumentException("Invalid data bits: " + dataBits);
             }
-            
+
             switch (parity) {
                 case PARITY_NONE:
                     break;
@@ -214,26 +209,26 @@ public class Cp21xxSerialDriver implements UsbSerialDriver {
                     configDataBits |= 0x0020;
                     break;
                 case PARITY_MARK:
-                    if(mIsRestrictedPort)
+                    if (mIsRestrictedPort)
                         throw new UnsupportedOperationException("Unsupported parity: mark");
                     configDataBits |= 0x0030;
                     break;
                 case PARITY_SPACE:
-                    if(mIsRestrictedPort)
+                    if (mIsRestrictedPort)
                         throw new UnsupportedOperationException("Unsupported parity: space");
                     configDataBits |= 0x0040;
                     break;
                 default:
                     throw new IllegalArgumentException("Invalid parity: " + parity);
             }
-            
+
             switch (stopBits) {
                 case STOPBITS_1:
                     break;
                 case STOPBITS_1_5:
                     throw new UnsupportedOperationException("Unsupported stop bits: 1.5");
                 case STOPBITS_2:
-                    if(mIsRestrictedPort)
+                    if (mIsRestrictedPort)
                         throw new UnsupportedOperationException("Unsupported stop bits: 2");
                     configDataBits |= 2;
                     break;
@@ -289,12 +284,12 @@ public class Cp21xxSerialDriver implements UsbSerialDriver {
         public EnumSet<ControlLine> getControlLines() throws IOException {
             byte status = getStatus();
             EnumSet<ControlLine> set = EnumSet.noneOf(ControlLine.class);
-            if(rts) set.add(ControlLine.RTS);
-            if((status & STATUS_CTS) != 0) set.add(ControlLine.CTS);
-            if(dtr) set.add(ControlLine.DTR);
-            if((status & STATUS_DSR) != 0) set.add(ControlLine.DSR);
-            if((status & STATUS_CD) != 0) set.add(ControlLine.CD);
-            if((status & STATUS_RI) != 0) set.add(ControlLine.RI);
+            if (rts) set.add(ControlLine.RTS);
+            if ((status & STATUS_CTS) != 0) set.add(ControlLine.CTS);
+            if (dtr) set.add(ControlLine.DTR);
+            if ((status & STATUS_DSR) != 0) set.add(ControlLine.DSR);
+            if ((status & STATUS_CD) != 0) set.add(ControlLine.CD);
+            if ((status & STATUS_RI) != 0) set.add(ControlLine.RI);
             return set;
         }
 
@@ -324,11 +319,11 @@ public class Cp21xxSerialDriver implements UsbSerialDriver {
     public static Map<Integer, int[]> getSupportedDevices() {
         final Map<Integer, int[]> supportedDevices = new LinkedHashMap<>();
         supportedDevices.put(UsbId.VENDOR_SILABS,
-                new int[] {
-            UsbId.SILABS_CP2102, // same ID for CP2101, CP2103, CP2104, CP2109
-            UsbId.SILABS_CP2105,
-            UsbId.SILABS_CP2108,
-        });
+                new int[]{
+                        UsbId.SILABS_CP2102, // same ID for CP2101, CP2103, CP2104, CP2109
+                        UsbId.SILABS_CP2105,
+                        UsbId.SILABS_CP2108,
+                });
         return supportedDevices;
     }
 

@@ -1,27 +1,26 @@
 package com.meng.messtool.system.base;
 
 import android.*;
-import android.app.*;
+import android.app.AlertDialog;
 import android.content.*;
 import android.content.pm.*;
 import android.os.*;
 import android.support.annotation.*;
 import android.support.design.widget.*;
 import android.support.v7.app.*;
-import android.support.v7.widget.*;
+import android.support.v7.widget.Toolbar;
 import android.util.*;
 import android.view.*;
 import android.widget.*;
+
 import com.meng.messtool.*;
+import com.meng.messtool.R;
 import com.meng.messtool.system.debug.*;
 import com.meng.tools.*;
 import com.meng.tools.app.*;
+
 import java.util.*;
 import java.util.concurrent.*;
-
-import android.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
-import com.meng.messtool.R;
 
 public abstract class BaseActivity extends AppCompatActivity {
     /*
@@ -59,7 +58,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             init();
         }
     }
-    
+
     public void init() {
         context = this;
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -69,19 +68,19 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (SharedPreferenceHelper.isDebugMode()) {
             ThreadPool.executeAtFixedRate(new Runnable() {
 
-                    @Override
-                    public void run() {
-                        final float maxMemory = (float) (Runtime.getRuntime().maxMemory() * 1.0 / (1024 * 1024));
-                        final float totalMemory = (float) (Runtime.getRuntime().totalMemory() * 1.0 / (1024 * 1024));
-                        final float freeMemory = (float) (Runtime.getRuntime().freeMemory() * 1.0 / (1024 * 1024));
-                        runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    setSubtitle(String.format(Locale.CHINA, "max:%.0fM,use:%.2f/%.2fM", maxMemory, freeMemory, totalMemory));
-                                }
-                            });
-                    }
-                }, 1000, 1000, TimeUnit.MILLISECONDS);
+                @Override
+                public void run() {
+                    final float maxMemory = (float) (Runtime.getRuntime().maxMemory() * 1.0 / (1024 * 1024));
+                    final float totalMemory = (float) (Runtime.getRuntime().totalMemory() * 1.0 / (1024 * 1024));
+                    final float freeMemory = (float) (Runtime.getRuntime().freeMemory() * 1.0 / (1024 * 1024));
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            setSubtitle(String.format(Locale.CHINA, "max:%.0fM,use:%.2f/%.2fM", maxMemory, freeMemory, totalMemory));
+                        }
+                    });
+                }
+            }, 1000, 1000, TimeUnit.MILLISECONDS);
         }
     }
 
@@ -129,51 +128,51 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void showToast(final String msgAbbr, final String msgOrigin) {
         runOnUiThread(new Runnable() {
 
-                @Override
-                public void run() {
-                    Snackbar.make(mainLinearLayout, msgAbbr, 5000)
+            @Override
+            public void run() {
+                Snackbar.make(mainLinearLayout, msgAbbr, 5000)
                         .setAction("查看全文", msgOrigin.trim().length() == 0 ? null : new View.OnClickListener() {
 
-                                       @Override
-                                       public void onClick(View v) {
-                                           new AlertDialog.Builder(context).setIcon(R.mipmap.ic_launcher)
-                                               .setTitle("全文").setMessage(msgOrigin).setNegativeButton("复制", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                new AlertDialog.Builder(context).setIcon(R.mipmap.ic_launcher)
+                                        .setTitle("全文").setMessage(msgOrigin).setNegativeButton("复制", new DialogInterface.OnClickListener() {
 
-                                                   @Override
-                                                   public void onClick(DialogInterface p1, int p2) {
-                                                       AndroidContent.copyToClipboard(msgOrigin);
-                                                       showToast("复制成功");
-                                                   }
-                                               }).setPositiveButton("确定", null).show();
-                                       }
-                                   }).show();
-                }
-            });
+                                    @Override
+                                    public void onClick(DialogInterface p1, int p2) {
+                                        AndroidContent.copyToClipboard(msgOrigin);
+                                        showToast("复制成功");
+                                    }
+                                }).setPositiveButton("确定", null).show();
+                            }
+                        }).show();
+            }
+        });
     }
 
     public void showToast(final String msg) {
         runOnUiThread(new Runnable() {
 
-                @Override
-                public void run() {
-                    Snackbar.make(mainLinearLayout, msg, 5000)
+            @Override
+            public void run() {
+                Snackbar.make(mainLinearLayout, msg, 5000)
                         .setAction("查看全文", getLines(msg) < 2 && msg.length() < 40 ? null : new View.OnClickListener() {
 
-                                       @Override
-                                       public void onClick(View v) {
-                                           new AlertDialog.Builder(context).setIcon(R.mipmap.ic_launcher)
-                                               .setTitle("全文").setMessage(msg).setNegativeButton("复制", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                new AlertDialog.Builder(context).setIcon(R.mipmap.ic_launcher)
+                                        .setTitle("全文").setMessage(msg).setNegativeButton("复制", new DialogInterface.OnClickListener() {
 
-                                                   @Override
-                                                   public void onClick(DialogInterface p1, int p2) {
-                                                       AndroidContent.copyToClipboard(msg);
-                                                       showToast("复制成功");
-                                                   }
-                                               }).setPositiveButton("确定", null).show();
-                                       }
-                                   }).show();
-                }
-            });
+                                    @Override
+                                    public void onClick(DialogInterface p1, int p2) {
+                                        AndroidContent.copyToClipboard(msg);
+                                        showToast("复制成功");
+                                    }
+                                }).setPositiveButton("确定", null).show();
+                            }
+                        }).show();
+            }
+        });
     }
 
     private int getLines(String s) {

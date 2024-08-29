@@ -144,7 +144,7 @@ public class GIFCreator extends BaseFragment {
                         public void run() {
                             try {
                                 fabEncode.setMax(selectedImages.size());
-                                File outputFile = FileTool.getAppFile(FunctionSavePath.awesomeQR, FileTool.FileType.gif_89a);
+                                File outputFile = FileTool.getAppFile(FileSavePath.awesomeQR, FileTool.FileType.gif_89a);
                                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override

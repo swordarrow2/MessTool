@@ -100,19 +100,19 @@ public class FileTool {
         return f;
     }
 
-    public static File getAppFile(FunctionSavePath functionName, String name) {
+    public static File getAppFile(FileSavePath functionName, String name) {
         return getAppFile(functionName.getPath(), name);
     }
 
-    public static File getAppFile(FunctionSavePath functionName, String baseName, String extendName) {
+    public static File getAppFile(FileSavePath functionName, String baseName, String extendName) {
         return getAppFile(functionName.getPath(), baseName + "." + extendName);
     }
 
-    public static File getAppFile(FunctionSavePath functionName, String baseName, FileType ft) {
+    public static File getAppFile(FileSavePath functionName, String baseName, FileType ft) {
         return getAppFile(functionName.getPath(), baseName + "." + ft.getExtendName());
     }
 
-    public static File getAppFile(FunctionSavePath functionName, FileType ft) {
+    public static File getAppFile(FileSavePath functionName, FileType ft) {
         return getAppFile(functionName.getPath(), (System.currentTimeMillis() / 1000) + "." + ft.getExtendName());
     }
 

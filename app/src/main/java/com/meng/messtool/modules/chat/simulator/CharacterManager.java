@@ -19,7 +19,7 @@ public class CharacterManager {
     private LinkedHashSet<ChatCharacter> friends = new LinkedHashSet<>();//{{
 
     public CharacterManager() {
-        File file = FileTool.getAppFile(FunctionSavePath.chat_character, "chara.json"); //new File(path);
+        File file = FileTool.getAppFile(FileSavePath.chat_character, "chara.json"); //new File(path);
         try {
             if (!file.exists() || file.length() == 0) {
                 LinkedHashSet<ChatCharacter> list = new LinkedHashSet<>();

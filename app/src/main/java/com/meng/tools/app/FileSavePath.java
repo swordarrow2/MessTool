@@ -1,6 +1,6 @@
 package com.meng.tools.app;
 
-public enum FunctionSavePath {
+public enum FileSavePath {
     barcode("barcode/normal"),
     bus("bus"),
     awesomeQR("barcode/awesome"),
@@ -26,7 +26,7 @@ public enum FunctionSavePath {
 
     private String path;
 
-    FunctionSavePath(String path) {
+    FileSavePath(String path) {
         this.path = path;
     }
 

@@ -119,7 +119,7 @@ public class BarcodeNormal extends BaseFragment {
                 case R.id.qr_ButtonSave:
                     String s = null;
                     try {
-                        s = FileTool.saveToFile(FileTool.getAppFile(FunctionSavePath.barcode, FileTool.FileType.png), bmpQRcode);
+                        s = FileTool.saveToFile(FileTool.getAppFile(FileSavePath.barcode, FileTool.FileType.png), bmpQRcode);
                     } catch (IOException e) {
 
                     }

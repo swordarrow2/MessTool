@@ -121,7 +121,7 @@ public class ExceptionCatcher implements Thread.UncaughtExceptionHandler {
             String time = format.format(new Date());
             fileName = "crash-" + time + "-" + timestamp + ".log";
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                File file = FileTool.getAppFile(FunctionSavePath.log, fileName);
+                File file = FileTool.getAppFile(FileSavePath.log, fileName);
                 FileOutputStream fos = new FileOutputStream(file);
                 fos.write(sb.toString().getBytes());
                 fos.close();

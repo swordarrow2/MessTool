@@ -61,7 +61,7 @@ public class PictureCrypt extends BaseFragment implements View.OnClickListener {
             openGallery();
         } else if (p1.getId() == R.id.picture_cryptButton_save) {
             try {
-                String s = FileTool.saveToFile(FileTool.getAppFile(FunctionSavePath.bus, FileTool.FileType.png), cryptBitmap);
+                String s = FileTool.saveToFile(FileTool.getAppFile(FileSavePath.bus, FileTool.FileType.png), cryptBitmap);
                 getActivity().getApplicationContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(s))));
             } catch (IOException e) {
             }

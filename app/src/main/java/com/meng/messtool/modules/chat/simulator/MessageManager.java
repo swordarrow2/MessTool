@@ -19,7 +19,7 @@ public class MessageManager {
 
     public MessageManager(String scriptName) {
         
-        File file = FileTool.getAppFile(FunctionSavePath.chat_script, scriptName);
+        File file = FileTool.getAppFile(FileSavePath.chat_script, scriptName);
         try {
             ArrayList<ChatScriptAction> list = GSON.fromJson(FileTool.readString(file), new TypeToken<ArrayList<ChatScriptAction>>(){}.getType());
             chatMsg.addAll(list);
@@ -30,7 +30,7 @@ public class MessageManager {
     }
 
     public static void createExample() {
-        File file = FileTool.getAppFile(FunctionSavePath.chat_script, "exmaple.json");
+        File file = FileTool.getAppFile(FileSavePath.chat_script, "exmaple.json");
         try {
             ArrayList<ChatScriptAction> list = new ArrayList<>();
 

@@ -31,16 +31,16 @@ class PixivProgressBar extends LinearLayout {
         String extendName = picUrl.substring(picUrl.lastIndexOf(".") + 1, picUrl.length()).toLowerCase();
         String fileName = picUrl.substring(picUrl.lastIndexOf("/") + 1, picUrl.lastIndexOf("."));
         if (extendName.equalsIgnoreCase("zip")) {
-            fileAbsolutePath = FileTool.getAppFile(FunctionSavePath.pixivZIP, fileName, FileTool.FileType.zip).getAbsolutePath();
+            fileAbsolutePath = FileTool.getAppFile(FileSavePath.pixivZIP, fileName, FileTool.FileType.zip).getAbsolutePath();
         } else if (pictureInfoJavaBean.staticPicJavaBean.body.size() > 1) {
 
-            fileAbsolutePath = FileTool.getAppFile(FunctionSavePath.pixivDynamic, pictureInfoJavaBean.id + "/" + fileName, extendName).getAbsolutePath();
+            fileAbsolutePath = FileTool.getAppFile(FileSavePath.pixivDynamic, pictureInfoJavaBean.id + "/" + fileName, extendName).getAbsolutePath();
             File folder = new File(fileAbsolutePath).getParentFile();
             if (!folder.exists()) {
                 folder.mkdirs();
             }
         } else {
-            fileAbsolutePath = FileTool.getAppFile(FunctionSavePath.pixivDynamic, fileName, extendName).getAbsolutePath();
+            fileAbsolutePath = FileTool.getAppFile(FileSavePath.pixivDynamic, fileName, extendName).getAbsolutePath();
         }
         MFragmentManager.getInstance().getFragment(PixivDownloadMain.class).threadPool.execute(new DownloadRunnable(this, picUrl, fileAbsolutePath, listView, pictureInfoJavaBean));
     }

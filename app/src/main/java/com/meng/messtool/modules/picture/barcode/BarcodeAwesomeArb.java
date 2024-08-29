@@ -105,7 +105,7 @@ public class BarcodeAwesomeArb extends BaseFragment implements View.OnClickListe
             case R.id.awesomeqr_mainButton_save:
                 String s = null;
                 try {
-                    s = FileTool.saveToFile(FileTool.getAppFile(FunctionSavePath.awesomeQR, FileTool.FileType.png), finallyBmp);
+                    s = FileTool.saveToFile(FileTool.getAppFile(FileSavePath.awesomeQR, FileTool.FileType.png), finallyBmp);
                 } catch (IOException e) {
 
                 }

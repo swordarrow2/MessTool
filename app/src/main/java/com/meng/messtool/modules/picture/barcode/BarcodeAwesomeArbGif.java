@@ -139,7 +139,7 @@ public class BarcodeAwesomeArbGif extends BaseFragment implements View.OnClickLi
 
                     localAnimatedGifEncoder.finish();
                     setProgress(100);
-                    File outputFile = FileTool.getAppFile(FunctionSavePath.awesomeQR, FileTool.FileType.gif_89a);
+                    File outputFile = FileTool.getAppFile(FileSavePath.awesomeQR, FileTool.FileType.gif_89a);
                     FileOutputStream fos = new FileOutputStream(outputFile);
                     baos.writeTo(fos);
                     baos.flush();

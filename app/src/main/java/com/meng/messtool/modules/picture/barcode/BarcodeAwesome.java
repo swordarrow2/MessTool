@@ -119,7 +119,7 @@ public class BarcodeAwesome extends BaseFragment implements View.OnClickListener
                 break;
             case R.id.awesomeqr_mainButton_save:
                 try {
-                    String s = FileTool.saveToFile(FileTool.getAppFile(FunctionSavePath.awesomeQR, FileTool.FileType.png), bmpQRcode);
+                    String s = FileTool.saveToFile(FileTool.getAppFile(FileSavePath.awesomeQR, FileTool.FileType.png), bmpQRcode);
                     showToast("已保存至" + s);
                     getActivity().getApplicationContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(s))));//更新图库
                 } catch (IOException e) {

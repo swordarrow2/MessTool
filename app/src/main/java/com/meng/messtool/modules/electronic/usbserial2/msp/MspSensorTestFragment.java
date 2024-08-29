@@ -7,7 +7,6 @@ import android.os.*;
 import android.support.annotation.*;
 import android.view.*;
 import android.widget.*;
-
 import com.hoho.android.usbserial.driver.*;
 import com.hoho.android.usbserial.util.*;
 import com.meng.messtool.*;
@@ -15,8 +14,8 @@ import com.meng.messtool.customview.*;
 import com.meng.messtool.modules.electronic.usbserial2.*;
 import com.meng.messtool.modules.electronic.usbserial2.msp.datapack.*;
 import com.meng.messtool.modules.electronic.usbserial2.msp.sensor.*;
+import com.meng.messtool.system.base.*;
 import com.meng.tools.app.*;
-
 import java.io.*;
 import java.util.concurrent.*;
 

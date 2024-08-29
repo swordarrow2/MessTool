@@ -25,6 +25,7 @@
 		<Button
 			android:layout_weight="1"
 			android:layout_width="0dp"
+            android:id="@+id/function_chat_script_editor_add_actionButton_select_from"
 			android:layout_height="wrap_content"
 			android:text="选择"/>
 
@@ -33,6 +34,7 @@
 			android:defaultValue="false"
 			android:text="来自自己"
 			android:layout_width="0dp"
+            android:id="@+id/function_chat_script_editor_add_actionCheckBox_from_self"
 			android:layout_height="wrap_content"/>
 
 	</LinearLayout>

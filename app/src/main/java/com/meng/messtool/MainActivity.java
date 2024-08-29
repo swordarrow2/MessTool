@@ -4,7 +4,6 @@ import android.app.*;
 import android.content.*;
 import android.content.res.*;
 import android.hardware.usb.*;
-import android.net.*;
 import android.os.*;
 import android.support.design.widget.*;
 import android.support.v4.view.*;
@@ -12,17 +11,18 @@ import android.support.v4.widget.*;
 import android.support.v7.app.*;
 import android.view.*;
 import android.widget.*;
-import com.meng.messtool.menu.*;
 import com.meng.messtool.modules.electronic.usbserial2.*;
-import com.meng.messtool.task.*;
+import com.meng.messtool.system.*;
+import com.meng.messtool.system.base.*;
+import com.meng.messtool.system.debug.*;
+import com.meng.messtool.system.menu.*;
+import com.meng.messtool.system.task.*;
 import com.meng.tools.*;
 import com.meng.tools.app.*;
-import java.util.*;
+import com.meng.tools.update.*;
 import java.util.concurrent.*;
-import org.jsoup.*;
 
 import android.app.AlertDialog;
-import android.webkit.*;
 
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -35,7 +35,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private boolean firstOpened = false;
     private ActionBarDrawerToggle toggle;
 
-    @JavascriptInterface
     public void openLeftDrawer() {
         mDrawerLayout.openDrawer(Gravity.START);
     }
@@ -80,6 +79,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         navigationView.inflateHeaderView(R.layout.system_drawer_header);
         ColorStateList csl = ColorStateList.valueOf(0xff000000);
         navigationView.setItemTextColor(csl);
+        
         navigationView.setItemIconTintList(csl);
         navigationView.getHeaderView(0).setVisibility(SharedPreferenceHelper.isShowSJF() ? View.VISIBLE : View.GONE);
         BackgroundTaskAdapter.getInstance().init(this);
@@ -102,8 +102,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
                 @Override
                 public void run() {
-                    UpdateInfo ui = new UpdateInfo(MainActivity.this);
-                    ui.checkUpdate();
+                    new UpdateChecker(MainActivity.this).checkUpdate();
                 }
             });
     }

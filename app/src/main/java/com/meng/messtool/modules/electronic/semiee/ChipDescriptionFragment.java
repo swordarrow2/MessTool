@@ -3,11 +3,9 @@ package com.meng.messtool.modules.electronic.semiee;
 import android.os.*;
 import android.view.*;
 import android.widget.*;
-
 import com.meng.api.semiee.*;
-import com.meng.messtool.*;
+import com.meng.messtool.system.base.*;
 import com.meng.tools.*;
-
 import java.io.*;
 import java.nio.charset.*;
 

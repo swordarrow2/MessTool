@@ -3,10 +3,10 @@ package com.meng.messtool.modules.picture.pixiv;
 import android.app.*;
 import android.view.*;
 import android.widget.*;
-
 import com.meng.messtool.*;
+import com.meng.messtool.system.*;
 import com.meng.tools.*;
-
+import com.meng.tools.app.*;
 import java.io.*;
 
 class PixivProgressBar extends LinearLayout {

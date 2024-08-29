@@ -5,20 +5,21 @@ import android.content.*;
 import android.os.*;
 import android.view.*;
 import android.widget.*;
-
 import com.meng.messtool.*;
-import com.meng.messtool.task.*;
+import com.meng.messtool.system.base.*;
+import com.meng.messtool.system.task.*;
 import com.meng.tools.*;
+import com.meng.tools.MaterialDesign.*;
 import com.meng.tools.app.*;
 import com.meng.tools.ffmpeg.*;
-
 import java.io.*;
+
 import java.lang.Process;
 
 public class RtmpFragment extends BaseFragment {
 
-    private EditText etRtmpServer;
-    private EditText etPushCode;
+    private MDEditText etRtmpServer;
+    private MDEditText etPushCode;
     private Button btnSelectFile;
     private Button btnStart;
     private LinearLayout rootLayout;
@@ -43,8 +44,8 @@ public class RtmpFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        etRtmpServer = (EditText) view.findViewById(R.id.rtmp_mainEditTextUrl);
-        etPushCode = (EditText) view.findViewById(R.id.rtmp_mainEditTextCode);
+        etRtmpServer = (MDEditText) view.findViewById(R.id.rtmp_mainEditTextUrl);
+        etPushCode = (MDEditText) view.findViewById(R.id.rtmp_mainEditTextCode);
         btnSelectFile = (Button) view.findViewById(R.id.rtmp_mainButtonSelect);
         btnStart = (Button) view.findViewById(R.id.rtmp_mainButtonStart);
         rootLayout = (LinearLayout) view.findViewById(R.id.rtmp_mainLinearLayout);
@@ -68,8 +69,8 @@ public class RtmpFragment extends BaseFragment {
                     v.setEnabled(true);
                     break;
                 case R.id.rtmp_mainButtonStart:
-                    String rtmp = etRtmpServer.getText().toString();
-                    String pushCode = etPushCode.getText().toString();
+                    String rtmp = etRtmpServer.getString();
+                    String pushCode = etPushCode.getString();
                     v.setEnabled(false);
                     if (!rtmp.startsWith("rtmp://")) {
                         showToast("不是合法的rtmp地址");

@@ -77,7 +77,7 @@
                 android:summaryOn="是"
                 android:title="显示长时间未验证是否可用的功能" />
             <CheckBoxPreference
-                android:defaultValue="true"
+                android:defaultValue="false"
                 android:key="GROUP_DEPRECATED"
                 android:summaryOff="否"
                 android:summaryOn="是"

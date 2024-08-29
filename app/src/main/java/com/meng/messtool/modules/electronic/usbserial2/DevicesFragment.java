@@ -7,11 +7,11 @@ import android.os.*;
 import android.support.annotation.*;
 import android.view.*;
 import android.widget.*;
-
 import com.hoho.android.usbserial.driver.*;
 import com.meng.messtool.*;
 import com.meng.messtool.modules.electronic.usbserial2.msp.*;
-
+import com.meng.messtool.system.*;
+import com.meng.messtool.system.base.*;
 import java.util.*;
 
 public class DevicesFragment extends BaseFragment {

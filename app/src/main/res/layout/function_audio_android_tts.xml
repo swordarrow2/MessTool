@@ -27,8 +27,8 @@
             android:id="@+id/android_tts_MDEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            ran:default_value="164"
-            ran:hint="@string/input_model_id" />
+            ran:default_value="@string/input_model_id"
+            ran:hint="输入文本" />
 
         <com.meng.messtool.customview.MengSeekBar
             android:id="@+id/android_tts_MengSeekBar_1"

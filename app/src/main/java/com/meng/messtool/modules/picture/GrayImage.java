@@ -7,11 +7,11 @@ import android.net.*;
 import android.os.*;
 import android.view.*;
 import android.widget.*;
-
 import com.meng.messtool.*;
-import com.meng.messtool.task.*;
+import com.meng.messtool.system.base.*;
+import com.meng.messtool.system.task.*;
 import com.meng.tools.*;
-
+import com.meng.tools.app.*;
 import java.io.*;
 
 public class GrayImage extends BaseFragment implements View.OnClickListener {
@@ -55,11 +55,19 @@ public class GrayImage extends BaseFragment implements View.OnClickListener {
                 btnStart.setEnabled(true);
                 break;
             case R.id.binmainButton_start:
-                try {
-                    generate(path);
-                } catch (IOException e) {
-                    showToast(e.toString());
-                }
+                showToast("开始转换");
+
+                ThreadPool.execute(new Runnable(){
+
+                        @Override
+                        public void run() {
+                            try {
+                                generate(path);
+                            } catch (IOException e) {
+                                showToast(e.toString());
+                            }
+                        }
+                    });              
                 break;
         }
     }
@@ -78,7 +86,6 @@ public class GrayImage extends BaseFragment implements View.OnClickListener {
     }
 
     private void generate(final String path) throws IOException {
-        showToast("开始转换");
         final FileTool.FileType type = FileTool.getFileType(new File(path)).describe;
         if (type == FileTool.FileType.gif_87a || type == FileTool.FileType.gif_89a) {
 
@@ -130,11 +137,11 @@ public class GrayImage extends BaseFragment implements View.OnClickListener {
             getActivity().getApplicationContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(s))));
             getActivity().runOnUiThread(new Runnable() {
 
-                @Override
-                public void run() {
-                    imageView.setImageBitmap(grayBitmap);
-                }
-            });
+                    @Override
+                    public void run() {
+                        imageView.setImageBitmap(grayBitmap);
+                    }
+                });
         }
     }
 

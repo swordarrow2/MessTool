@@ -5,8 +5,8 @@ import android.content.*;
 import android.os.*;
 import android.view.*;
 import android.widget.*;
-
 import com.meng.messtool.*;
+import com.meng.messtool.system.base.*;
 import com.meng.tools.*;
 
 public class BarcodeReaderCamera extends BaseFragment implements View.OnClickListener {

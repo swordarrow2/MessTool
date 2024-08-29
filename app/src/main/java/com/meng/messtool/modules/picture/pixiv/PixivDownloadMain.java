@@ -8,21 +8,22 @@ import android.view.*;
 import android.view.View.*;
 import android.widget.*;
 import android.widget.AdapterView.*;
-
 import com.google.gson.*;
 import com.google.gson.internal.*;
 import com.meng.messtool.*;
+import com.meng.messtool.system.*;
+import com.meng.messtool.system.base.*;
 import com.meng.tools.*;
 import com.meng.tools.MaterialDesign.*;
 import com.meng.tools.app.*;
-
-import org.jsoup.*;
-
 import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.regex.*;
+import org.jsoup.*;
+
+import android.view.View.OnClickListener;
 
 public class PixivDownloadMain extends BaseFragment {
 

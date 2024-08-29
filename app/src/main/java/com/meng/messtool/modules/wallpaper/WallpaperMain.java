@@ -6,8 +6,8 @@ import android.os.*;
 import android.view.*;
 import android.view.View.*;
 import android.widget.*;
-
 import com.meng.messtool.*;
+import com.meng.messtool.system.base.*;
 import com.meng.tools.*;
 
 public class WallpaperMain extends BaseFragment {

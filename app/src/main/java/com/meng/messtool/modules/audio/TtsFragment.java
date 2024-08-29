@@ -7,11 +7,11 @@ import android.util.*;
 import android.view.*;
 import android.view.View.*;
 import android.widget.*;
-
 import com.meng.messtool.*;
 import com.meng.messtool.customview.*;
+import com.meng.messtool.system.*;
+import com.meng.messtool.system.base.*;
 import com.meng.tools.MaterialDesign.*;
-
 import java.text.*;
 import java.util.*;
 
@@ -79,7 +79,7 @@ public class TtsFragment extends BaseFragment implements OnClickListener, TextTo
         msbSpeechRate.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                msbPitch.setText(MessageFormat.format("rate:{0}", progress));
+                msbSpeechRate.setText(MessageFormat.format("rate:{0}", progress));
                 seekBar.setProgress(progress);
             }
 

@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ran="http://schemas.android.com/apk/res-auto"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
     android:id="@+id/rtmp_mainLinearLayout"
 	android:orientation="vertical">
+    
+    <com.meng.tools.MaterialDesign.MDEditText
+        android:id="@+id/rtmp_mainEditTextUrl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        ran:default_value=""
+        ran:hint="rtmp服务器" />
 
-	<EditText
-		android:id="@+id/rtmp_mainEditTextUrl"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:hint="rtmp服务器"/>
-
-	<EditText
-		android:id="@+id/rtmp_mainEditTextCode"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:hint="推流码"/>
+    <com.meng.tools.MaterialDesign.MDEditText
+        android:id="@+id/rtmp_mainEditTextCode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        ran:default_value=""
+        ran:hint="推流码" />
 
 	<Button
 		android:id="@+id/rtmp_mainButtonSelect"

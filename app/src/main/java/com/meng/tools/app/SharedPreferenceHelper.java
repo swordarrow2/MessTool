@@ -1,12 +1,7 @@
 package com.meng.tools.app;
 
 import android.content.*;
-import android.os.*;
-
-import com.meng.messtool.*;
-
-import java.lang.reflect.*;
-import java.util.*;
+import com.meng.messtool.system.debug.*;
 
 
 public class SharedPreferenceHelper {

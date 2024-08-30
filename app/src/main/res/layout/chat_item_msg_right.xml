@@ -32,7 +32,7 @@
         android:layout_marginTop="5dp"
         android:visibility="gone">
 
-        <com.meng.messtool.chat.CircleImageView
+        <com.meng.messtool.customview.CircleImageView
             android:id="@+id/iv_userhead"
             android:layout_width="52dp"
             android:layout_height="52dp"

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ran="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <Spinner
-        android:id="@+id/function_chat_script_editor_add_actionSpinner"
+        android:id="@+id/chat_script_editor_add_actionSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -14,22 +15,23 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/function_chat_script_editor_add_action_from"
+        <com.meng.messtool.customview.MaterialDesign.MDEditText
+            android:id="@+id/chat_script_editor_add_action_from"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            android:hint="@string/from" />
+            ran:default_value="null"
+            ran:hint="@string/from" />
 
         <Button
-            android:id="@+id/function_chat_script_editor_add_actionButton_select_from"
+            android:id="@+id/chat_script_editor_add_actionButton_select_from"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/select" />
 
         <CheckBox
-            android:id="@+id/function_chat_script_editor_add_actionCheckBox_from_self"
+            android:id="@+id/chat_script_editor_add_actionCheckBox_from_self"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -38,23 +40,26 @@
 
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/function_chat_script_editor_add_action_content"
+    <com.meng.messtool.customview.MaterialDesign.MDEditText
+        android:id="@+id/chat_script_editor_add_action_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/contents" />
+        ran:default_value="null"
+        ran:hint="@string/contents" />
 
-    <EditText
-        android:id="@+id/function_chat_script_editor_add_action_wait"
+    <com.meng.messtool.customview.MaterialDesign.MDEditText
+        android:id="@+id/chat_script_editor_add_action_wait"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/wait" />
+        ran:default_value="2000"
+        ran:hint="@string/wait_time_ms" />
 
-    <EditText
-        android:id="@+id/function_chat_script_editor_add_action_message_id"
+    <com.meng.messtool.customview.MaterialDesign.MDEditText
+        android:id="@+id/chat_script_editor_add_action_message_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/message_id" />
+        ran:default_value="-1"
+        ran:hint="@string/message_id" />
 
 </LinearLayout>
 

@@ -3,7 +3,7 @@ package com.meng.messtool.system;
 import android.os.*;
 import android.view.*;
 
-import com.meng.api.jsBridge.*;
+import com.meng.api.javascript.*;
 import com.meng.messtool.*;
 import com.meng.messtool.customview.*;
 import com.meng.messtool.system.base.*;
@@ -16,7 +16,7 @@ public class About extends BaseFragment {
      */
     public static final String TAG = "About";
 
-    private MengWebView mWebView;
+    private MengWebView webView;
 
     @Override
     public String getTitle() {
@@ -36,15 +36,15 @@ public class About extends BaseFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mWebView = (MengWebView) view.findViewById(R.id.function_system_about_WebView);
+        webView = (MengWebView) view.findViewById(R.id.function_system_about_WebView);
         welcome();
     }
 
     private void welcome() {
-        JsInterfaceObject jo = new JsInterfaceObject();
+        JsApi jo = new JsApi();
         jo.setMainActivity((MainActivity) getActivity());
-        mWebView.loadUrl("file:///android_asset/about/about.html");
-        mWebView.addJavascriptInterface(jo, "obj");
+        webView.loadUrl("file:///android_asset/about/about.html");
+        webView.addJavascriptInterface(jo, "obj");
 
     }
 }

@@ -16,7 +16,7 @@ public class CharacterManager {
      */
     public static final String TAG = "CharacterManager";
 
-    private LinkedHashSet<ChatCharacter> friends = new LinkedHashSet<>();//{{
+    private LinkedList<ChatCharacter> friends = new LinkedList<>();//{{
 
     public CharacterManager() {
         File file = FileTool.getAppFile(FileSavePath.chat_character, "chara.json"); //new File(path);
@@ -27,13 +27,17 @@ public class CharacterManager {
                 list.add(new ChatCharacter("月下", "moon.jpg"));
                 FileTool.saveToFile(file, GSON.toJson(list).getBytes(StandardCharsets.UTF_8));
             } else {
-                LinkedHashSet<ChatCharacter> fromJson = GSON.fromJson(FileTool.readString(file), new TypeToken<LinkedHashSet<ChatCharacter>>() {
+                LinkedList<ChatCharacter> fromJson = GSON.fromJson(FileTool.readString(file), new TypeToken<LinkedList<ChatCharacter>>() {
                 }.getType());
                 friends.addAll(fromJson);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public LinkedList<ChatCharacter> getAllCharacter() {
+        return friends;
     }
 
     public ChatCharacter get(String name) {

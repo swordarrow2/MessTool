@@ -29,12 +29,12 @@ public class ChatScriptAdapter extends BaseAdapter {
 
     private ChatScriptEngine engine;
 
-    public ChatScriptAdapter(Context context, CharacterManager charaManager, ChatRoomInfo room, LinkedList<ChatScriptAction> coll) {
+    public ChatScriptAdapter(Context context, ChatSimulator simulator, ChatRoomInfo room, LinkedList<ChatScriptAction> coll) {
         this.coll = coll;
         mInflater = LayoutInflater.from(context);
         animation = AnimationUtils.loadAnimation(context, R.anim.slide_bottom);
-        this.charaManager = charaManager;
-        engine = new ChatScriptEngine(context, room);
+        charaManager = new CharacterManager();
+        engine = new ChatScriptEngine(context, simulator, room);
     }
 
     public int getCount() {

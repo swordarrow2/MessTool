@@ -11,6 +11,8 @@ import android.widget.*;
 import com.meng.tools.*;
 import com.meng.tools.app.*;
 
+import java.util.*;
+
 public class ChatScriptEngine {
 
     /*
@@ -20,10 +22,31 @@ public class ChatScriptEngine {
     public static final String TAG = "ChatEngine";
     private ChatRoomInfo room;
     private Context context;
+    private ChatSimulator simulator;
 
-    public ChatScriptEngine(Context context, ChatRoomInfo room) {
+    public ChatScriptEngine(Context context, ChatSimulator simulator, ChatRoomInfo room) {
         this.room = room;
         this.context = context;
+        this.simulator = simulator;
+    }
+
+    public void startAction(final List<ChatScriptAction> list) {
+        final Random random = new Random();
+        if (list.size() > 0) {
+            ThreadPool.execute(new Runnable() {
+
+                @Override
+                public void run() {
+                    for (ChatScriptAction entity : list) {
+                        try {
+                            Thread.sleep(entity.wait == -1 ? random.nextInt(3000) : entity.wait);
+                        } catch (InterruptedException ignore) {
+                        }
+                        simulator.onMessage(entity);
+                    }
+                }
+            });
+        }
     }
 
     public void processAction(ChatScriptAdapter.ViewHolder viewHolder, ChatScriptAction action) {

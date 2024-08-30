@@ -28,8 +28,7 @@ public class ChatSimulator extends BaseFragment {
     private ChatScriptAdapter mAdapter;
     private LinkedList<ChatScriptAction> mDataArrays = new LinkedList<ChatScriptAction>();
     private MessageManager messageDB;
-    public CharacterManager charaManager;
-    public ChatRoomInfo chatRoomInfo;
+    private ChatScriptEngine engine;
 
     @Override
     public String getTitle() {
@@ -72,14 +71,14 @@ public class ChatSimulator extends BaseFragment {
         chat_title_back = (Button) view.findViewById(R.id.chat_title_back);
         chat_bottom_send = (Button) view.findViewById(R.id.chat_bottom_send);
         chat_bottom_edit = (EditText) view.findViewById(R.id.chat_bottom_edit);
-        chatRoomInfo = new ChatRoomInfo();
-        chatRoomInfo.setTitleView(chat_title_nick);
     }
 
     private void init(String scriptName) {
         messageDB = new MessageManager(scriptName);
-        charaManager = new CharacterManager();
-        mAdapter = new ChatScriptAdapter(getActivity(), charaManager, chatRoomInfo, mDataArrays);
+        ChatRoomInfo chatRoomInfo = new ChatRoomInfo();
+        chatRoomInfo.setTitleView(chat_title_nick);
+        engine = new ChatScriptEngine(getActivity(), this, chatRoomInfo);
+        mAdapter = new ChatScriptAdapter(getActivity(), this, chatRoomInfo, mDataArrays);
         mListView.setAdapter(mAdapter);
 
         chat_bottom_send.setOnClickListener(new OnClickListener() {
@@ -104,27 +103,13 @@ public class ChatSimulator extends BaseFragment {
     }
 
     public void initData() {
-        final List<ChatScriptAction> list = messageDB.getMsg("观星".hashCode());
-        final Random random = new Random();
-        if (list.size() > 0) {
-            ThreadPool.execute(new Runnable() {
-
-                @Override
-                public void run() {
-                    for (ChatScriptAction entity : list) {
-                        try {
-                            Thread.sleep(entity.wait == -1 ? random.nextInt(3000) : entity.wait);
-                        } catch (InterruptedException ignore) {
-                        }
-                        onMessage(entity);
-                    }
-                }
-            });
-        }
+        final List<ChatScriptAction> list = messageDB.getScriptActions();
+        engine.startAction(list);
 
     }
 
-    private void onMessage(final ChatScriptAction msg) {
+
+    public void onMessage(final ChatScriptAction msg) {
         getActivity().runOnUiThread(new Runnable() {
 
             @Override

@@ -68,11 +68,11 @@
 
     <string name="back">返回</string>
     <string name="send">发送</string>
-    <string name="from">from</string>
+    <string name="from">消息来自</string>
     <string name="select">选择</string>
     <string name="from_self">来自自己</string>
-    <string name="wait">wait</string>
-    <string name="message_id">message id</string>
+    <string name="wait_time_ms">等待时间(ms)</string>
+    <string name="message_id">消息id</string>
     <string name="selected_frames">已选择的帧</string>
     <string name="status">status</string>
     <string name="select_video">选择视频</string>

@@ -80,17 +80,59 @@ public class ChatEditor extends BaseFragment {
                         .setItems(items, new DialogInterface.OnClickListener() {
 
                             @Override
-                            public void onClick(DialogInterface dia, final int which1) {
+                            public void onClick(DialogInterface dia, final int whichInsert) {
 
-                                final AddActionView aav = new AddActionView(getActivity());
+                                LinearLayout ll = (LinearLayout) LayoutInflater.from(getActivity()).inflate(R.layout.chat_script_editor_add_action, null);
+                                final Spinner spinner = (Spinner) ll.findViewById(R.id.chat_script_editor_add_actionSpinner);
+                                final MDEditText etFrom = (MDEditText) ll.findViewById(R.id.chat_script_editor_add_action_from);
+                                final CheckBox cbFrom = (CheckBox) ll.findViewById(R.id.chat_script_editor_add_actionCheckBox_from_self);
+                                final MDEditText etContent = (MDEditText) ll.findViewById(R.id.chat_script_editor_add_action_content);
+                                final MDEditText etWait = (MDEditText) ll.findViewById(R.id.chat_script_editor_add_action_wait);
+                                final MDEditText etMessageId = (MDEditText) ll.findViewById(R.id.chat_script_editor_add_action_message_id);
+                                final Button btnSelectFrom = (Button) ll.findViewById(R.id.chat_script_editor_add_actionButton_select_from);
+                                btnSelectFrom.setOnClickListener(new OnClickListener() {
+
+                                    @Override
+                                    public void onClick(View p1) {
+
+                                        final CharacterAdapter characterAdapter = new CharacterAdapter(getActivity(), charaManager.getAllCharacter());
+                                        new AlertDialog.Builder(getActivity())
+                                                .setTitle("选择角色")
+                                                .setSingleChoiceItems(characterAdapter, 0, new DialogInterface.OnClickListener() {
+
+                                                    @Override
+                                                    public void onClick(DialogInterface dia, int whichCharacter) {
+                                                        dia.dismiss();
+                                                        etFrom.setText(characterAdapter.getItem(whichCharacter).name);
+                                                    }
+                                                })
+                                                .create().show();
+                                    }
+                                });
+                                cbFrom.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+                                    @Override
+                                    public void onCheckedChanged(CompoundButton p1, boolean p2) {
+                                        btnSelectFrom.setEnabled(!p2);
+                                        etFrom.setEnabled(!p2);
+                                    }
+                                });
+                                spinner.setAdapter(new ArrayAdapter<ActionType>(getActivity(), android.R.layout.simple_list_item_1, ActionType.values()));
+                                spinner.setSelection(1, true);
                                 new AlertDialog.Builder(getActivity())
                                         .setTitle("编辑动作")
-                                        .setView(aav)
+                                        .setView(ll)
                                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
 
                                             @Override
-                                            public void onClick(DialogInterface dia, int which2) {
-                                                mDataArrays.add(pointer + which1, aav.getAction());
+                                            public void onClick(DialogInterface dia, int whichAction) {
+                                                mDataArrays.add(pointer + whichInsert, new ChatScriptAction(
+                                                        ActionType.values()[spinner.getSelectedItemPosition()],
+                                                        etContent.getString(),
+                                                        etFrom.getString(),
+                                                        etWait.getInt(),
+                                                        cbFrom.isChecked(),
+                                                        etMessageId.getInt()));
                                             }
                                         }).setNegativeButton("取消", null).create().show();
                                 adapter.notifyDataSetChanged();

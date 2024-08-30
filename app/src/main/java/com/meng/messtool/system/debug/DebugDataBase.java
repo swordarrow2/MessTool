@@ -38,7 +38,7 @@ public class DebugDataBase extends AbstractDatabaseHelper {
         if (sqLiteOpenHelper != null) {
             Debuger.addLog(TAG, "dbHelper has already init.");
         }
-        sqLiteOpenHelper = new SQLiteOpenHelper(context, FileTool.getAppFile(FileSavePath.database, TABLE_NAME, "db").getAbsolutePath(), null, DATABASE_VERSION) {
+        sqLiteOpenHelper = new SQLiteOpenHelper(context, FileTool.getAppFile(FileSavePath.DATABASE, TABLE_NAME, "db").getAbsolutePath(), null, DATABASE_VERSION) {
             @Override
             public void onCreate(SQLiteDatabase db) {
                 db.execSQL("create table if not exists " + TABLE_NAME + "( _id integer primary key autoincrement , _time long, _op varchar(512))");

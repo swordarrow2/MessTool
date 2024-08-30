@@ -78,7 +78,7 @@ public class MainAdapter extends BaseAdapter {
                 break;
             case TYPE_IMAGE_MESSAGE:
                 SpannableString msp = new SpannableString(String.format("%s:%s", action.from, action.content));
-                msp.setSpan(new ImageSpan(ctx, BitmapFactory.decodeFile(FileTool.getAppFile(FileSavePath.chat_image, action.content).getAbsolutePath())), action.from.length() + 1, msp.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                msp.setSpan(new ImageSpan(ctx, BitmapFactory.decodeFile(FileTool.getAppFile(FileSavePath.CHAT_IMAGE, action.content).getAbsolutePath())), action.from.length() + 1, msp.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 viewHolder.tv2.setText(msp);
                 break;
             case TYPE_MESSAGE_RECALL:

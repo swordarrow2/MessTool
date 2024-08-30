@@ -9,6 +9,7 @@
 
 MD:(忘了)
 
+RPG-Maker MV/MZ Decrypter:https://github.com/Petschko/Java-RPG-Maker-MV-Decrypter
 
 （想起来了再补充）
 

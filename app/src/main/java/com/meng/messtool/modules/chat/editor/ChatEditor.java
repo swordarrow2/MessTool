@@ -57,7 +57,7 @@ public class ChatEditor extends BaseFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.item_save) {
             if (file == null) {
-                file = FileTool.getAppFile(FileSavePath.chat_script, "script" + System.currentTimeMillis() + ".json");
+                file = FileTool.getAppFile(FileSavePath.CHAT_SCRIPT, "script" + System.currentTimeMillis() + ".json");
             }
             FileTool.saveToFile(file, GSON.toJson(mDataArrays).getBytes(StandardCharsets.UTF_8));
         }

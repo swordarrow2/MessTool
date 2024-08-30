@@ -9,6 +9,8 @@ import com.meng.messtool.system.base.*;
 import com.meng.tools.app.*;
 import com.meng.tools.update.*;
 
+import rpgde.*;
+
 public class DatabaseTestFragment extends BaseFragment {
     private TextView textView;
 
@@ -21,6 +23,12 @@ public class DatabaseTestFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         textView = (TextView) view.findViewById(R.id.aboutTextView);
+        ThreadPool.execute(new Runnable() {
+            @Override
+            public void run() {
+                new App().start();
+            }
+        });
         ThreadPool.execute(new Runnable() {
 
             @Override

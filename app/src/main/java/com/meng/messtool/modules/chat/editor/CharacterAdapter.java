@@ -64,7 +64,7 @@ public class CharacterAdapter extends BaseAdapter {
 
         Bitmap decodeFile = headCache.get(character.head);
         if (decodeFile == null) {
-            headCache.put(character.head, decodeFile = BitmapFactory.decodeFile(FileTool.getAppFile(FileSavePath.chat_character, character.head).getAbsolutePath()));
+            headCache.put(character.head, decodeFile = BitmapFactory.decodeFile(FileTool.getAppFile(FileSavePath.CHAT_CHARACTER, character.head).getAbsolutePath()));
         }
         viewHolder.avatar.setImageBitmap(decodeFile);
 

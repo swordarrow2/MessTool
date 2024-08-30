@@ -80,7 +80,7 @@ public class ChatScriptAdapter extends BaseAdapter {
 
         Bitmap decodeFile = headCache.get(action.from);
         if (decodeFile == null) {
-            headCache.put(action.content, decodeFile = BitmapFactory.decodeFile(FileTool.getAppFile(FileSavePath.chat_character, charaManager.get(action.from).head).getAbsolutePath()));
+            headCache.put(action.content, decodeFile = BitmapFactory.decodeFile(FileTool.getAppFile(FileSavePath.CHAT_CHARACTER, charaManager.get(action.from).head).getAbsolutePath()));
         }
         viewHolder.img.setImageBitmap(decodeFile);
 

@@ -88,7 +88,7 @@ public class PixivDownloadMain extends BaseFragment {
         fabAddMine.setOnClickListener(onClickListener);
         taskLinearLayout = (LinearLayout) view.findViewById(R.id.pixiv_download_main_downloadlist_task);
         checkBoxIsUID = (CheckBox) view.findViewById(R.id.pixiv_download_main_checkbox_user);
-        String[] filesName = FileTool.getAppFile(FileSavePath.pixivZIP, "").list();
+        String[] filesName = FileTool.getAppFile(FileSavePath.PIXIV_ZIP, "").list();
         Arrays.sort(filesName);
         downloadedList.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, filesName));
         likeList.setOnItemClickListener(new OnItemClickListener() {

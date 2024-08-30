@@ -129,7 +129,7 @@ public class BarcodeAwesomeGif extends BaseFragment {
                         localAnimatedGifEncoder.addFrame(encodeAwesome(gifDecoder.getNextFrame()));
                     }
                     localAnimatedGifEncoder.finish();
-                    File outputFile = FileTool.getAppFile(FileSavePath.awesomeQR, FileTool.FileType.gif_89a);
+                    File outputFile = FileTool.getAppFile(FileSavePath.AWESOME_QR, FileTool.FileType.gif_89a);
                     FileOutputStream fos = new FileOutputStream(outputFile);
                     baos.writeTo(fos);
                     baos.flush();

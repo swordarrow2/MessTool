@@ -141,7 +141,7 @@ class DownloadRunnable implements Runnable {
                     ze = zis.getNextEntry();
                 }
                 localAnimatedGifEncoder.finish();
-                File outputFile = FileTool.getAppFile(FileSavePath.awesomeQR, FileTool.FileType.gif_89a);
+                File outputFile = FileTool.getAppFile(FileSavePath.AWESOME_QR, FileTool.FileType.gif_89a);
                 FileOutputStream fos = new FileOutputStream(outputFile);
                 baos.writeTo(fos);
                 baos.flush();
@@ -189,7 +189,7 @@ class DownloadRunnable implements Runnable {
      filesNow = i;
      }
      localAnimatedGifEncoder.finish();
-     String path = FileHelper.getFileAbsPath(fileName, FunctionName.pixivAnimate);
+     String path = FileHelper.getFileAbsPath(fileName, FunctionName.pixiv_animate);
      try {
      FileOutputStream fos = new FileOutputStream(path);
      baos.writeTo(fos);
@@ -253,7 +253,7 @@ class DownloadRunnable implements Runnable {
         mengProgressBar.context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                String[] downloadedFilesName = FileTool.getAppFile(FileSavePath.pixivZIP, "").list();
+                String[] downloadedFilesName = FileTool.getAppFile(FileSavePath.PIXIV_ZIP, "").list();
                 Arrays.sort(downloadedFilesName);
                 listView.setAdapter(new ArrayAdapter<String>(mengProgressBar.context, android.R.layout.simple_list_item_1, downloadedFilesName));
                 LinearLayout ll = (LinearLayout) mengProgressBar.getParent();

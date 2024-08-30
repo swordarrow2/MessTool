@@ -49,11 +49,11 @@ public class ChatSimulator extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         findView(view);
-        String[] l = FileTool.getAppFile(FileSavePath.chat_script, "").list();
+        String[] l = FileTool.getAppFile(FileSavePath.CHAT_SCRIPT, "").list();
         if (l.length == 0) {
             MessageManager.createExample();
         }
-        final String[] items = FileTool.getAppFile(FileSavePath.chat_script, "").list();
+        final String[] items = FileTool.getAppFile(FileSavePath.CHAT_SCRIPT, "").list();
         new AlertDialog.Builder(getActivity())
                 .setTitle("选择脚本")
                 .setItems(items, new DialogInterface.OnClickListener() {

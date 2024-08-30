@@ -30,7 +30,7 @@ public class LcscApi {
 
     public static List<LcscElement> searchLcsc(String keyword) throws IOException {
         List<LcscElement> list = new ArrayList<>();
-        File file = FileTool.getAppFile(FileSavePath.cache, keyword, "html");
+        File file = FileTool.getAppFile(FileSavePath.CACHE, keyword, "html");
         if (!file.exists() || file.length() == 0) {
             String s = Jsoup.connect("https://so.szlcsc.com/global.html?k=" + keyword)
                     .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.6261.95 Safari/537.36")

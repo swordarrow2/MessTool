@@ -116,7 +116,7 @@ public class GrayImage extends BaseFragment implements View.OnClickListener {
                             setProgress(i);
                         }
                         localAnimatedGifEncoder.finish();
-                        File outputFile = FileTool.getAppFile(FileSavePath.awesomeQR, FileTool.FileType.gif_89a);
+                        File outputFile = FileTool.getAppFile(FileSavePath.AWESOME_QR, FileTool.FileType.gif_89a);
                         FileOutputStream fos = new FileOutputStream(outputFile);
                         baos.writeTo(fos);
                         baos.flush();
@@ -134,7 +134,7 @@ public class GrayImage extends BaseFragment implements View.OnClickListener {
             BitmapFactory.Options bo = new BitmapFactory.Options();
             bo.inMutable = true;
             final Bitmap grayBitmap = encode(BitmapFactory.decodeFile(path, bo));
-            String s = FileTool.saveToFile(FileTool.getAppFile(FileSavePath.gray8picture, FileTool.FileType.png), grayBitmap);
+            String s = FileTool.saveToFile(FileTool.getAppFile(FileSavePath.GRAY_8_PICTURE, FileTool.FileType.png), grayBitmap);
             showToast("已保存至" + s);
             getActivity().getApplicationContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(s))));
             getActivity().runOnUiThread(new Runnable() {

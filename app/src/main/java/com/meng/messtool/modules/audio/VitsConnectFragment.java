@@ -148,7 +148,7 @@ public class VitsConnectFragment extends BaseFragment implements OnClickListener
                         }
                     }
                     String fname = String.format(Locale.CHINA, "VITS - %s - %d - %s", id, System.currentTimeMillis(), MD5.getMd5().calculate(content));
-                    File savedVoice = FileTool.getAppFile(FileSavePath.TtsVoice, fname, FileTool.FileType.wav);
+                    File savedVoice = FileTool.getAppFile(FileSavePath.TTS_VOICE, fname, FileTool.FileType.wav);
                     try (FileOutputStream output = new FileOutputStream(savedVoice)) {
                         try (InputStream input = connection.getInputStream()) {
                             setProgress(0);

@@ -88,13 +88,21 @@ public class FileTool {
                 if (!mkdirs) {
                     return null;
                 }
-            }
-        } else if (!f.exists()) {
-            try {
-                f.getParentFile().mkdirs();
-                f.createNewFile();
-            } catch (IOException e) {
-                return null;
+                if (!f.exists()) {
+                    try {
+                        f.getParentFile().mkdirs();
+                        f.createNewFile();
+                    } catch (IOException e) {
+                        return null;
+                    }
+                }
+            } else {
+                if (!f.getParentFile().exists()) {
+                    boolean mkdirs = f.getParentFile().mkdirs();
+                    if (!mkdirs) {
+                        return null;
+                    }
+                }
             }
         }
         return f;

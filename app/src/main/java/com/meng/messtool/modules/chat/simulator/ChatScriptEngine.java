@@ -67,7 +67,7 @@ public class ChatScriptEngine {
                 viewHolder.relativeLayout.setVisibility(View.VISIBLE);
                 viewHolder.tvUserName.setText(action.from);
                 SpannableString msp = new SpannableString(action.content);
-                msp.setSpan(new ImageSpan(context, BitmapFactory.decodeFile(FileTool.getAppFile(FileSavePath.chat_image, action.content).getAbsolutePath())), 0, action.content.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                msp.setSpan(new ImageSpan(context, BitmapFactory.decodeFile(FileTool.getAppFile(FileSavePath.CHAT_IMAGE, action.content).getAbsolutePath())), 0, action.content.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 viewHolder.tvContent.setText(msp);
                 break;
             case TYPE_MESSAGE_RECALL:

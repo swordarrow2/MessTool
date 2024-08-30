@@ -20,7 +20,7 @@ public enum FileSavePath {
     CHAT_IMAGE("chat/image/"),
     CHAT_SCRIPT("chat/script/"),
     CHAT_CHARACTER("chat/character/"),
-    RPG_DECRYPT("rpg_decrypt/"),
+    RPG_DECRYPT("rpg_decrypt"),
     CACHE("cache/"),
     LOG("crash_log/");
 

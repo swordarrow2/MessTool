@@ -4,6 +4,7 @@ import org.json.*;
 
 import java.nio.*;
 import java.nio.charset.*;
+import java.security.*;
 import java.util.*;
 
 /**
@@ -286,10 +287,11 @@ public class Decrypter {
      * @throws NullPointerException - Decrypt-Code is null
      */
     private void calcRealDecryptionCode() throws NullPointerException {
-        if (this.getDecryptCode() == null)
+        String decryptCode = this.getDecryptCode();
+        if (decryptCode == null)
             throw new NullPointerException("DecryptCode");
 
-        String[] decryptArray = this.getDecryptCode().split("(?<=\\G.{2})");
+        String[] decryptArray = decryptCode.split("(?<=\\G.{2})");
         ArrayList<String> verifiedDecryptArray = new ArrayList<>();
 
         // Remove empty parts
@@ -308,7 +310,7 @@ public class Decrypter {
      * @param rpgMakerMv - Encrypt as RPG-Maker-MV File
      * @throws Exception - Various Exceptions
      */
-    void encryptFile(File file, boolean rpgMakerMv) throws Exception {
+    void encryptFile(RPG_File file, boolean rpgMakerMv) throws Exception {
         try {
             if (!file.load()) {
                 throw new RuntimeException(file.getFilePath() + " Can't load File-Content...");
@@ -334,7 +336,9 @@ public class Decrypter {
         // Encrypt
         if (content.length > 0) {
             for (int i = 0; i < this.getHeaderLen(); i++) {
-                content[i] = (byte) (content[i] ^ (byte) Integer.parseInt(this.getRealDecryptCode()[i], 16));
+                this.getRealDecryptCode();
+                byte[] decryptCode = hexStringToByteArray(this.decryptCode);
+                content[i] = (byte) (content[i] ^ decryptCode[i]);
             }
         }
 
@@ -366,7 +370,7 @@ public class Decrypter {
      * @param restorePictures - Restore Pictures without the Key
      * @throws Exception - Various Exceptions
      */
-    public void decryptFile(File file, boolean restorePictures) throws Exception {
+    public void decryptFile(RPG_File file, boolean restorePictures) throws Exception {
         if (restorePictures && (!file.isImage() || !file.isFileEncryptedExt()))
             return;
 
@@ -403,9 +407,9 @@ public class Decrypter {
                 if (restorePictures) { // Restore Pictures
                     content[i] = getPNGHeaderByteArray()[i];
                 } else {// Decrypt Real-Header & First part of the Content
-                    String[] realDecryptCode = this.getRealDecryptCode();
-                    System.out.println(realDecryptCode.length);
-                    content[i] = (byte) (content[i] ^ (byte) Integer.parseInt(realDecryptCode[i], 16));
+                    this.getRealDecryptCode();
+                    byte[] decryptCode = hexStringToByteArray(this.decryptCode);
+                    content[i] = (byte) (content[i] ^ decryptCode[i]);
                 }
             }
         }
@@ -413,6 +417,28 @@ public class Decrypter {
         // Update File-Content
         file.setContent(content);
         file.changeExtension(file.realExtByFakeExt());
+    }
+
+    private int toByte(char c) {
+        if (c >= '0' && c <= '9')
+            return (c - '0');
+        if (c >= 'A' && c <= 'F')
+            return (c - 'A' + 10);
+        if (c >= 'a' && c <= 'f')
+            return (c - 'a' + 10);
+
+        throw new InvalidParameterException("Invalid hex char '" + c + "'");
+    }
+
+    private byte[] hexStringToByteArray(String hexString) {
+        int length = hexString.length();
+        byte[] buffer = new byte[(length + 1) / 2];
+
+        for (int i = 0; i < length; i += 2) {
+            buffer[i / 2] = (byte) ((toByte(hexString.charAt(i)) << 4) | toByte(hexString.charAt(i + 1)));
+        }
+
+        return buffer;
     }
 
     /**
@@ -442,7 +468,7 @@ public class Decrypter {
      * @throws JSONException        - Key not Found Exception
      * @throws NullPointerException - System-File is null
      */
-    public void detectEncryptionKeyFromJson(File file, String keyName) throws JSONException, NullPointerException {
+    public void detectEncryptionKeyFromJson(RPG_File file, String keyName) throws JSONException, NullPointerException {
         try {
             if (!file.load())
                 throw new RuntimeException(file.getFilePath() + " Can't load File-Content...");
@@ -477,7 +503,7 @@ public class Decrypter {
      *
      * @param file - Encrypted-Image-File
      */
-    public void detectEncryptionKeyFromImage(File file) throws Exception {
+    public void detectEncryptionKeyFromImage(RPG_File file) throws Exception {
         // Only encrypted images
         if (!file.isImage() || !file.isFileEncryptedExt())
             return;

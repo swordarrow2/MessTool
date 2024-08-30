@@ -12,73 +12,103 @@ class Decrypt {
     private String version = Decrypter.DEFAULT_VERSION;
     private String remain = Decrypter.DEFAULT_REMAIN;
 
-    /**
-     * Runs the Command
-     *
-     * @param args - Command-Line commands
-     */
-    public void run(String[] args) {
-
-        // Set Path to Project
-        pathToProject = args[1];
-        // Set Output-Dir
-        try {
-            outputDir = args[2];
-        } catch (ArrayIndexOutOfBoundsException arEx) {
-            outputDir = Config.DEFAULT_OUTPUT_DIR;
-        }
-
-        System.out.println("Set Output-Dir to: \"" + outputDir + "\"");
-
-        if (args.length >= 4)
-            verifyDir = Boolean.parseBoolean(args[3]);
-        if (args.length >= 5)
-            ignoreFakeHeader = Boolean.parseBoolean(args[4]);
-        if (args.length >= 6) {
-            if (!args[5].toLowerCase().equals("auto")) {
-                key = args[5].toLowerCase();
-            }
-        }
-        if (args.length >= 7) {
-            headerLen = Integer.parseInt(args[6]);
-
-            // Ensure headerLen is at least 1 else default
-            if (headerLen < 1)
-                headerLen = Decrypter.DEFAULT_HEADER_LEN;
-        }
-        if (args.length >= 8)
-            signature = args[7].trim().toLowerCase();
-        if (args.length >= 9)
-            version = args[8].trim().toLowerCase();
-        if (args.length >= 10)
-            remain = args[9].trim().toLowerCase();
-
-        handleFiles();
-    }
 
     /**
      * Handles Files to decrypt
      */
-    private void handleFiles() {
+    public void handleFiles() {
         try {
-            RPG_Project rpgProject = new RPG_Project(pathToProject, verifyDir);
+            RPG_Project rpgProject = new RPG_Project(getProjectPath(), isVerifyDir());
             Decrypter decrypter;
 
-            if (key == null) {
+            if (getKey() == null) {
                 decrypter = new Decrypter();
             } else {
-                decrypter = new Decrypter(key);
+                decrypter = new Decrypter(getKey());
             }
 
-            rpgProject.setOutputPath(outputDir);
-            decrypter.setIgnoreFakeHeader(ignoreFakeHeader);
-            decrypter.setHeaderLen(headerLen);
-            decrypter.setSignature(signature);
-            decrypter.setVersion(version);
-            decrypter.setRemain(remain);
+            rpgProject.setOutputPath(getOutputPath());
+            decrypter.setIgnoreFakeHeader(isIgnoreFakeHeader());
+            decrypter.setHeaderLen(getHeaderLen());
+            decrypter.setSignature(getSignature());
+            decrypter.setVersion(getVersion());
+            decrypter.setRemain(getRemain());
             rpgProject.decryptFilesCmd(decrypter);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    public String getProjectPath() {
+        return pathToProject;
+    }
+
+    public void setPathToProject(String pathToProject) {
+        this.pathToProject = pathToProject;
+    }
+
+    public String getOutputPath() {
+        return outputDir;
+    }
+
+    public void setOutputDir(String outputDir) {
+        this.outputDir = outputDir;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public boolean isVerifyDir() {
+        return verifyDir;
+    }
+
+    public void setVerifyDir(boolean verifyDir) {
+        this.verifyDir = verifyDir;
+    }
+
+    public boolean isIgnoreFakeHeader() {
+        return ignoreFakeHeader;
+    }
+
+    public void setIgnoreFakeHeader(boolean ignoreFakeHeader) {
+        this.ignoreFakeHeader = ignoreFakeHeader;
+    }
+
+    public int getHeaderLen() {
+        return headerLen;
+    }
+
+    public void setHeaderLen(int headerLen) {
+        this.headerLen = headerLen;
+    }
+
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public String getRemain() {
+        return remain;
+    }
+
+    public void setRemain(String remain) {
+        this.remain = remain;
+    }
+
 }

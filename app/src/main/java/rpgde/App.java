@@ -1,15 +1,18 @@
 package rpgde;
 
-public class App {
-    public static String outputDir;
-    public static Preferences preferences;
-    private static CMD cmd;
+import com.meng.tools.*;
+import com.meng.tools.app.*;
 
-    public static void main(String[] args) {
-        // Ensure System output dir always exists
-        if (!File.existsDir(Config.DEFAULT_OUTPUT_DIR))
-            File.createDirectory(Config.DEFAULT_OUTPUT_DIR);
-        cmd = new CMD(args);
-        cmd.runCMD();
+import java.io.*;
+
+public class App {
+
+    public void start() {
+        Decrypt decrypt = new Decrypt();
+        decrypt.setPathToProject("/storage/emulated/0/backups/assets/www/");
+        File appFile = FileTool.getAppFile(FileSavePath.RPG_DECRYPT, "");
+        decrypt.setOutputDir(appFile.getAbsolutePath());
+        decrypt.handleFiles();
     }
+
 }

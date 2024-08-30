@@ -82,26 +82,27 @@ public class FileTool {
 
     public static File getAppFile(String path, String name) {
         File f = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/MessTool/" + path + "/" + name);
-        if (f.isFile()) {
-            if (!f.getParentFile().exists()) {
-                boolean mkdirs = f.getParentFile().mkdirs();
+        if (!f.getAbsolutePath().equals("/")) {
+            File parentFile = f.getParentFile();
+            if (!parentFile.exists()) {
+                boolean mkdirs = parentFile.mkdirs();
                 if (!mkdirs) {
                     return null;
                 }
                 if (!f.exists()) {
                     try {
-                        f.getParentFile().mkdirs();
+                        parentFile.mkdirs();
                         f.createNewFile();
                     } catch (IOException e) {
                         return null;
                     }
                 }
-            } else {
-                if (!f.getParentFile().exists()) {
-                    boolean mkdirs = f.getParentFile().mkdirs();
-                    if (!mkdirs) {
-                        return null;
-                    }
+            }
+        } else {
+            if (!f.exists()) {
+                boolean mkdirs = f.mkdirs();
+                if (!mkdirs) {
+                    return null;
                 }
             }
         }

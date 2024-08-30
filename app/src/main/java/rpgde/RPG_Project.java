@@ -1,5 +1,8 @@
 package rpgde;
 
+import com.meng.tools.*;
+import com.meng.tools.app.*;
+
 import org.json.*;
 
 import java.util.*;
@@ -9,36 +12,36 @@ import java.util.*;
  */
 public class RPG_Project {
     private String path;
-    private String outputPath = Config.DEFAULT_OUTPUT_DIR;
-    private File system = null;
-    private File projectFile = null;
-    private File encryptedImgFile = null;
+    private String outputPath = FileTool.getAppFile(FileSavePath.RPG_DECRYPT, "").getAbsolutePath();
+    private RPG_File system = null;
+    private RPG_File projectFile = null;
+    private RPG_File encryptedImgFile = null;
     private String encryptionKeyName = "encryptionKey";
     private boolean isEncrypted = true;
     private boolean isMV = true;
-    private ArrayList<File> files = new ArrayList<>();
-    private ArrayList<File> encryptedFiles = new ArrayList<>();
-    private ArrayList<File> resourceFiles = new ArrayList<>();
+    private ArrayList<RPG_File> files = new ArrayList<>();
+    private ArrayList<RPG_File> encryptedFiles = new ArrayList<>();
+    private ArrayList<RPG_File> resourceFiles = new ArrayList<>();
 
     /**
      * RPG_Project Constructor
      *
      * @param path         - Path to the RPG-Maker-Project
      * @param verifyRPGDir - true if the RPG-Maker-Directory should verified
-     * @throws PathException - Path doesn't exists/Not Valid-Dir exception
+     * @throws RuntimeException - Path doesn't exists/Not Valid-Dir exception
      */
-    public RPG_Project(String path, boolean verifyRPGDir) throws PathException {
+    public RPG_Project(String path, boolean verifyRPGDir) throws RuntimeException {
         if (path == null)
-            throw new PathException("Project-Path can't be null!", (String) null);
-        if (!File.existsDir(path))
-            throw new PathException("Project-Path doesn't exists!", path);
+            throw new RuntimeException("Project-Path can't be null!");
+        if (!RPG_File.existsDir(path))
+            throw new RuntimeException("Project-Path doesn't exists!");
 
         this.setPath(path);
 
         // Check if Path is a Valid-RPG-Maker-Dir
         if (verifyRPGDir)
             if (!this.verifyDir())
-                throw new PathException("Directory is not a Valid RPG-Maker-MV Directory!", path);
+                throw new RuntimeException("Directory is not a Valid RPG-Maker-MV Directory!");
 
         this.loadFiles();
         this.findSystemFile();
@@ -68,7 +71,7 @@ public class RPG_Project {
      * @param path - Path of the Project
      */
     private void setPath(String path) {
-        this.path = File.ensureDSonEndOfPath(path);
+        this.path = RPG_File.ensureDSonEndOfPath(path);
     }
 
     /**
@@ -87,12 +90,12 @@ public class RPG_Project {
      */
     public void setOutputPath(String outputPath) {
         if (outputPath == null) {
-            PathException pe = new PathException("outputPath can't be null!", (String) null);
+            RuntimeException pe = new RuntimeException("outputPath can't be null!");
             pe.printStackTrace();
             return;
         }
 
-        this.outputPath = File.ensureDSonEndOfPath(outputPath);
+        this.outputPath = RPG_File.ensureDSonEndOfPath(outputPath);
     }
 
     /**
@@ -100,7 +103,7 @@ public class RPG_Project {
      *
      * @return - System-File or null if not set
      */
-    public File getSystem() {
+    public RPG_File getSystem() {
         return system;
     }
 
@@ -109,7 +112,7 @@ public class RPG_Project {
      *
      * @param system - System-File
      */
-    void setSystem(File system) {
+    void setSystem(RPG_File system) {
         this.system = system;
     }
 
@@ -118,7 +121,7 @@ public class RPG_Project {
      *
      * @return - Project-File or null if none
      */
-    public File getProjectFile() {
+    public RPG_File getProjectFile() {
         return projectFile;
     }
 
@@ -127,7 +130,7 @@ public class RPG_Project {
      *
      * @param projectFile - Project-File
      */
-    public void setProjectFile(File projectFile) {
+    public void setProjectFile(RPG_File projectFile) {
         this.projectFile = projectFile;
     }
 
@@ -136,7 +139,7 @@ public class RPG_Project {
      *
      * @return - encrypted image file or null if none found
      */
-    public File getEncryptedImgFile() {
+    public RPG_File getEncryptedImgFile() {
         return encryptedImgFile;
     }
 
@@ -145,7 +148,7 @@ public class RPG_Project {
      *
      * @param encryptedImgFile - encrypted image file
      */
-    private void setEncryptedImgFile(File encryptedImgFile) {
+    private void setEncryptedImgFile(RPG_File encryptedImgFile) {
         this.encryptedImgFile = encryptedImgFile;
     }
 
@@ -215,7 +218,7 @@ public class RPG_Project {
      *
      * @return - File List
      */
-    ArrayList<File> getFiles() {
+    ArrayList<RPG_File> getFiles() {
         return files;
     }
 
@@ -224,7 +227,7 @@ public class RPG_Project {
      *
      * @return - Encryption-File List
      */
-    public ArrayList<File> getEncryptedFiles() {
+    public ArrayList<RPG_File> getEncryptedFiles() {
         return encryptedFiles;
     }
 
@@ -233,7 +236,7 @@ public class RPG_Project {
      *
      * @return - Resource-File List
      */
-    public ArrayList<File> getResourceFiles() {
+    public ArrayList<RPG_File> getResourceFiles() {
         return resourceFiles;
     }
 
@@ -242,11 +245,11 @@ public class RPG_Project {
      */
     private void loadFiles() {
         java.io.File projectPath = new java.io.File(this.getPath());
-        ArrayList<java.io.File> files = File.readDirFiles(projectPath);
+        ArrayList<java.io.File> files = RPG_File.readDirFiles(projectPath);
 
         for (java.io.File file : files) {
             try {
-                this.getFiles().add(new File(file.getCanonicalPath()));
+                this.getFiles().add(new RPG_File(file.getCanonicalPath()));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -287,7 +290,7 @@ public class RPG_Project {
         if (this.getEncryptedImgFile() != null)
             return;
 
-        for (File file : this.getFiles()) {
+        for (RPG_File file : this.getFiles()) {
             if (file.isFileEncryptedExt() && file.isImage()) {
                 this.setEncryptedImgFile(file);
                 return;
@@ -299,7 +302,7 @@ public class RPG_Project {
      * Find all Encrypted-Files of the Project and save them into an ArrayList
      */
     private void findEncryptedFiles() {
-        for (File file : this.getFiles()) {
+        for (RPG_File file : this.getFiles()) {
             if (file.isFileEncryptedExt()) {
                 this.getEncryptedFiles().add(file);
 
@@ -313,7 +316,7 @@ public class RPG_Project {
      * Find all Resource-Files of the Project and save them into an ArrayList
      */
     private void findResourceFiles() {
-        for (File file : this.getFiles()) {
+        for (RPG_File file : this.getFiles()) {
             if (file.canBeEncrypted())
                 this.getResourceFiles().add(file);
         }
@@ -341,7 +344,7 @@ public class RPG_Project {
      */
     public void encryptFilesCmd(Decrypter encrypter) throws Exception {
         // Check if Output-Dir exists
-        if (!File.existsDir(this.getOutputPath())) {
+        if (!RPG_File.existsDir(this.getOutputPath())) {
             System.out.println("Output-dir \"" + this.getOutputPath() + "\" doesn't exists!");
             return;
         }
@@ -359,7 +362,7 @@ public class RPG_Project {
             this.findResourceFiles();
 
         for (int i = 0; i < this.getResourceFiles().size(); i++) {
-            File currentFile = this.getResourceFiles().get(i);
+            RPG_File currentFile = this.getResourceFiles().get(i);
 
             try {
                 System.out.println("Encrypting: " + currentFile.getFilePath());
@@ -392,7 +395,7 @@ public class RPG_Project {
      */
     public void decryptFilesCmd(Decrypter decrypter, boolean restoreImages) throws Exception {
         // Check if Output-Dir exists
-        if (!File.existsDir(this.getOutputPath())) {
+        if (!RPG_File.existsDir(this.getOutputPath())) {
             System.out.println("Output-dir \"" + this.getOutputPath() + "\" doesn't exists!");
             return;
         }
@@ -410,7 +413,7 @@ public class RPG_Project {
             this.findEncryptedFiles();
 
         for (int i = 0; i < this.getEncryptedFiles().size(); i++) {
-            File currentFile = this.getEncryptedFiles().get(i);
+            RPG_File currentFile = this.getEncryptedFiles().get(i);
 
             // Only images if restore images
             if (restoreImages && (!currentFile.isImage() || !currentFile.isFileEncryptedExt()))
@@ -459,11 +462,12 @@ public class RPG_Project {
      * @param file              - File to save to the Output Directory
      * @param overwriteExisting - Overwrite existing Files
      */
-    public void saveFile(File file, boolean overwriteExisting) {
-        String newPath = this.projectPathToOutputPath(file.getFileDirectoryPath());
+    public void saveFile(RPG_File file, boolean overwriteExisting) {
+        String fileDirectoryPath = file.getFileDirectoryPath();
+        String newPath = this.projectPathToOutputPath(fileDirectoryPath);
 
         // Check if dir exists if not create it
-        if (File.existsDir(newPath, true)) {
+        if (RPG_File.existsDir(newPath, true)) {
             file.changePathToFile(newPath);
             System.out.println("Save File to: " + file.getFilePath());
             file.save(overwriteExisting);
@@ -479,7 +483,7 @@ public class RPG_Project {
      *
      * @param file - File to save to the Output Directory
      */
-    void saveFile(File file) {
+    void saveFile(RPG_File file) {
         saveFile(file, false);
     }
 
@@ -489,7 +493,7 @@ public class RPG_Project {
      * @return - true if the Directory is a RPG-Maker-Project else false
      */
     private boolean verifyDir() {
-        return Finder.verifyRPGDir(File.ensureDSonEndOfPath(this.getPath()));
+        return Finder.verifyRPGDir(RPG_File.ensureDSonEndOfPath(this.getPath()));
     }
 
     /**
@@ -513,12 +517,12 @@ public class RPG_Project {
             i++;
         }
 
-        for (File file : getEncryptedFiles()) {
+        for (RPG_File file : getEncryptedFiles()) {
             fileList[i] = new java.io.File(file.getFilePath());
             i++;
         }
 
-        for (File file : getResourceFiles()) {
+        for (RPG_File file : getResourceFiles()) {
             fileList[i] = new java.io.File(file.getFilePath());
             i++;
         }

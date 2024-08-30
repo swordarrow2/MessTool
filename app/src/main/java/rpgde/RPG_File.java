@@ -6,7 +6,7 @@ import java.util.*;
 /**
  * @author Peter Dragicevic
  */
-public class File {
+public class RPG_File {
     private String name;
     private String extension;
     private byte[] content = null;
@@ -18,9 +18,9 @@ public class File {
      * @param filePath - Path of the File
      * @throws Exception - Invalid File-Path
      */
-    public File(String filePath) throws Exception {
+    public RPG_File(String filePath) throws Exception {
         if (filePath == null) {
-            PathException pe = new PathException("filePath can't be null!", (String) null);
+            RuntimeException pe = new RuntimeException("filePath can't be null!");
             pe.printStackTrace();
         }
 
@@ -77,7 +77,7 @@ public class File {
      */
     public static String ensureDSonEndOfPath(String path) {
         if (path == null) {
-            PathException pe = new PathException("path can't be null!", (String) null);
+            RuntimeException pe = new RuntimeException("path can't be null!");
             pe.printStackTrace();
             return null;
         }
@@ -96,7 +96,7 @@ public class File {
      */
     public static boolean existsDir(String path) {
         if (path == null) {
-            PathException pe = new PathException("path can't be null!", (String) null);
+            RuntimeException pe = new RuntimeException("path can't be null!");
             pe.printStackTrace();
             return false;
         }
@@ -113,7 +113,7 @@ public class File {
      */
     public static boolean existsDir(String path, boolean createMissing) {
         if (path == null) {
-            PathException pe = new PathException("path can't be null!", (String) null);
+            RuntimeException pe = new RuntimeException("path can't be null!");
             pe.printStackTrace();
             return false;
         }
@@ -137,7 +137,7 @@ public class File {
      */
     public static boolean existsFile(String filePath) {
         if (filePath == null) {
-            PathException pe = new PathException("filePath can't be null!", (String) null);
+            RuntimeException pe = new RuntimeException("filePath can't be null!");
             pe.printStackTrace();
             return false;
         }
@@ -154,7 +154,7 @@ public class File {
      */
     public static boolean existsFile(String filePath, boolean createMissing) {
         if (filePath == null) {
-            PathException pe = new PathException("filePath can't be null!", (String) null);
+            RuntimeException pe = new RuntimeException("filePath can't be null!");
             pe.printStackTrace();
             return false;
         }
@@ -191,7 +191,7 @@ public class File {
      */
     private static boolean deleteDirectoryOperation(String directoryPath, boolean recursive, boolean deleteOwn) {
         if (directoryPath == null) {
-            PathException pe = new PathException("directoryPath can't be null!", (String) null);
+            RuntimeException pe = new RuntimeException("directoryPath can't be null!");
             pe.printStackTrace();
             return false;
         }
@@ -200,7 +200,7 @@ public class File {
         java.io.File[] dirContent;
 
         // Ensure that dir Exists
-        if (!File.existsDir(directoryPath))
+        if (!RPG_File.existsDir(directoryPath))
             return false;
 
         dirContent = dir.listFiles();
@@ -211,7 +211,7 @@ public class File {
 
         for (java.io.File item : dirContent) {
             if (item.isDirectory() && recursive) {
-                if (!File.deleteDirectory(item.getPath()))
+                if (!RPG_File.deleteDirectory(item.getPath()))
                     return false;
             } else {
                 if (!item.delete())
@@ -230,7 +230,7 @@ public class File {
      * @return - true on success else false
      */
     public static boolean deleteDirectory(String directoryPath) {
-        return File.deleteDirectoryOperation(directoryPath, true, true);
+        return RPG_File.deleteDirectoryOperation(directoryPath, true, true);
     }
 
     /**
@@ -240,7 +240,7 @@ public class File {
      * @return - true on success else false
      */
     public static boolean deleteFilesInDir(String directoryPath) {
-        return File.deleteDirectoryOperation(directoryPath, false, false);
+        return RPG_File.deleteDirectoryOperation(directoryPath, false, false);
     }
 
     /**
@@ -251,7 +251,7 @@ public class File {
      */
     public static boolean createDirectory(String directoryPath) {
         if (directoryPath == null) {
-            PathException pe = new PathException("directoryPath can't be null!", (String) null);
+            RuntimeException pe = new RuntimeException("directoryPath can't be null!");
             pe.printStackTrace();
             return false;
         }
@@ -268,7 +268,7 @@ public class File {
      * @return - true if Directory was cleared else false
      */
     public static boolean clearDirectory(String directoryPath) {
-        return File.deleteDirectoryOperation(directoryPath, true, false);
+        return RPG_File.deleteDirectoryOperation(directoryPath, true, false);
     }
 
     /**
@@ -381,7 +381,7 @@ public class File {
      */
     public void setFilePath(String filePath) {
         if (filePath == null) {
-            PathException pe = new PathException("filePath can't be null!", (String) null);
+            RuntimeException pe = new RuntimeException("filePath can't be null!");
             pe.printStackTrace();
             return;
         }
@@ -421,16 +421,16 @@ public class File {
         if (newPath == null)
             newPath = "";
 
-        this.setFilePath(File.ensureDSonEndOfPath(newPath) + this.getFullFileName());
+        this.setFilePath(RPG_File.ensureDSonEndOfPath(newPath) + this.getFullFileName());
     }
 
     /**
      * Loads the File-Content as Byte-Array
      *
      * @return true if file was loaded false if not
-     * @throws RuntimeException - File to big Exception
+     * @throws java.lang.RuntimeException - File to big Exception
      */
-    public boolean load() throws RuntimeException {
+    public boolean load() throws java.lang.RuntimeException {
         FileInputStream fileIO;
         java.io.File file = new java.io.File(this.getFilePath());
         byte[] byteContent;
@@ -440,7 +440,7 @@ public class File {
             if (!file.exists())
                 throw new FileNotFoundException();
             if (!file.canRead())
-                throw new RuntimeException(this.getFilePath() + " Can't read File");
+                throw new java.lang.RuntimeException(this.getFilePath() + " Can't read File");
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -449,7 +449,7 @@ public class File {
 
         // Check size of the file
         if (file.length() > Integer.MAX_VALUE)
-            throw new RuntimeException(
+            throw new java.lang.RuntimeException(
                     this.getFilePath() + " File is to big... (> " + Integer.MAX_VALUE + " Bytes)!"
             );
 
@@ -523,7 +523,7 @@ public class File {
                 fileOS.write(this.getContent(), 0, this.getContent().length);
                 fileOS.close();
             } else
-                throw new RuntimeException(this.getFilePath() + " Can't write File!");
+                throw new java.lang.RuntimeException(this.getFilePath() + " Can't write File!");
         } catch (Exception e) {
             e.printStackTrace();
 

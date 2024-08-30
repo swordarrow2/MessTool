@@ -19,7 +19,7 @@ class Finder {
      * @param projectDir - Directory of the Project
      * @return - System-File-Object if found else null
      */
-    static File findSystemFile(String projectDir) {
+    static RPG_File findSystemFile(String projectDir) {
         String[] filePaths = new String[]{"data" + Const.DS + "System.json",
                 "www" + Const.DS + "data" + Const.DS + "System.json"};
 
@@ -32,7 +32,7 @@ class Finder {
      * @param projectDir - Directory were to search
      * @return - Project File or null if not found
      */
-    static File findProjectFile(String projectDir) {
+    static RPG_File findProjectFile(String projectDir) {
         String[] potentialPaths = new String[]{"Game.rpgproject", "game.rmmzproject"};
 
         return findFromArray(potentialPaths, projectDir);
@@ -45,7 +45,7 @@ class Finder {
      * @param systemFile - System.json File
      * @return - Key-Name or null if not found
      */
-    static String testEncryptionKeyNames(File systemFile) {
+    static String testEncryptionKeyNames(RPG_File systemFile) {
         String[] keyNames = new String[]{"encryptionKey"};
         Decrypter d = new Decrypter();
         String result = null;
@@ -79,7 +79,7 @@ class Finder {
             return false;
         }
 
-        ArrayList<java.io.File> mainDirFiles = File.readDirFiles(new java.io.File(dir), false);
+        ArrayList<java.io.File> mainDirFiles = RPG_File.readDirFiles(new java.io.File(dir), false);
         String[] rpgGameCommonFiles = new String[]{"Game.exe", // Mostly with an other name...
                 "Game.rpgproject", // Mostly not in the Directory
                 "d3dcompiler_47.dll", "ffmpegsumo.dll", "icudtl.dat", "libEGL.dll", "libGLESv2.dll", "nw.pak",
@@ -106,15 +106,15 @@ class Finder {
      *                      search in this dir)
      * @return - Target File or null if not found
      */
-    private static File findFromArray(String[] filePathArray, String mainPath) {
-        File targetFile = null;
+    private static RPG_File findFromArray(String[] filePathArray, String mainPath) {
+        RPG_File targetFile = null;
 
         for (String filePath : filePathArray) {
             java.io.File fileIo = new java.io.File(mainPath + filePath);
 
             if (fileIo.exists() && !fileIo.isDirectory()) {
                 try {
-                    targetFile = new File(mainPath + filePath);
+                    targetFile = new RPG_File(mainPath + filePath);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

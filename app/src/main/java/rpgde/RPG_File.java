@@ -51,8 +51,9 @@ public class RPG_File {
         java.io.File[] files = dir.listFiles();
         ArrayList<java.io.File> fileList = new ArrayList<>();
 
-        if (files == null)
-            files = new java.io.File[0];
+        if (files == null) {
+            files = new File[0];
+        }
 
         for (java.io.File file : files) {
             if (file.isDirectory()) {
@@ -62,8 +63,9 @@ public class RPG_File {
                     // Process Directory-Content
                     fileList.addAll(dirContent);
                 }
-            } else
+            } else {
                 fileList.add(file);
+            }
         }
 
         return fileList;
@@ -82,8 +84,9 @@ public class RPG_File {
             return null;
         }
 
-        if (!path.substring(path.length() - 1).equals(Const.DS))
-            path = path + Const.DS;
+        if (!path.endsWith("/")) {
+            path = path + "/";
+        }
 
         return path;
     }
@@ -121,12 +124,14 @@ public class RPG_File {
         java.io.File dir = new java.io.File(path);
 
         if (!dir.exists()) {
-            if (createMissing)
+            if (createMissing) {
                 return dir.mkdirs();
+            }
 
             return false;
-        } else
+        } else {
             return true;
+        }
     }
 
     /**
@@ -177,8 +182,9 @@ public class RPG_File {
             }
 
             return false;
-        } else
+        } else {
             return true;
+        }
     }
 
     /**
@@ -200,22 +206,26 @@ public class RPG_File {
         java.io.File[] dirContent;
 
         // Ensure that dir Exists
-        if (!RPG_File.existsDir(directoryPath))
+        if (!RPG_File.existsDir(directoryPath)) {
             return false;
+        }
 
         dirContent = dir.listFiles();
 
         // Empty Directory
-        if (dirContent == null)
+        if (dirContent == null) {
             return !deleteOwn || dir.delete();
+        }
 
         for (java.io.File item : dirContent) {
             if (item.isDirectory() && recursive) {
-                if (!RPG_File.deleteDirectory(item.getPath()))
+                if (!RPG_File.deleteDirectory(item.getPath())) {
                     return false;
+                }
             } else {
-                if (!item.delete())
+                if (!item.delete()) {
                     return false;
+                }
             }
         }
 
@@ -322,10 +332,11 @@ public class RPG_File {
      */
     private void setExtension(String extension) {
         if (extension != null) {
-            if (extension.equals(""))
+            if (extension.equals("")) {
                 extension = null;
-            else
+            } else {
                 extension = extension.toLowerCase();
+            }
         }
 
         this.extension = extension;
@@ -338,8 +349,9 @@ public class RPG_File {
      */
     public void changeExtension(String newExtension) {
         if (newExtension != null) {
-            if (newExtension.equals(""))
+            if (newExtension.equals("")) {
                 newExtension = null;
+            }
         }
 
         this.setFilePath(this.getFileDirectoryPath() + this.getName() +
@@ -404,10 +416,11 @@ public class RPG_File {
      * @return - File Directory-Path
      */
     public String getFileDirectoryPath() {
-        int lastDSChar = this.getFilePath().lastIndexOf(Const.DS);
+        int lastDSChar = this.getFilePath().lastIndexOf("/");
 
-        if (lastDSChar == -1)
+        if (lastDSChar == -1) {
             return "";
+        }
 
         return this.getFilePath().substring(0, lastDSChar + 1);
     }
@@ -418,8 +431,9 @@ public class RPG_File {
      * @param newPath - New Directory of the File
      */
     public void changePathToFile(String newPath) {
-        if (newPath == null)
+        if (newPath == null) {
             newPath = "";
+        }
 
         this.setFilePath(RPG_File.ensureDSonEndOfPath(newPath) + this.getFullFileName());
     }
@@ -437,10 +451,12 @@ public class RPG_File {
 
         try {
             // Check if file exists and if it can be read
-            if (!file.exists())
+            if (!file.exists()) {
                 throw new FileNotFoundException();
-            if (!file.canRead())
-                throw new java.lang.RuntimeException(this.getFilePath() + " Can't read File");
+            }
+            if (!file.canRead()) {
+                throw new RuntimeException(this.getFilePath() + " Can't read File");
+            }
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -448,10 +464,11 @@ public class RPG_File {
         }
 
         // Check size of the file
-        if (file.length() > Integer.MAX_VALUE)
-            throw new java.lang.RuntimeException(
+        if (file.length() > Integer.MAX_VALUE) {
+            throw new RuntimeException(
                     this.getFilePath() + " File is to big... (> " + Integer.MAX_VALUE + " Bytes)!"
             );
+        }
 
         byteContent = new byte[(int) file.length()];
 
@@ -461,8 +478,9 @@ public class RPG_File {
             int readBytes = fileIO.read(byteContent, 0, byteContent.length);
             fileIO.close();
 
-            if (readBytes != file.length())
+            if (readBytes != file.length()) {
                 throw new IOException("Read bytes don't match File-Length!");
+            }
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -503,12 +521,13 @@ public class RPG_File {
         file = new java.io.File(this.getFilePath());
 
         // Check if file exists and if its allowed to overwrite
-        if (file.exists() && !overwriteExisting)
+        if (file.exists() && !overwriteExisting) {
             return false;
-        else if (!file.exists()) {
+        } else if (!file.exists()) {
             try {
-                if (!file.createNewFile())
+                if (!file.createNewFile()) {
                     throw new Exception("Can't create File " + this.getFullFileName() + "!");
+                }
             } catch (Exception e) {
                 e.printStackTrace();
 
@@ -522,8 +541,9 @@ public class RPG_File {
                 fileOS = new FileOutputStream(file);
                 fileOS.write(this.getContent(), 0, this.getContent().length);
                 fileOS.close();
-            } else
-                throw new java.lang.RuntimeException(this.getFilePath() + " Can't write File!");
+            } else {
+                throw new RuntimeException(this.getFilePath() + " Can't write File!");
+            }
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -540,19 +560,21 @@ public class RPG_File {
      */
     private void extractInfosFromPath() throws Exception {
         int filePathLen = this.getFilePath().length();
-        int lastDSCharPos = this.getFilePath().lastIndexOf(Const.DS);
+        int lastDSCharPos = this.getFilePath().lastIndexOf("/");
         int lastDotPos = this.getFilePath().lastIndexOf(".");
         String fileName = this.getFilePath();
 
-        if (filePathLen - 1 == lastDSCharPos || filePathLen == 0)
+        if (filePathLen - 1 == lastDSCharPos || filePathLen == 0) {
             throw new Exception("File-Path invalid!");
+        }
 
-        if (lastDSCharPos != -1)
+        if (lastDSCharPos != -1) {
             fileName = this.getFilePath().substring(lastDSCharPos + 1);
+        }
 
-        if (lastDSCharPos >= lastDotPos || lastDotPos == 0 || (lastDotPos - 1) == lastDSCharPos || lastDotPos == filePathLen - 1)
+        if (lastDSCharPos >= lastDotPos || lastDotPos == 0 || (lastDotPos - 1) == lastDSCharPos || lastDotPos == filePathLen - 1) {
             this.setExtension(null);
-        else {
+        } else {
             this.setExtension(this.getFilePath().substring(lastDotPos + 1));
             fileName = this.getFilePath().substring(lastDSCharPos + 1, lastDotPos);
         }
@@ -642,8 +664,9 @@ public class RPG_File {
      * @return - true if the Extension is an encrypted File-extension else false
      */
     public boolean isFileEncryptedExt() {
-        if (this.extension == null)
+        if (this.extension == null) {
             return false;
+        }
 
         switch (this.extension) {
             case "rpgmvp":

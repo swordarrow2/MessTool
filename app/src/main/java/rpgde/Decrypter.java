@@ -55,20 +55,23 @@ public class Decrypter {
      */
     private static byte[] getByteArray(byte[] byteArray, int startPos, int length) {
         // Don't allow start-values below 0
-        if (startPos < 0)
+        if (startPos < 0) {
             startPos = 0;
+        }
 
         // Check if length is to below 0 (to end of array)
-        if (length < 0)
+        if (length < 0) {
             length = byteArray.length - startPos;
+        }
 
         byte[] newByteArray = new byte[length];
         int n = 0;
 
         for (int i = startPos; i < (startPos + length); i++) {
             // Check if byte array is on the last pos and return shorter byte array if
-            if (byteArray.length <= i)
+            if (byteArray.length <= i) {
                 return getByteArray(newByteArray, 0, n);
+            }
 
             newByteArray[n] = byteArray[i];
             n++;
@@ -97,14 +100,15 @@ public class Decrypter {
     private static String bytesToHex(byte[] bytes) {
         StringBuilder sb = new StringBuilder();
 
-        for (byte b : bytes)
+        for (byte b : bytes) {
             sb.append(String.format("%02x", b));
+        }
 
         return sb.toString();
     }
 
     /**
-     * Return the Decrypt-Code
+     * Return the CryManager-Code
      *
      * @return DecryptCode or null if not set
      */
@@ -113,30 +117,31 @@ public class Decrypter {
     }
 
     /**
-     * Sets the Decrypt-Code
+     * Sets the CryManager-Code
      *
-     * @param decryptCode - Decrypt-Code
+     * @param decryptCode - CryManager-Code
      */
     public void setDecryptCode(String decryptCode) {
         this.decryptCode = decryptCode;
     }
 
     /**
-     * Returns the Real Decrypt-Code as Array
+     * Returns the Real CryManager-Code as Array
      *
-     * @return Real Decrypt-Code as Array
+     * @return Real CryManager-Code as Array
      */
     private String[] getRealDecryptCode() {
-        if (this.realDecryptCode == null)
+        if (this.realDecryptCode == null) {
             this.calcRealDecryptionCode();
+        }
 
         return realDecryptCode;
     }
 
     /**
-     * Sets the Real Decrypt-Code as Array
+     * Sets the Real CryManager-Code as Array
      *
-     * @param realDecryptCode - Real Decrypt-Code as Array
+     * @param realDecryptCode - Real CryManager-Code as Array
      */
     private void setRealDecryptCode(String[] realDecryptCode) {
         this.realDecryptCode = realDecryptCode;
@@ -148,8 +153,9 @@ public class Decrypter {
      * @return - RPG-Header-Bytes
      */
     private byte[] getRpgHeaderBytes() {
-        if (this.rpgHeaderBytes == null)
+        if (this.rpgHeaderBytes == null) {
             this.generateRpgHeaderBytes();
+        }
 
         return rpgHeaderBytes;
     }
@@ -258,7 +264,7 @@ public class Decrypter {
      *
      * @return - true if Fake-Header should be ignored else false
      */
-    boolean isIgnoreFakeHeader() {
+    private boolean isIgnoreFakeHeader() {
         return ignoreFakeHeader;
     }
 
@@ -282,22 +288,24 @@ public class Decrypter {
     }
 
     /**
-     * Reads the Decrypt-Code into an Array with 2 Paired Strings
+     * Reads the CryManager-Code into an Array with 2 Paired Strings
      *
-     * @throws NullPointerException - Decrypt-Code is null
+     * @throws NullPointerException - CryManager-Code is null
      */
     private void calcRealDecryptionCode() throws NullPointerException {
         String decryptCode = this.getDecryptCode();
-        if (decryptCode == null)
+        if (decryptCode == null) {
             throw new NullPointerException("DecryptCode");
+        }
 
         String[] decryptArray = decryptCode.split("(?<=\\G.{2})");
         ArrayList<String> verifiedDecryptArray = new ArrayList<>();
 
         // Remove empty parts
         for (String aDecryptArray : decryptArray) {
-            if (!aDecryptArray.equals(""))
+            if (!aDecryptArray.equals("")) {
                 verifiedDecryptArray.add(aDecryptArray);
+            }
         }
 
         this.setRealDecryptCode(verifiedDecryptArray.toArray(new String[0]));
@@ -323,12 +331,15 @@ public class Decrypter {
         }
 
         // Check if all required external stuff is here
-        if (this.getDecryptCode() == null)
+        if (this.getDecryptCode() == null) {
             throw new NullPointerException("Encryption-Code is not set!");
-        if (file.getContent() == null)
+        }
+        if (file.getContent() == null) {
             throw new NullPointerException("File-Content is not loaded!");
-        if (file.getContent().length < (this.getHeaderLen()))
+        }
+        if (file.getContent().length < (this.getHeaderLen())) {
             throw new Exception("File is to short (<" + (this.getHeaderLen()) + " Bytes)");
+        }
 
         // Get Content
         byte[] content = file.getContent();
@@ -371,12 +382,14 @@ public class Decrypter {
      * @throws Exception - Various Exceptions
      */
     public void decryptFile(RPG_File file, boolean restorePictures) throws Exception {
-        if (restorePictures && (!file.isImage() || !file.isFileEncryptedExt()))
+        if (restorePictures && (!file.isImage() || !file.isFileEncryptedExt())) {
             return;
+        }
 
         try {
-            if (!file.load())
+            if (!file.load()) {
                 throw new RuntimeException(file.getFilePath() + " Can't load File-Content...");
+            }
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -384,20 +397,25 @@ public class Decrypter {
         }
 
         // Check if all required external stuff is here
-        if (this.getDecryptCode() == null && !restorePictures)
+        if (this.getDecryptCode() == null && !restorePictures) {
             throw new NullPointerException("Decryption-Code is not set!");
-        if (file.getContent() == null)
+        }
+        if (file.getContent() == null) {
             throw new NullPointerException("File-Content is not loaded!");
-        if (file.getContent().length < (this.getHeaderLen() * 2))
+        }
+        if (file.getContent().length < (this.getHeaderLen() * 2)) {
             throw new Exception("File is to short (<" + (this.getHeaderLen() * 2) + " Bytes)");
+        }
 
         // Get Content
         byte[] content = file.getContent();
 
         // Check Header
-        if (!this.isIgnoreFakeHeader())
-            if (!this.checkFakeHeader(content))
+        if (!this.isIgnoreFakeHeader()) {
+            if (!this.checkFakeHeader(content)) {
                 throw new Exception("Header is Invalid!");
+            }
+        }
 
         // Remove Fake-Header from rest
         content = Decrypter.getByteArray(content, this.getHeaderLen());
@@ -406,7 +424,7 @@ public class Decrypter {
             for (int i = 0; i < this.getHeaderLen(); i++) {
                 if (restorePictures) { // Restore Pictures
                     content[i] = getPNGHeaderByteArray()[i];
-                } else {// Decrypt Real-Header & First part of the Content
+                } else {// CryManager Real-Header & First part of the Content
                     this.getRealDecryptCode();
                     byte[] decryptCode = hexStringToByteArray(this.decryptCode);
                     content[i] = (byte) (content[i] ^ decryptCode[i]);
@@ -420,13 +438,15 @@ public class Decrypter {
     }
 
     private int toByte(char c) {
-        if (c >= '0' && c <= '9')
+        if (c >= '0' && c <= '9') {
             return (c - '0');
-        if (c >= 'A' && c <= 'F')
+        }
+        if (c >= 'A' && c <= 'F') {
             return (c - 'A' + 10);
-        if (c >= 'a' && c <= 'f')
+        }
+        if (c >= 'a' && c <= 'f') {
             return (c - 'a' + 10);
-
+        }
         throw new InvalidParameterException("Invalid hex char '" + c + "'");
     }
 
@@ -447,14 +467,15 @@ public class Decrypter {
      * @param content - File-Content as Byte-Array
      * @return - true if the header is valid else false
      */
-    boolean checkFakeHeader(byte[] content) {
+    private boolean checkFakeHeader(byte[] content) {
         byte[] header = Decrypter.getByteArray(content, 0, this.getHeaderLen());
         byte[] refBytes = this.getRpgHeaderBytes();
 
         // Verify header (Check if its an encrypted file)
         for (int i = 0; i < this.getHeaderLen(); i++) {
-            if (refBytes[i] != header[i])
+            if (refBytes[i] != header[i]) {
                 return false;
+            }
         }
 
         return true;
@@ -470,8 +491,9 @@ public class Decrypter {
      */
     public void detectEncryptionKeyFromJson(RPG_File file, String keyName) throws JSONException, NullPointerException {
         try {
-            if (!file.load())
+            if (!file.load()) {
                 throw new RuntimeException(file.getFilePath() + " Can't load File-Content...");
+            }
         } catch (NullPointerException nullEx) {
             throw new NullPointerException("System-File is not set!");
         } catch (Exception e) {
@@ -505,12 +527,14 @@ public class Decrypter {
      */
     public void detectEncryptionKeyFromImage(RPG_File file) throws Exception {
         // Only encrypted images
-        if (!file.isImage() || !file.isFileEncryptedExt())
+        if (!file.isImage() || !file.isFileEncryptedExt()) {
             return;
+        }
 
         try {
-            if (!file.load())
+            if (!file.load()) {
                 throw new RuntimeException(file.getFilePath() + " Can't load File-Content...");
+            }
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -518,19 +542,23 @@ public class Decrypter {
         }
 
         // Check if all required external stuff is here
-        if (file.getContent() == null)
+        if (file.getContent() == null) {
             throw new NullPointerException("File-Content is not loaded!");
-        if (file.getContent().length < (this.getHeaderLen() * 2))
+        }
+        if (file.getContent().length < (this.getHeaderLen() * 2)) {
             throw new Exception("File is to short (<" + (this.getHeaderLen() * 2) + " Bytes)");
+        }
 
         // Get Content
         byte[] content = file.getContent();
         byte[] keyBytes = new byte[this.getHeaderLen()];
 
         // Check Header
-        if (!this.isIgnoreFakeHeader())
-            if (!this.checkFakeHeader(content))
+        if (!this.isIgnoreFakeHeader()) {
+            if (!this.checkFakeHeader(content)) {
                 throw new Exception("Header is Invalid!");
+            }
+        }
 
         // Remove Fake-Header from rest
         content = Decrypter.getByteArray(content, this.getHeaderLen());
@@ -551,8 +579,9 @@ public class Decrypter {
      * @return PNG-Header Byte Array
      */
     private byte[] getPNGHeaderByteArray() {
-        if (pngHeaderBytes != null)
+        if (pngHeaderBytes != null) {
             return pngHeaderBytes;
+        }
 
         String[] pngHeaderArr = PNG_HEADER.split("(?<=\\G.{2})");
         byte[] pngHeaderBytesArray = new byte[this.getHeaderLen()];

@@ -1,6 +1,6 @@
 package rpgde;
 
-class Decrypt {
+class CryManager {
     private String pathToProject;
     private String outputDir;
 
@@ -12,11 +12,13 @@ class Decrypt {
     private String version = Decrypter.DEFAULT_VERSION;
     private String remain = Decrypter.DEFAULT_REMAIN;
 
+    // Encrypter options
+    private boolean toMV = true;
 
     /**
      * Handles Files to decrypt
      */
-    public void handleFiles() {
+    public void decry() {
         try {
             RPG_Project rpgProject = new RPG_Project(getProjectPath(), isVerifyDir());
             Decrypter decrypter;
@@ -34,6 +36,29 @@ class Decrypt {
             decrypter.setVersion(getVersion());
             decrypter.setRemain(getRemain());
             rpgProject.decryptFilesCmd(decrypter);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void encry() {
+        try {
+            RPG_Project rpgProject = new RPG_Project(pathToProject, false);
+            Decrypter encrypter;
+
+            if (key == null) {
+                encrypter = new Decrypter();
+            } else {
+                encrypter = new Decrypter(key);
+            }
+
+            rpgProject.setOutputPath(outputDir);
+            rpgProject.setMV(toMV);
+            encrypter.setHeaderLen(headerLen);
+            encrypter.setSignature(signature);
+            encrypter.setVersion(version);
+            encrypter.setRemain(remain);
+            rpgProject.encryptFilesCmd(encrypter);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -111,4 +136,11 @@ class Decrypt {
         this.remain = remain;
     }
 
+    public void setToMV(boolean toMV) {
+        this.toMV = toMV;
+    }
+
+    public boolean isToMV() {
+        return toMV;
+    }
 }

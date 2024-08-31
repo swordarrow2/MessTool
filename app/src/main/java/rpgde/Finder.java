@@ -20,8 +20,8 @@ class Finder {
      * @return - System-File-Object if found else null
      */
     static RPG_File findSystemFile(String projectDir) {
-        String[] filePaths = new String[]{"data" + Const.DS + "System.json",
-                "www" + Const.DS + "data" + Const.DS + "System.json"};
+        String[] filePaths = new String[]{"data/System.json",
+                "www/data/System.json"};
 
         return findFromArray(filePaths, projectDir);
     }

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ran="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RadioGroup
+        android:id="@+id/game_rpg_cry_main_rbg_mode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/game_rpg_cry_main_rb_decry"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="@string/decry" />
+        <!--623156-->
+        <RadioButton
+            android:id="@+id/game_rpg_cry_main_rb_encry"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/encry" />
+    </RadioGroup>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/game_rpg_cry_main_cb_verify_dir"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="false"
+            android:text="verifyDir" />
+
+        <CheckBox
+            android:id="@+id/game_rpg_cry_main_cb_ignore_fake_header"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="ignoreFakeHeader" />
+
+        <CheckBox
+            android:id="@+id/game_rpg_cry_main_cb_mv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:enabled="false"
+            android:text="MV Project" />
+    </LinearLayout>
+
+    <com.meng.messtool.customview.MaterialDesign.MDEditText
+        android:id="@+id/game_rpg_cry_main_et_path_to_project"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        ran:default_value="/storage/emulated/0/"
+        ran:hint="pathToProject" />
+
+    <com.meng.messtool.customview.MaterialDesign.MDEditText
+        android:id="@+id/game_rpg_cry_main_et_output_dir"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        ran:default_value="/storage/emulated/0/"
+        ran:hint="outputDir" />
+
+    <com.meng.messtool.customview.MaterialDesign.MDEditText
+        android:id="@+id/game_rpg_cry_main_et_key"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        ran:default_value="auto"
+        ran:hint="key" />
+
+    <com.meng.messtool.customview.MaterialDesign.MDEditText
+        android:id="@+id/game_rpg_cry_main_et_header_len"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        ran:default_value="16"
+        ran:hint="headerLen" />
+
+    <com.meng.messtool.customview.MaterialDesign.MDEditText
+        android:id="@+id/game_rpg_cry_main_et_signature"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        ran:default_value="5250474d56000000"
+        ran:hint="signature" />
+
+    <com.meng.messtool.customview.MaterialDesign.MDEditText
+        android:id="@+id/game_rpg_cry_main_et_version"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        ran:default_value="000301"
+        ran:hint="version" />
+
+    <com.meng.messtool.customview.MaterialDesign.MDEditText
+        android:id="@+id/game_rpg_cry_main_et_remain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        ran:default_value="0000000000"
+        ran:hint="remain" />
+
+</LinearLayout>

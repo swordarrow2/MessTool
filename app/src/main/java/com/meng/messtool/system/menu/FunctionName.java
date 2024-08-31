@@ -20,6 +20,7 @@ import com.meng.messtool.modules.picture.barcode.*;
 import com.meng.messtool.modules.picture.gif.*;
 import com.meng.messtool.modules.picture.pixiv.*;
 import com.meng.messtool.modules.picture.saucenao.*;
+import com.meng.messtool.modules.rpgdecry.*;
 import com.meng.messtool.modules.wallpaper.*;
 import com.meng.messtool.system.*;
 import com.meng.messtool.system.base.*;
@@ -38,8 +39,8 @@ public enum FunctionName {
 //    FUNCTION_FPV_MSPV2("msp v2",FunctionGroup.GROUP_FPV,MspV2TestFragment.class),
 //    FUNCTION_FPV_MSP_SENSOR("msp sensor",FunctionGroup.GROUP_FPV,MspV2TestFragment.class),
 
-    /********************PICTURE*********************/
-    FUNCTION_PICTURE_BARCODE("条码", FunctionGroup.GROUP_PICTURE, new Runnable() {
+    /********************MEDIA*********************/
+    FUNCTION_PICTURE_BARCODE("条码", FunctionGroup.GROUP_MEDIA, new Runnable() {
 
         @Override
         public void run() {
@@ -79,26 +80,24 @@ public enum FunctionName {
 
         }
     }),
-    FUNCTION_PICTURE_CRYPT("加密", FunctionGroup.GROUP_PICTURE, PictureCrypt.class),
-    FUNCTION_PICTURE_GRAY("灰度图", FunctionGroup.GROUP_PICTURE, GrayImage.class),
-    FUNCTION_PICTURE_ENCODE_GIF("合成GIF", FunctionGroup.GROUP_PICTURE, GIFCreator.class),
+    FUNCTION_PICTURE_CRYPT("加密", FunctionGroup.GROUP_MEDIA, PictureCrypt.class),
+    FUNCTION_PICTURE_GRAY("灰度图", FunctionGroup.GROUP_MEDIA, GrayImage.class),
+    FUNCTION_PICTURE_ENCODE_GIF("合成GIF", FunctionGroup.GROUP_MEDIA, GIFCreator.class),
     FUNCTION_PICTURE_PIXIV_DOWNLOAD("PIXIV下载", FunctionGroup.GROUP_LONG_TIME_NO_USE, PixivDownloadMain.class),
-    FUNCTION_PICTURE_SAUCENAO("SauceNAO搜图", FunctionGroup.GROUP_PICTURE, SauceNaoMain.class),
-
-    /********************VIDEO*********************/
+    FUNCTION_PICTURE_SAUCENAO("SauceNAO搜图", FunctionGroup.GROUP_MEDIA, SauceNaoMain.class),
 
     FUNCTION_VIDEO_FORMAT_CONVERT("视频格式转换", FunctionGroup.GROUP_DEVELOPING, FfmpegFragment.class),
-    FUNCTION_VIDEO_RTMP_PUSH("RTMP推流", FunctionGroup.GROUP_VIDEO, RtmpFragment.class),
-    FUNCTION_VIDEO_WALLPAPER("视频动态壁纸", FunctionGroup.GROUP_VIDEO, WallpaperMain.class),
+    FUNCTION_VIDEO_RTMP_PUSH("RTMP推流", FunctionGroup.GROUP_MEDIA, RtmpFragment.class),
+    FUNCTION_VIDEO_WALLPAPER("视频动态壁纸", FunctionGroup.GROUP_MEDIA, WallpaperMain.class),
+
+    FUNCTION_AUDIO_ANDROID_TTS("文本语音合成", FunctionGroup.GROUP_MEDIA, TtsFragment.class),
+
 
     /********************FPV*********************/
 
     FUNCTION_FC_CONFIG("fc config", FunctionGroup.GROUP_DEVELOPING, FcConfig.class),
     FUNCTION_PID_SIMULATOR("pid simulator", FunctionGroup.GROUP_DEVELOPING, PIDSimulator.class),
 
-    /********************TTS*********************/
-
-    FUNCTION_AUDIO_ANDROID_TTS("文本语音合成", FunctionGroup.GROUP_AUDIO, TtsFragment.class),
 
     /********************ELECTRONIC*********************/
 
@@ -115,6 +114,7 @@ public enum FunctionName {
 
     FUNCTION_TOY_CHAT_SIMULATOR("聊天模拟器", FunctionGroup.GROUP_TOY, ChatSimulator.class),
     FUNCTION_TOY_CHAT_SCRIPT_EDITOR("聊天脚本编辑器", FunctionGroup.GROUP_TOY, ChatEditor.class),
+    FUNCTION_TOY_RPG_CRYPT("RPG文件解密", FunctionGroup.GROUP_TOY, RpgCrypter.class),
 
     /********************DEPRCATED*********************/
 

@@ -1,4 +1,4 @@
-package rpgde;
+package com.meng.messtool.modules.rpgdecry;
 
 class CryManager {
     private String pathToProject;
@@ -21,13 +21,7 @@ class CryManager {
     public void decry() {
         try {
             RPG_Project rpgProject = new RPG_Project(getProjectPath(), isVerifyDir());
-            Decrypter decrypter;
-
-            if (getKey() == null) {
-                decrypter = new Decrypter();
-            } else {
-                decrypter = new Decrypter(getKey());
-            }
+            Decrypter decrypter = new Decrypter(getKey());
 
             rpgProject.setOutputPath(getOutputPath());
             decrypter.setIgnoreFakeHeader(isIgnoreFakeHeader());
@@ -44,14 +38,7 @@ class CryManager {
     public void encry() {
         try {
             RPG_Project rpgProject = new RPG_Project(pathToProject, false);
-            Decrypter encrypter;
-
-            if (key == null) {
-                encrypter = new Decrypter();
-            } else {
-                encrypter = new Decrypter(key);
-            }
-
+            Decrypter encrypter = new Decrypter(key);
             rpgProject.setOutputPath(outputDir);
             rpgProject.setMV(toMV);
             encrypter.setHeaderLen(headerLen);

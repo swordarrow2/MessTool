@@ -9,7 +9,7 @@ import com.meng.messtool.system.base.*;
 import com.meng.tools.app.*;
 import com.meng.tools.update.*;
 
-import rpgde.*;
+import com.meng.messtool.modules.rpgdecry.*;
 
 public class DatabaseTestFragment extends BaseFragment {
     private TextView textView;

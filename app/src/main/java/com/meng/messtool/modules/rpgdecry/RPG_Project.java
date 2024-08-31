@@ -1,4 +1,4 @@
-package rpgde;
+package com.meng.messtool.modules.rpgdecry;
 
 import com.meng.tools.*;
 import com.meng.tools.app.*;
@@ -31,29 +31,35 @@ public class RPG_Project {
      * @throws RuntimeException - Path doesn't exists/Not Valid-Dir exception
      */
     public RPG_Project(String path, boolean verifyRPGDir) throws RuntimeException {
-        if (path == null)
+        if (path == null) {
             throw new RuntimeException("Project-Path can't be null!");
-        if (!RPG_File.existsDir(path))
+        }
+        if (!RPG_File.existsDir(path)) {
             throw new RuntimeException("Project-Path doesn't exists!");
+        }
 
         this.setPath(path);
 
         // Check if Path is a Valid-RPG-Maker-Dir
-        if (verifyRPGDir)
-            if (!this.verifyDir())
+        if (verifyRPGDir) {
+            if (!this.verifyDir()) {
                 throw new RuntimeException("Directory is not a Valid RPG-Maker-MV Directory!");
+            }
+        }
 
         this.loadFiles();
         this.findSystemFile();
         this.findProjectFile();
 
-        if (this.getSystem() != null)
+        if (this.getSystem() != null) {
             this.checkIfEncrypted();
+        }
 
-        if (this.isEncrypted())
+        if (this.isEncrypted()) {
             this.findEncryptedFiles();
-        else
+        } else {
             this.findResourceFiles();
+        }
     }
 
     /**
@@ -270,9 +276,9 @@ public class RPG_Project {
             // VOID
         }
 
-        if (d.getDecryptCode() != null)
+        if (d.getDecryptCode() != null) {
             this.setEncrypted(true);
-        else {
+        } else {
             // Test default names
             String decryptKey = Finder.testEncryptionKeyNames(this.getSystem());
 
@@ -287,8 +293,9 @@ public class RPG_Project {
      * Finds an Encrypted image and assigns it to the class
      */
     public void findEncryptedImg() {
-        if (this.getEncryptedImgFile() != null)
+        if (this.getEncryptedImgFile() != null) {
             return;
+        }
 
         for (RPG_File file : this.getFiles()) {
             if (file.isFileEncryptedExt() && file.isImage()) {
@@ -306,8 +313,9 @@ public class RPG_Project {
             if (file.isFileEncryptedExt()) {
                 this.getEncryptedFiles().add(file);
 
-                if (this.getEncryptedImgFile() == null && file.isImage())
+                if (this.getEncryptedImgFile() == null && file.isImage()) {
                     this.setEncryptedImgFile(file);
+                }
             }
         }
     }
@@ -317,8 +325,9 @@ public class RPG_Project {
      */
     private void findResourceFiles() {
         for (RPG_File file : this.getFiles()) {
-            if (file.canBeEncrypted())
+            if (file.canBeEncrypted()) {
                 this.getResourceFiles().add(file);
+            }
         }
     }
 
@@ -358,8 +367,9 @@ public class RPG_Project {
         }
 
         // Load resource files anyway
-        if (this.isEncrypted())
+        if (this.isEncrypted()) {
             this.findResourceFiles();
+        }
 
         for (int i = 0; i < this.getResourceFiles().size(); i++) {
             RPG_File currentFile = this.getResourceFiles().get(i);
@@ -409,15 +419,17 @@ public class RPG_Project {
         }
 
         // Ensure files are loaded
-        if (!this.isEncrypted())
+        if (!this.isEncrypted()) {
             this.findEncryptedFiles();
+        }
 
         for (int i = 0; i < this.getEncryptedFiles().size(); i++) {
             RPG_File currentFile = this.getEncryptedFiles().get(i);
 
             // Only images if restore images
-            if (restoreImages && (!currentFile.isImage() || !currentFile.isFileEncryptedExt()))
+            if (restoreImages && (!currentFile.isImage() || !currentFile.isFileEncryptedExt())) {
                 continue;
+            }
 
             try {
                 if (restoreImages) {
@@ -471,8 +483,9 @@ public class RPG_Project {
             file.changePathToFile(newPath);
             System.out.println("Save File to: " + file.getFilePath());
             file.save(overwriteExisting);
-        } else
+        } else {
             System.out.println("Can't create Directory for File: " + newPath + file.getFullFileName());
+        }
 
         // Clean up Memory
         file.unloadContent();

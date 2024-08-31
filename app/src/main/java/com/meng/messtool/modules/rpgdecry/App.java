@@ -1,4 +1,4 @@
-package rpgde;
+package com.meng.messtool.modules.rpgdecry;
 
 import com.meng.tools.*;
 import com.meng.tools.app.*;

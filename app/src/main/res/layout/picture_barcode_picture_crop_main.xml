@@ -39,7 +39,7 @@
             android:textSize="22sp" />
     </LinearLayout>
 
-    <com.meng.messtool.modules.picture.barcode.ClipSquareImageView
+    <com.meng.messtool.modules.media.barcode.ClipSquareImageView
         android:id="@+id/clipSquareIV"
         android:layout_width="match_parent"
         android:layout_height="0dp"

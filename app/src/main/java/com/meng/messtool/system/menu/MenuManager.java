@@ -46,10 +46,30 @@ public class MenuManager {
         }
         if (SharedPreferenceHelper.isShowGroupName()) {
             for (Map.Entry<FunctionGroup, LinkedList<FunctionName>> entry : menuEntry.entrySet()) {
-                SubMenu subMenu = menu.addSubMenu(0, entry.getKey().ordinal(), 0, entry.getKey().getName());
+                FunctionGroup key = entry.getKey();
+                SubMenu subMenu = menu.addSubMenu(0, key.ordinal(), 0, key.getName());
                 for (FunctionName fn : entry.getValue()) {
                     MenuItem item = subMenu.add(0, fn.ordinal(), 0, fn.getName());
-                    item.setIcon(R.drawable.ic_menu);
+                    switch (key) {
+                        case GROUP_DEVELOPING:
+                            item.setIcon(R.drawable.ic_edit);
+                            break;
+                        case GROUP_DEPRECATED:
+                            item.setIcon(R.drawable.ic_close);
+                            break;
+                        case GROUP_SYSTEM:
+                            item.setIcon(R.drawable.ic_progress);
+                            break;
+                        case GROUP_BOX_ARRAY:
+                        case GROUP_MEDIA:
+                            item.setIcon(android.R.drawable.ic_menu_gallery);
+                            break;
+                        case GROUP_ELECTRONIC:
+                        case GROUP_DEFAULT:
+                        case GROUP_TOY:
+                        case GROUP_LONG_TIME_NO_USE:
+                            item.setIcon(R.drawable.ic_menu);
+                    }
                     Debuger.addLog(TAG, "add function", fn.getName());
                 }
             }

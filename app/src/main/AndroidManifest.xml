@@ -92,17 +92,17 @@
 
 
         <activity
-            android:name=".modules.picture.pixiv.LoginPixivActivity"
+            android:name=".modules.media.pixiv.LoginPixivActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask" />
 
         <activity
-            android:name=".modules.picture.barcode.CropActivity"
+            android:name=".modules.media.barcode.CropActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask" />
 
         <activity
-            android:name=".modules.picture.barcode.ReadBarcodeCameraActivity"
+            android:name=".modules.media.barcode.ReadBarcodeCameraActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask">
             <intent-filter>
@@ -119,11 +119,11 @@
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
 
         <activity
-            android:name=".modules.picture.gif.SelectFileActivity"
+            android:name=".modules.media.gif.SelectFileActivity"
             android:launchMode="singleTask" />
 
         <service
-            android:name=".modules.wallpaper.VideoWallpaper"
+            android:name=".modules.media.wallpaper.VideoWallpaper"
             android:permission="android.permission.BIND_WALLPAPER">
 
             <intent-filter>

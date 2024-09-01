@@ -1,4 +1,4 @@
-package com.meng.messtool.modules.picture;
+package com.meng.messtool.modules.media;
 
 import android.app.*;
 import android.content.*;

@@ -25,7 +25,7 @@ import android.util.*;
 
 import com.google.zxing.*;
 import com.meng.messtool.*;
-import com.meng.messtool.modules.picture.barcode.*;
+import com.meng.messtool.modules.media.barcode.*;
 import com.meng.tools.zxing.camera.*;
 import com.meng.tools.zxing.view.*;
 

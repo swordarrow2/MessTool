@@ -19,7 +19,7 @@ package com.meng.tools.zxing.decoding;
 import android.os.*;
 
 import com.google.zxing.*;
-import com.meng.messtool.modules.picture.barcode.*;
+import com.meng.messtool.modules.media.barcode.*;
 
 import java.util.*;
 import java.util.concurrent.*;

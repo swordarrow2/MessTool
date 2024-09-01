@@ -1,4 +1,4 @@
-package com.meng.messtool.modules.picture.saucenao;
+package com.meng.messtool.modules.media.saucenao;
 
 import org.jsoup.helper.*;
 import org.jsoup.nodes.*;

@@ -1,4 +1,4 @@
-package com.meng.messtool.modules.picture.gif;
+package com.meng.messtool.modules.media.gif;
 
 import android.graphics.*;
 

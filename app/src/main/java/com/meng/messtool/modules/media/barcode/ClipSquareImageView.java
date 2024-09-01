@@ -1,4 +1,4 @@
-package com.meng.messtool.modules.picture.barcode;
+package com.meng.messtool.modules.media.barcode;
 
 import android.annotation.*;
 import android.content.*;

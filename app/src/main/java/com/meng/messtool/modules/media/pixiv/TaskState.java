@@ -1,4 +1,4 @@
-package com.meng.messtool.modules.picture.pixiv;
+package com.meng.messtool.modules.media.pixiv;
 
 enum TaskState {
     nothing,

@@ -1,4 +1,4 @@
-package com.meng.messtool.modules.wallpaper;
+package com.meng.messtool.modules.media.wallpaper;
 
 import android.app.*;
 import android.content.*;

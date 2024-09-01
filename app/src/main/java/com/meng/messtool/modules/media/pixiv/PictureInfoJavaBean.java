@@ -1,4 +1,4 @@
-package com.meng.messtool.modules.picture.pixiv;
+package com.meng.messtool.modules.media.pixiv;
 
 class PictureInfoJavaBean {
     public boolean isAnimPicture = true;

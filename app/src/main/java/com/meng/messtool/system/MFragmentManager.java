@@ -3,7 +3,7 @@ package com.meng.messtool.system;
 import android.app.*;
 
 import com.meng.messtool.*;
-import com.meng.messtool.modules.picture.barcode.*;
+import com.meng.messtool.modules.media.barcode.*;
 import com.meng.messtool.system.base.*;
 import com.meng.messtool.system.debug.*;
 import com.meng.tools.app.*;

@@ -1,20 +1,17 @@
 package com.vincent.videocompressor;
 
-import android.annotation.TargetApi;
-import android.graphics.SurfaceTexture;
-import android.opengl.GLES20;
-import android.view.Surface;
+import android.graphics.*;
+import android.opengl.*;
+import android.view.*;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
+import java.nio.*;
 
-import javax.microedition.khronos.egl.EGL10;
+import javax.microedition.khronos.egl.*;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 
-@TargetApi(16)
 public class OutputSurface implements SurfaceTexture.OnFrameAvailableListener {
 
     private static final int EGL_OPENGL_ES2_BIT = 4;

@@ -1,47 +1,18 @@
 package com.vincent.videocompressor;
 
-import android.annotation.TargetApi;
-import android.media.MediaCodec;
-import android.media.MediaFormat;
+import android.annotation.*;
+import android.media.*;
 
-import com.coremedia.iso.BoxParser;
-import com.coremedia.iso.IsoFile;
-import com.coremedia.iso.IsoTypeWriter;
-import com.coremedia.iso.boxes.Box;
-import com.coremedia.iso.boxes.Container;
-import com.coremedia.iso.boxes.DataEntryUrlBox;
-import com.coremedia.iso.boxes.DataInformationBox;
-import com.coremedia.iso.boxes.DataReferenceBox;
-import com.coremedia.iso.boxes.FileTypeBox;
-import com.coremedia.iso.boxes.HandlerBox;
-import com.coremedia.iso.boxes.MediaBox;
-import com.coremedia.iso.boxes.MediaHeaderBox;
-import com.coremedia.iso.boxes.MediaInformationBox;
-import com.coremedia.iso.boxes.MovieBox;
-import com.coremedia.iso.boxes.MovieHeaderBox;
-import com.coremedia.iso.boxes.SampleSizeBox;
-import com.coremedia.iso.boxes.SampleTableBox;
-import com.coremedia.iso.boxes.SampleToChunkBox;
-import com.coremedia.iso.boxes.StaticChunkOffsetBox;
-import com.coremedia.iso.boxes.SyncSampleBox;
-import com.coremedia.iso.boxes.TimeToSampleBox;
-import com.coremedia.iso.boxes.TrackBox;
-import com.coremedia.iso.boxes.TrackHeaderBox;
-import com.googlecode.mp4parser.DataSource;
-import com.googlecode.mp4parser.util.Matrix;
+import com.coremedia.iso.*;
+import com.coremedia.iso.boxes.*;
+import com.googlecode.mp4parser.*;
+import com.googlecode.mp4parser.util.*;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.channels.WritableByteChannel;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.io.*;
+import java.nio.*;
+import java.nio.channels.*;
+import java.util.*;
 
-@TargetApi(16)
 public class MP4Builder {
     private InterleaveChunkMdat mdat = null;
     private Mp4Movie currentMp4Movie = null;

@@ -2,15 +2,14 @@ package com.vincent.videocompressor;
 
 import android.content.*;
 import android.os.*;
-import android.support.annotation.*;
 import android.support.v7.app.*;
 import android.view.*;
 import android.widget.*;
 
 import com.meng.messtool.*;
+import com.meng.tools.*;
 
 import java.io.*;
-import java.net.*;
 import java.text.*;
 import java.util.*;
 
@@ -30,22 +29,15 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar pb_compress;
 
     private long startTime, endTime;
+    String destPath = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main1);
-
-    }
-
-    @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
         initView();
     }
 
-    String destPath = "";
 
     private void initView() {
         Button btn_select = (Button) findViewById(R.id.btn_select);
@@ -125,18 +117,8 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_FOR_VIDEO_FILE && resultCode == RESULT_OK) {
             if (data != null && data.getData() != null) {
-//                inputPath = data.getData().getPath();
-//                tv_input.setText(inputPath);
-
-                try {
-                    inputPath = Util.getFilePath(this, data.getData());
-                    tv_input.setText(inputPath);
-                } catch (URISyntaxException e) {
-                    e.printStackTrace();
-                }
-
-//                inputPath = "/storage/emulated/0/DCIM/Camera/VID_20170522_172417.mp4"; // 图片文件路径
-//                tv_input.setText(inputPath);// /storage/emulated/0/DCIM/Camera/VID_20170522_172417.mp4
+                inputPath = AndroidContent.absolutePathFromUri(this, data.getData());
+                tv_input.setText(inputPath);
             }
         }
     }

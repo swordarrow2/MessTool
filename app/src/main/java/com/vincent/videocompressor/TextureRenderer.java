@@ -1,14 +1,11 @@
 package com.vincent.videocompressor;
 
-import android.annotation.TargetApi;
-import android.graphics.SurfaceTexture;
-import android.opengl.GLES11Ext;
-import android.opengl.GLES20;
+import android.annotation.*;
+import android.graphics.*;
+import android.opengl.*;
 import android.opengl.Matrix;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
+import java.nio.*;
 
 @TargetApi(16)
 public class TextureRenderer {
@@ -27,23 +24,23 @@ public class TextureRenderer {
 
     private static final String VERTEX_SHADER =
             "uniform mat4 uMVPMatrix;\n" +
-            "uniform mat4 uSTMatrix;\n" +
-            "attribute vec4 aPosition;\n" +
-            "attribute vec4 aTextureCoord;\n" +
-            "varying vec2 vTextureCoord;\n" +
-            "void main() {\n" +
-            "  gl_Position = uMVPMatrix * aPosition;\n" +
-            "  vTextureCoord = (uSTMatrix * aTextureCoord).xy;\n" +
-            "}\n";
+                    "uniform mat4 uSTMatrix;\n" +
+                    "attribute vec4 aPosition;\n" +
+                    "attribute vec4 aTextureCoord;\n" +
+                    "varying vec2 vTextureCoord;\n" +
+                    "void main() {\n" +
+                    "  gl_Position = uMVPMatrix * aPosition;\n" +
+                    "  vTextureCoord = (uSTMatrix * aTextureCoord).xy;\n" +
+                    "}\n";
 
     private static final String FRAGMENT_SHADER =
             "#extension GL_OES_EGL_image_external : require\n" +
-            "precision mediump float;\n" +
-            "varying vec2 vTextureCoord;\n" +
-            "uniform samplerExternalOES sTexture;\n" +
-            "void main() {\n" +
-            "  gl_FragColor = texture2D(sTexture, vTextureCoord);\n" +
-            "}\n";
+                    "precision mediump float;\n" +
+                    "varying vec2 vTextureCoord;\n" +
+                    "uniform samplerExternalOES sTexture;\n" +
+                    "void main() {\n" +
+                    "  gl_FragColor = texture2D(sTexture, vTextureCoord);\n" +
+                    "}\n";
 
     private float[] mMVPMatrix = new float[16];
     private float[] mSTMatrix = new float[16];

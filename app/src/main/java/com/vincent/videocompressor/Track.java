@@ -1,30 +1,16 @@
 package com.vincent.videocompressor;
 
-import android.annotation.TargetApi;
-import android.media.MediaCodec;
-import android.media.MediaFormat;
+import android.media.*;
 
-import com.coremedia.iso.boxes.AbstractMediaHeaderBox;
-import com.coremedia.iso.boxes.SampleDescriptionBox;
-import com.coremedia.iso.boxes.SoundMediaHeaderBox;
-import com.coremedia.iso.boxes.VideoMediaHeaderBox;
-import com.coremedia.iso.boxes.sampleentry.AudioSampleEntry;
-import com.coremedia.iso.boxes.sampleentry.VisualSampleEntry;
-import com.googlecode.mp4parser.boxes.mp4.ESDescriptorBox;
-import com.googlecode.mp4parser.boxes.mp4.objectdescriptors.AudioSpecificConfig;
-import com.googlecode.mp4parser.boxes.mp4.objectdescriptors.DecoderConfigDescriptor;
-import com.googlecode.mp4parser.boxes.mp4.objectdescriptors.ESDescriptor;
-import com.googlecode.mp4parser.boxes.mp4.objectdescriptors.SLConfigDescriptor;
-import com.mp4parser.iso14496.part15.AvcConfigurationBox;
+import com.coremedia.iso.boxes.*;
+import com.coremedia.iso.boxes.sampleentry.*;
+import com.googlecode.mp4parser.boxes.mp4.*;
+import com.googlecode.mp4parser.boxes.mp4.objectdescriptors.*;
+import com.mp4parser.iso14496.part15.*;
 
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.nio.*;
+import java.util.*;
 
-@TargetApi(16)
 public class Track {
     private long trackId = 0;
     private ArrayList<Sample> samples = new ArrayList<Sample>();
@@ -40,7 +26,7 @@ public class Track {
     private float volume = 0;
     private ArrayList<Long> sampleDurations = new ArrayList<Long>();
     private boolean isAudio = false;
-    private static Map<Integer, Integer> samplingFrequencyIndexMap = new HashMap<Integer, Integer>();
+    private static Map<Integer, Integer> samplingFrequencyIndexMap = new HashMap<>();
     private long lastPresentationTimeUs = 0;
     private boolean first = true;
 
@@ -62,7 +48,7 @@ public class Track {
     public Track(int id, MediaFormat format, boolean isAudio) throws Exception {
         trackId = id;
         if (!isAudio) {
-            sampleDurations.add((long)3015);
+            sampleDurations.add((long) 3015);
             duration = 3015;
             width = format.getInteger(MediaFormat.KEY_WIDTH);
             height = format.getInteger(MediaFormat.KEY_HEIGHT);
@@ -128,7 +114,7 @@ public class Track {
                 sampleDescriptionBox.addBox(visualSampleEntry);
             }
         } else {
-            sampleDurations.add((long)1024);
+            sampleDurations.add((long) 1024);
             duration = 1024;
             isAudio = true;
             volume = 1;
@@ -159,7 +145,7 @@ public class Track {
 
             AudioSpecificConfig audioSpecificConfig = new AudioSpecificConfig();
             audioSpecificConfig.setAudioObjectType(2);
-            audioSpecificConfig.setSamplingFrequencyIndex(samplingFrequencyIndexMap.get((int)audioSampleEntry.getSampleRate()));
+            audioSpecificConfig.setSamplingFrequencyIndex(samplingFrequencyIndexMap.get((int) audioSampleEntry.getSampleRate()));
             audioSpecificConfig.setChannelConfiguration(audioSampleEntry.getChannelCount());
             decoderConfigDescriptor.setAudioSpecificInfo(audioSpecificConfig);
 

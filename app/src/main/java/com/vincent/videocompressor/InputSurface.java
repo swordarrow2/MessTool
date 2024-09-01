@@ -1,18 +1,9 @@
 package com.vincent.videocompressor;
 
-import android.annotation.TargetApi;
-import android.opengl.EGL14;
-import android.opengl.EGLConfig;
-import android.opengl.EGLContext;
-import android.opengl.EGLDisplay;
-import android.opengl.EGLExt;
-import android.opengl.EGLSurface;
-import android.os.Build;
-import android.view.Surface;
+import android.opengl.*;
+import android.view.*;
 
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class InputSurface {
-    private static final boolean VERBOSE = false;
     private static final int EGL_RECORDABLE_ANDROID = 0x3142;
     private static final int EGL_OPENGL_ES2_BIT = 4;
     private EGLDisplay mEGLDisplay;
@@ -20,7 +11,7 @@ public class InputSurface {
     private EGLSurface mEGLSurface;
     private Surface mSurface;
 
-    public InputSurface(Surface surface) {
+    InputSurface(Surface surface) {
         if (surface == null) {
             throw new NullPointerException();
         }
@@ -97,10 +88,6 @@ public class InputSurface {
 
     public boolean swapBuffers() {
         return EGL14.eglSwapBuffers(mEGLDisplay, mEGLSurface);
-    }
-
-    public Surface getSurface() {
-        return mSurface;
     }
 
     public void setPresentationTime(long nsecs) {

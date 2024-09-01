@@ -1,6 +1,5 @@
 package com.vincent.videocompressor;
 
-import android.annotation.*;
 import android.media.*;
 
 import com.coremedia.iso.*;
@@ -191,14 +190,14 @@ public class MP4Builder {
         }
     }
 
-    public static long gcd(long a, long b) {
+    private static long gcd(long a, long b) {
         if (b == 0) {
             return a;
         }
         return gcd(b, a % b);
     }
 
-    public long getTimescale(Mp4Movie mp4Movie) {
+    private long getTimescale(Mp4Movie mp4Movie) {
         long timescale = 0;
         if (!mp4Movie.getTracks().isEmpty()) {
             timescale = mp4Movie.getTracks().iterator().next().getTimeScale();
@@ -209,7 +208,7 @@ public class MP4Builder {
         return timescale;
     }
 
-    protected MovieBox createMovieBox(Mp4Movie movie) {
+    private MovieBox createMovieBox(Mp4Movie movie) {
         MovieBox movieBox = new MovieBox();
         MovieHeaderBox mvhd = new MovieHeaderBox();
 
@@ -237,7 +236,7 @@ public class MP4Builder {
         return movieBox;
     }
 
-    protected TrackBox createTrackBox(Track track, Mp4Movie movie) {
+    private TrackBox createTrackBox(Track track, Mp4Movie movie) {
         TrackBox trackBox = new TrackBox();
         TrackHeaderBox tkhd = new TrackHeaderBox();
 
@@ -293,7 +292,7 @@ public class MP4Builder {
         return trackBox;
     }
 
-    protected Box createStbl(Track track) {
+    private Box createStbl(Track track) {
         SampleTableBox stbl = new SampleTableBox();
 
         createStsd(track, stbl);
@@ -306,11 +305,11 @@ public class MP4Builder {
         return stbl;
     }
 
-    protected void createStsd(Track track, SampleTableBox stbl) {
+    private void createStsd(Track track, SampleTableBox stbl) {
         stbl.addBox(track.getSampleDescriptionBox());
     }
 
-    protected void createStts(Track track, SampleTableBox stbl) {
+    private void createStts(Track track, SampleTableBox stbl) {
         TimeToSampleBox.Entry lastEntry = null;
         List<TimeToSampleBox.Entry> entries = new ArrayList<>();
 
@@ -327,7 +326,7 @@ public class MP4Builder {
         stbl.addBox(stts);
     }
 
-    protected void createStss(Track track, SampleTableBox stbl) {
+    private void createStss(Track track, SampleTableBox stbl) {
         long[] syncSamples = track.getSyncSamples();
         if (syncSamples != null && syncSamples.length > 0) {
             SyncSampleBox stss = new SyncSampleBox();
@@ -336,7 +335,7 @@ public class MP4Builder {
         }
     }
 
-    protected void createStsc(Track track, SampleTableBox stbl) {
+    private void createStsc(Track track, SampleTableBox stbl) {
         SampleToChunkBox stsc = new SampleToChunkBox();
         stsc.setEntries(new LinkedList<SampleToChunkBox.Entry>());
 
@@ -376,13 +375,13 @@ public class MP4Builder {
         stbl.addBox(stsc);
     }
 
-    protected void createStsz(Track track, SampleTableBox stbl) {
+    private void createStsz(Track track, SampleTableBox stbl) {
         SampleSizeBox stsz = new SampleSizeBox();
         stsz.setSampleSizes(track2SampleSizes.get(track));
         stbl.addBox(stsz);
     }
 
-    protected void createStco(Track track, SampleTableBox stbl) {
+    private void createStco(Track track, SampleTableBox stbl) {
         ArrayList<Long> chunksOffsets = new ArrayList<>();
         long lastOffset = -1;
         for (Sample sample : track.getSamples()) {

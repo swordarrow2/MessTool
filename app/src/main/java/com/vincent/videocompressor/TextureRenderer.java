@@ -135,14 +135,6 @@ public class TextureRenderer {
         }
     }
 
-    public void changeFragmentShader(String fragmentShader) {
-        GLES20.glDeleteProgram(mProgram);
-        mProgram = createProgram(VERTEX_SHADER, fragmentShader);
-        if (mProgram == 0) {
-            throw new RuntimeException("failed creating program");
-        }
-    }
-
     private int loadShader(int shaderType, String source) {
         int shader = GLES20.glCreateShader(shaderType);
         checkGlError("glCreateShader type=" + shaderType);

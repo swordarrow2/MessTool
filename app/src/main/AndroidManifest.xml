@@ -58,20 +58,15 @@
         <meta-data
             android:name="android.max_aspect"
             android:value="2.1" />
+
         <activity
             android:name="com.vincent.videocompressor.MainActivity"
             android:label="VideoActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
             </intent-filter>
-        </activity> <activity
-        android:name="com.vincent.videocompressor.VideoActivity"
-        android:label="VideoActivity">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-        </intent-filter>
-    </activity>
+        </activity>
 
         <activity
             android:name=".MainActivity"
@@ -94,7 +89,6 @@
                 android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
                 android:resource="@xml/device_filter" />
         </activity>
-
 
 
         <activity

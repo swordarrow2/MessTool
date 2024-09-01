@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
                         tv_indicator.setText(String.format("Compressing...\nStart at: %s", new SimpleDateFormat("HH:mm:ss", getLocale()).format(new Date())));
                         pb_compress.setVisibility(View.VISIBLE);
                         startTime = System.currentTimeMillis();
-                        Util.writeFile(MainActivity.this, "Start at: " + new SimpleDateFormat("HH:mm:ss", getLocale()).format(new Date()) + "\n");
 
                     }
 
@@ -71,11 +70,8 @@ public class MainActivity extends AppCompatActivity {
                         tv_indicator.setText(String.format("%s\nCompress Success!\nEnd at: %s", previous, new SimpleDateFormat("HH:mm:ss", getLocale()).format(new Date())));
                         pb_compress.setVisibility(View.INVISIBLE);
                         endTime = System.currentTimeMillis();
-                        Util.writeFile(MainActivity.this, "End at: " + new SimpleDateFormat("HH:mm:ss", getLocale()).format(new Date()) + "\n");
-                        Util.writeFile(MainActivity.this, "Total: " + ((endTime - startTime) / 1000) + "s" + "\n");
-                        Util.writeFile(MainActivity.this);
 
-                        startActivity(new Intent(MainActivity.this, VideoActivity.class).putExtra("vvVideo", destPath));
+//                        startActivity(new Intent(MainActivity.this, VideoActivity.class).putExtra("vvVideo", destPath));
 
                     }
 
@@ -84,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
                         tv_indicator.setText("Compress Failed!");
                         pb_compress.setVisibility(View.INVISIBLE);
                         endTime = System.currentTimeMillis();
-                        Util.writeFile(MainActivity.this, "Failed Compress!!!" + new SimpleDateFormat("HH:mm:ss", getLocale()).format(new Date()));
                     }
 
                     @Override

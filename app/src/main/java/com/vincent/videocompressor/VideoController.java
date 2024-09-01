@@ -3,7 +3,6 @@ package com.vincent.videocompressor;
 import android.annotation.TargetApi;
 import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
-import android.media.MediaCodecList;
 import android.media.MediaExtractor;
 import android.media.MediaFormat;
 import android.media.MediaMetadataRetriever;
@@ -11,11 +10,7 @@ import android.os.Build;
 import android.util.Log;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 
 public class VideoController {
     static final int COMPRESS_QUALITY_HIGH = 1;
@@ -26,12 +21,6 @@ public class VideoController {
     public String path;
 
     public final static String MIME_TYPE = "video/avc";
-    private final static int PROCESSOR_TYPE_OTHER = 0;
-    private final static int PROCESSOR_TYPE_QCOM = 1;
-    private final static int PROCESSOR_TYPE_INTEL = 2;
-    private final static int PROCESSOR_TYPE_MTK = 3;
-    private final static int PROCESSOR_TYPE_SEC = 4;
-    private final static int PROCESSOR_TYPE_TI = 5;
     private static volatile VideoController Instance = null;
     private boolean videoConvertFirstWrite = true;
 
@@ -59,77 +48,6 @@ public class VideoController {
         }
     }
 
-    public static class VideoConvertRunnable implements Runnable {
-
-        private String videoPath;
-        private String destPath;
-
-        private VideoConvertRunnable(String videoPath, String destPath) {
-            this.videoPath = videoPath;
-            this.destPath = destPath;
-        }
-
-        static void runConversion(final String videoPath, final String destPath) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        VideoConvertRunnable wrapper = new VideoConvertRunnable(videoPath, destPath);
-                        Thread th = new Thread(wrapper, "VideoConvertRunnable");
-                        th.start();
-                        th.join();
-                    } catch (Exception e) {
-                        Log.e("tmessages", e.getMessage());
-                    }
-                }
-            }).start();
-        }
-
-        @Override
-        public void run() {
-            VideoController.getInstance().convertVideo(videoPath, destPath, 0, null);
-        }
-    }
-
-    public static MediaCodecInfo selectCodec(String mimeType) {
-        int numCodecs = MediaCodecList.getCodecCount();
-        MediaCodecInfo lastCodecInfo = null;
-        for (int i = 0; i < numCodecs; i++) {
-            MediaCodecInfo codecInfo = MediaCodecList.getCodecInfoAt(i);
-            if (!codecInfo.isEncoder()) {
-                continue;
-            }
-            String[] types = codecInfo.getSupportedTypes();
-            for (String type : types) {
-                if (type.equalsIgnoreCase(mimeType)) {
-                    lastCodecInfo = codecInfo;
-                    if (!lastCodecInfo.getName().equals("OMX.SEC.avc.enc")) {
-                        return lastCodecInfo;
-                    } else if (lastCodecInfo.getName().equals("OMX.SEC.AVC.Encoder")) {
-                        return lastCodecInfo;
-                    }
-                }
-            }
-        }
-        return lastCodecInfo;
-    }
-
-    /**
-     * Background conversion for queueing tasks
-     *
-     * @param path source file to compress
-     * @param dest destination directory to put result
-     */
-
-    public void scheduleVideoConvert(String path, String dest) {
-        startVideoConvertFromQueue(path, dest);
-    }
-
-    private void startVideoConvertFromQueue(String path, String dest) {
-        VideoConvertRunnable.runConversion(path, dest);
-    }
-
-    @TargetApi(16)
     private long readAndWriteTrack(MediaExtractor extractor, MP4Builder mediaMuxer, MediaCodec.BufferInfo info, long start, long end, File file, boolean isAudio) throws Exception {
         int trackIndex = selectTrack(extractor, isAudio);
         if (trackIndex >= 0) {
@@ -239,15 +157,9 @@ public class VideoController {
                 bitrate = resultWidth * resultHeight * 30;
                 break;
             case COMPRESS_QUALITY_MEDIUM:
-
-//              resultWidth = originalWidth / 2;
-//              resultHeight = originalHeight / 2;
-
                 resultWidth = originalWidth;
                 resultHeight = originalHeight;
                 bitrate = resultWidth * resultHeight *5;
-                Log.i("tangpeng","bitrate="+bitrate);
-
                 break;
             case COMPRESS_QUALITY_LOW:
                 resultWidth = originalWidth / 2;
@@ -318,7 +230,6 @@ public class VideoController {
                             int videoTrackIndex = -5;
 
                             int colorFormat;
-                            int processorType = PROCESSOR_TYPE_OTHER;
                             String manufacturer = Build.MANUFACTURER.toLowerCase();
                             colorFormat = MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface;
                             Log.e("tmessages", "colorFormat = " + colorFormat);
@@ -326,31 +237,11 @@ public class VideoController {
                             int resultHeightAligned = resultHeight;
                             int padding = 0;
                             int bufferSize = resultWidth * resultHeight * 3 / 2;
-                            if (processorType == PROCESSOR_TYPE_OTHER) {
                                 if (resultHeight % 16 != 0) {
                                     resultHeightAligned += (16 - (resultHeight % 16));
                                     padding = resultWidth * (resultHeightAligned - resultHeight);
                                     bufferSize += padding * 5 / 4;
                                 }
-                            } else if (processorType == PROCESSOR_TYPE_QCOM) {
-                                if (!manufacturer.toLowerCase().equals("lge")) {
-                                    int uvoffset = (resultWidth * resultHeight + 2047) & ~2047;
-                                    padding = uvoffset - (resultWidth * resultHeight);
-                                    bufferSize += padding;
-                                }
-                            } else if (processorType == PROCESSOR_TYPE_TI) {
-                                //resultHeightAligned = 368;
-                                //bufferSize = resultWidth * resultHeightAligned * 3 / 2;
-                                //resultHeightAligned += (16 - (resultHeight % 16));
-                                //padding = resultWidth * (resultHeightAligned - resultHeight);
-                                //bufferSize += padding * 5 / 4;
-                            } else if (processorType == PROCESSOR_TYPE_MTK) {
-                                if (manufacturer.equals("baidu")) {
-                                    resultHeightAligned += (16 - (resultHeight % 16));
-                                    padding = resultWidth * (resultHeightAligned - resultHeight);
-                                    bufferSize += padding * 5 / 4;
-                                }
-                            }
 
                             extractor.selectTrack(videoIndex);
                             if (startTime > 0) {
@@ -638,18 +529,4 @@ public class VideoController {
         return true;
     }
 
-    public static void copyFile(File src, File dst) throws IOException {
-        FileChannel inChannel = new FileInputStream(src).getChannel();
-        FileChannel outChannel = new FileOutputStream(dst).getChannel();
-        try {
-            inChannel.transferTo(1, inChannel.size(), outChannel);
-        } finally {
-            if (inChannel != null) {
-                inChannel.close();
-            }
-            if (outChannel != null) {
-                outChannel.close();
-            }
-        }
-    }
 }//790

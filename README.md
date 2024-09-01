@@ -7,10 +7,11 @@
 
 安卓系统USB串口:com.hoho.android.usbserial
 
-MD:(忘了)
+Material Design:(忘了)
 
 RPG-Maker MV/MZ Decrypter:https://github.com/Petschko/Java-RPG-Maker-MV-Decrypter
 
+android.media.MediaCodec wrapper:https://github.com/tangpeng/VideoCompressor/
 （想起来了再补充）
 
 

@@ -36,22 +36,10 @@
             android:title="显示在菜单的功能">
             <CheckBoxPreference
                 android:defaultValue="true"
-                android:key="GROUP_PICTURE"
+                android:key="GROUP_MEDIA"
                 android:summaryOff="否"
                 android:summaryOn="是"
-                android:title="显示图片相关功能" />
-            <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="GROUP_VIDEO"
-                android:summaryOff="否"
-                android:summaryOn="是"
-                android:title="显示视频相关功能" />
-            <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="GROUP_AUDIO"
-                android:summaryOff="否"
-                android:summaryOn="是"
-                android:title="显示音频相关功能" />
+                android:title="显示多媒体相关功能" />
             <CheckBoxPreference
                 android:defaultValue="true"
                 android:key="GROUP_ELECTRONIC"

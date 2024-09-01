@@ -14,9 +14,9 @@ android {
         applicationId "com.meng.messtool"
         minSdkVersion 23
         targetSdkVersion 23
-        versionCode 6
-        versionName "2.4.1"
-        // function.optimize&feature.bugfix
+        versionCode 7
+        versionName "2.5.2"
+        // function.optimize & feature.bugfix
     }
     buildTypes {
         release {

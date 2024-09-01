@@ -7,7 +7,7 @@ import android.widget.*;
 import com.meng.messtool.*;
 import com.meng.messtool.system.base.*;
 import com.meng.tools.app.*;
-import com.meng.tools.update.*;
+import com.meng.tools.app.update.*;
 
 import com.meng.messtool.modules.rpgdecry.*;
 

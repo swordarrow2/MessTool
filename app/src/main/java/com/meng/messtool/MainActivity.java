@@ -20,7 +20,7 @@ import com.meng.messtool.system.menu.*;
 import com.meng.messtool.system.task.*;
 import com.meng.tools.*;
 import com.meng.tools.app.*;
-import com.meng.tools.update.*;
+import com.meng.tools.app.update.*;
 
 import java.util.concurrent.*;
 

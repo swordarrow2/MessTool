@@ -1,4 +1,4 @@
-package com.meng.tools.update;
+package com.meng.tools.app.update;
 
 import android.app.*;
 import android.content.*;
@@ -10,6 +10,8 @@ import com.meng.tools.*;
 import com.meng.tools.app.*;
 
 import org.jsoup.*;
+import org.jsoup.nodes.*;
+import org.jsoup.select.*;
 
 import java.util.*;
 
@@ -35,11 +37,11 @@ public class UpdateChecker {
             PackageInfo packageInfo = activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0);
             currentVersion = packageInfo.versionName;
             packageName = packageInfo.packageName;
-            UpdateNotes un = getUpdateNotes();
-            if (un == null) {
+            UpdateNotes updateNotes = getUpdateNotes();
+            if (updateNotes == null) {
                 return null;
             }
-            UpdateNotes.Node lastNode = un.getLastNote();
+            UpdateNotes.Node lastNode = updateNotes.getLastNote();
             return lastNode.version;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
@@ -48,18 +50,19 @@ public class UpdateChecker {
         }
     }
 
-    public String getLastVersionLink() {
-        //return "https://swordarrow2.github.io/" + packageName + "_" + lastVersion + ".apk";           
+    private String getLastVersionLink() {
+        String link = "https://github.com/swordarrow2/MessTool/releases/latest";
         try {
-            Connection connection = Jsoup.connect("https://github.com/swordarrow2/MessTool/releases/latest");
-            connection.userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:28.0) Gecko/20100101 Firefox/28.0");
-            connection.ignoreContentType(true).method(Connection.Method.GET).followRedirects(false);
-            Connection.Response response = connection.execute();
-            Map<String, String> head = response.headers();
-            return head.get("Location");
+            String redirectLink = MNetwork.getRealUrl(link);
+            String tag = redirectLink.substring(redirectLink.lastIndexOf("/") + 1);
+            String exContent = MNetwork.httpGet("https://github.com/swordarrow2/MessTool/releases/expanded_assets/" + tag);
+            Document doc = Jsoup.parse(exContent);
+            Elements table = doc.getElementsByTag("a");
+            String href = table.first().attr("href");
+            return "https://www.github.com" + href;
         } catch (Exception e) {
             e.printStackTrace();
-            return "https://github.com/swordarrow2/MessTool/releases/latest";
+            return link;
         }
     }
 
@@ -75,8 +78,8 @@ public class UpdateChecker {
             return;
         }
         final String lastVersionDownloadLink = getLastVersionLink();
-        final UpdateNotes un = getUpdateNotes();
-        if (un == null) {
+        final UpdateNotes notes = getUpdateNotes();
+        if (notes == null) {
             return;
         }
         activity.runOnUiThread(new Runnable() {
@@ -85,7 +88,7 @@ public class UpdateChecker {
             public void run() {
                 new AlertDialog.Builder(activity)
                         .setTitle("发现新版本")
-                        .setMessage(un.toString())
+                        .setMessage(notes.toString())
                         .setPositiveButton("现在更新", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface p1, int p2) {
@@ -121,7 +124,7 @@ public class UpdateChecker {
     public UpdateNotes getUpdateNotes() {
         UpdateNotes fromJson;
         try {
-            fromJson = GSON.fromJson(MNetwork.httpGet("https://swordarrow2.github.io/appupdate/" + packageName + ".json"), UpdateNotes.class);
+            fromJson = GSON.fromJson(MNetwork.httpGet("https://swordarrow2.github.io/app_update/" + packageName + ".json"), UpdateNotes.class);
         } catch (Exception e) {
             try {
                 fromJson = GSON.fromJson(MNetwork.httpGet("https://swordarrow2.github.io/example.json"), UpdateNotes.class);
@@ -152,7 +155,7 @@ public class UpdateChecker {
         if (index == fromJson.noteList.size()) {
             index = 0;
         }
-        fromJson.noteList = new LinkedList<UpdateNotes.Node>(fromJson.noteList.subList(index, fromJson.noteList.size()));
+        fromJson.noteList = new LinkedList<>(fromJson.noteList.subList(index, fromJson.noteList.size()));
         return fromJson;
     }
 }

@@ -16,13 +16,14 @@ import com.meng.messtool.system.*;
 import com.meng.messtool.system.base.*;
 
 import java.io.*;
-import java.nio.charset.*;
 
 import static com.meng.messtool.Constant.*;
 
-public class FpvTerminalFragment extends BaseFragment implements SerialInputOutputManager.Listener {
+public class FpvConfigGuiFragment extends BaseFragment implements SerialInputOutputManager.Listener {
 
     private enum UsbPermission {Unknown, Requested, Granted, Denied}
+
+    private TabHost tabHost;
 
     private boolean onRecord = false;
 
@@ -34,7 +35,6 @@ public class FpvTerminalFragment extends BaseFragment implements SerialInputOutp
 
     private final BroadcastReceiver broadcastReceiver;
     private final Handler mainLooper;
-    private SerialReceiveAdapter adptReceivedText;
 
     private SerialInputOutputManager usbIoManager;
     private UsbSerialPort usbSerialPort;
@@ -43,7 +43,13 @@ public class FpvTerminalFragment extends BaseFragment implements SerialInputOutp
     private WatchDog watchDog;
     private ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
-    public FpvTerminalFragment() {
+    private IFpvConfigerPart partTerminal;
+
+    public boolean isConnected() {
+        return connected;
+    }
+
+    public FpvConfigGuiFragment() {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -55,6 +61,7 @@ public class FpvTerminalFragment extends BaseFragment implements SerialInputOutp
             }
         };
         mainLooper = new Handler(Looper.getMainLooper());
+        partTerminal = new FpvConfigGuiTerminal(this);
     }
 
     /*
@@ -62,11 +69,8 @@ public class FpvTerminalFragment extends BaseFragment implements SerialInputOutp
      */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fpv_terminal, container, false);
+        View view = inflater.inflate(R.layout.fpv_config_gui_framework, container, false);
         tvFcName = (TextView) view.findViewById(R.id.fpv_terminal_textview_fc_name);
-        ListView lvReceiveText = (ListView) view.findViewById(R.id.function_electronic_usbserial2_terminal_list);
-        adptReceivedText = new SerialReceiveAdapter(getActivity());
-        lvReceiveText.setAdapter(adptReceivedText);
         final TextView sendText = (TextView) view.findViewById(R.id.send_text);
         View sendBtn = view.findViewById(R.id.send_btn);
         sendBtn.setOnClickListener(new View.OnClickListener() {
@@ -81,6 +85,7 @@ public class FpvTerminalFragment extends BaseFragment implements SerialInputOutp
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         watchDog = new WatchDog(100, new Runnable() {
             @Override
             public void run() {
@@ -97,6 +102,11 @@ public class FpvTerminalFragment extends BaseFragment implements SerialInputOutp
                     onRecord = true;
                 }
             });
+        tabHost = (TabHost) view.findViewById(android.R.id.tabhost);
+        tabHost.setup();
+        partTerminal.initView(view);
+        tabHost.addTab(tabHost.newTabSpec(partTerminal.getName()).setIndicator(partTerminal.getName(), null).setContent(partTerminal.getMainView()));
+        tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator("CLI2", null).setContent(R.id.boost_inductor_current));
     }
 
     @Override
@@ -109,8 +119,7 @@ public class FpvTerminalFragment extends BaseFragment implements SerialInputOutp
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.clear) {
-            adptReceivedText.clear();
-            adptReceivedText.notifyDataSetChanged();
+            showToast("no action");
             return true;
         } else if (id == R.id.send_break) {
             if (!connected) {
@@ -120,7 +129,7 @@ public class FpvTerminalFragment extends BaseFragment implements SerialInputOutp
                     usbSerialPort.setBreak(true);
                     Thread.sleep(100); // should show progress bar instead of blocking UI thread
                     usbSerialPort.setBreak(false);
-                    adptReceivedText.add("send <break>");
+                    showToast("send <break>");
                 } catch (UnsupportedOperationException ignored) {
                     Toast.makeText(getActivity(), "BREAK not supported", Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
@@ -146,18 +155,11 @@ public class FpvTerminalFragment extends BaseFragment implements SerialInputOutp
         byteArrayOutputStream.write(data, 0, data.length);
     }
 
-    public void processData(final byte[] data) {
+    public void processData(byte[] data) {
         if (data.length == 0) {
             return;
         }
-        mainLooper.post(new Runnable() {
-            @Override
-            public void run() {
-                adptReceivedText.add("receive " + data.length + " bytes: " + new String(data, StandardCharsets.US_ASCII), HexDump.toHexString(data));
-                adptReceivedText.notifyDataSetChanged();
-
-            }
-        });
+        partTerminal.processRecieved(data);
     }
 
     @Override
@@ -249,15 +251,25 @@ public class FpvTerminalFragment extends BaseFragment implements SerialInputOutp
         usbSerialPort = null;
     }
 
-    private void send(String str) {
+    public void send(String str) {
         if (!connected) {
             Toast.makeText(getActivity(), "not connected", Toast.LENGTH_SHORT).show();
             return;
         }
         try {
             byte[] data = (str + '\n').getBytes();
-            adptReceivedText.add("send " + data.length + " bytes: " + new String(data, StandardCharsets.US_ASCII), HexDump.toHexString(data));
-            adptReceivedText.notifyDataSetChanged();
+            usbSerialPort.write(data, WRITE_WAIT_MILLIS);
+        } catch (Exception e) {
+            onRunError(e);
+        }
+    }
+
+    public void send(byte[] data) {
+        if (!connected) {
+            Toast.makeText(getActivity(), "not connected", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        try {
             usbSerialPort.write(data, WRITE_WAIT_MILLIS);
         } catch (Exception e) {
             onRunError(e);
@@ -265,10 +277,7 @@ public class FpvTerminalFragment extends BaseFragment implements SerialInputOutp
     }
 
     void status(String str) {
-        if (onRecord) {
-            adptReceivedText.add(str);
-            adptReceivedText.notifyDataSetChanged();
-        }
+        showToast(str);
     }
 
     @Override

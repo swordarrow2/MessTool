@@ -47,9 +47,9 @@ public class FpvDevicesFragment extends BaseFragment {
                     args.putInt("port", item.port);
                     args.putInt("baud", baudRate);
 
-                    FpvTerminalFragment terminalFragment = MFragmentManager.getInstance().getFragment(FpvTerminalFragment.class);
+                    FpvConfigGuiFragment terminalFragment = MFragmentManager.getInstance().getFragment(FpvConfigGuiFragment.class);
                     terminalFragment.setArguments(args);
-                    MFragmentManager.getInstance().showFragment(FpvTerminalFragment.class);
+                    MFragmentManager.getInstance().showFragment(FpvConfigGuiFragment.class);
 
                 }
             }

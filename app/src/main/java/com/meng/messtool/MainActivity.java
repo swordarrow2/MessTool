@@ -138,7 +138,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                                                             MFragmentManager.getInstance().showFragment(DevicesFragment.class);
                                                             break;
                                                         case 1:
-                                                            MFragmentManager.getInstance().showFragment(FpvTerminalFragment.class);
+                                                            MFragmentManager.getInstance().showFragment(FpvConfigGuiFragment.class);
                                                             break;
                                                     }
                                                 }

@@ -1,4 +1,4 @@
-package com.meng.messtool.modules.electronic.usbserial2.msp;
+package com.meng.messtool.modules.fpvtool.serial.msp;
 
 import android.app.*;
 import android.content.*;
@@ -13,8 +13,8 @@ import com.hoho.android.usbserial.util.*;
 import com.meng.messtool.*;
 import com.meng.messtool.customview.*;
 import com.meng.messtool.modules.electronic.usbserial2.*;
-import com.meng.messtool.modules.electronic.usbserial2.msp.datapack.*;
-import com.meng.messtool.modules.electronic.usbserial2.msp.sensor.*;
+import com.meng.messtool.modules.fpvtool.serial.msp.datapack.*;
+import com.meng.messtool.modules.fpvtool.serial.msp.sensor.*;
 import com.meng.messtool.system.base.*;
 import com.meng.tools.app.*;
 

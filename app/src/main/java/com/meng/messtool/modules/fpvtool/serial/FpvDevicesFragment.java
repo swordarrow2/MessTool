@@ -1,4 +1,4 @@
-package com.meng.messtool.modules.electronic.usbserial2;
+package com.meng.messtool.modules.fpvtool.serial;
 
 import android.app.*;
 import android.content.*;
@@ -16,7 +16,7 @@ import com.meng.messtool.system.base.*;
 
 import java.util.*;
 
-public class DevicesFragment extends BaseFragment {
+public class FpvDevicesFragment extends BaseFragment {
 
     private final ArrayList<ListItem> listItems = new ArrayList<>();
     private ArrayAdapter<ListItem> listAdapter;
@@ -35,7 +35,7 @@ public class DevicesFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         ListView listView = (ListView) view.findViewById(R.id.list);
         setHasOptionsMenu(true);
-        listAdapter = new UsbDeviceAdapter(getActivity(), listItems);
+        listAdapter = new FpvDeviceAdapter(getActivity(), listItems);
         listView.setAdapter(listAdapter);
         listView.addHeaderView(getActivity().getLayoutInflater().inflate(R.layout.electronic_usbserial2_device_list_header, null, false), null, false);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -66,10 +66,10 @@ public class DevicesFragment extends BaseFragment {
                             ad.dismiss();
                             switch (p3) {
                                 case 0:
-                                    TerminalFragment terminalFragment = new TerminalFragment();
+                                    FpvTerminalFragment terminalFragment = new FpvTerminalFragment();
                                     terminalFragment.setArguments(args);
                                     MFragmentManager.getInstance().registFragment(terminalFragment);
-                                    MFragmentManager.getInstance().showFragment(TerminalFragment.class);
+                                    MFragmentManager.getInstance().showFragment(FpvTerminalFragment.class);
                                     break;
                                 case 1:
                                     MspV1TestFragment v1TestFragment = new MspV1TestFragment();
@@ -196,24 +196,20 @@ public class DevicesFragment extends BaseFragment {
      */
     private void RequestNormalPermission(UsbManager usbManager, UsbDevice device) {
         if (!usbManager.hasPermission(device)) {
-            //   showToast("printer dev has no permission,try request it.");
             usbManager.requestPermission(device, mPrtPermissionIntent);// will recall mReceiver
-        } else {
-            //  showToast("USB权限注册成功。");
         }
     }
 
     private void refresh() {
         UsbManager usbManager = (UsbManager) getActivity().getSystemService(Context.USB_SERVICE);
+        if (usbManager == null) {
+            return;
+        }
         UsbSerialProber usbDefaultProber = UsbSerialProber.getDefaultProber();
-        UsbSerialProber usbCustomProber = CustomProber.getCustomProber();
         listItems.clear();
         for (UsbDevice device : usbManager.getDeviceList().values()) {
             RequestNormalPermission(usbManager, device);
             UsbSerialDriver driver = usbDefaultProber.probeDevice(device);
-            if (driver == null) {
-                driver = usbCustomProber.probeDevice(device);
-            }
             if (driver == null) {
                 listItems.add(new ListItem(device, 0, null));
                 continue;
@@ -232,11 +228,11 @@ public class DevicesFragment extends BaseFragment {
 
     @Override
     public String getTitle() {
-        return "USB串口设备列表";
+        return "FPV串口设备列表";
     }
 
     @Override
     public CharSequence getDescribe() {
-        return "USB串口设备列表";
+        return "FPV串口调试器";
     }
 }

@@ -13,6 +13,7 @@ import com.meng.messtool.modules.electronic.elementbox.*;
 import com.meng.messtool.modules.electronic.usbserial.*;
 import com.meng.messtool.modules.electronic.usbserial2.*;
 import com.meng.messtool.modules.fpvtool.*;
+import com.meng.messtool.modules.fpvtool.serial.*;
 import com.meng.messtool.modules.media.*;
 import com.meng.messtool.modules.media.barcode.*;
 import com.meng.messtool.modules.media.gif.*;
@@ -96,6 +97,7 @@ public enum FunctionName {
 
     FUNCTION_FC_CONFIG("fc config", R.drawable.ic_quadcopter, FunctionGroup.GROUP_DEVELOPING, FcConfig.class),
     FUNCTION_PID_SIMULATOR("pid simulator", FunctionGroup.GROUP_DEVELOPING, PIDSimulator.class),
+    FUNCTION_FPV_CONFIG("Clear Flight", FunctionGroup.GROUP_DEVELOPING, FpvDevicesFragment.class),
 
 
     /********************ELECTRONIC*********************/

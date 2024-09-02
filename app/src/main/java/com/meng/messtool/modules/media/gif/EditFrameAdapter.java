@@ -38,9 +38,9 @@ public class EditFrameAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = context.getLayoutInflater().inflate(R.layout.list_item_image_with_two_text, null);
             holder = new ViewHolder();
-            holder.imageView = (ImageView) convertView.findViewById(R.id.imageView_info);
-            holder.tvFileName = (TextView) convertView.findViewById(R.id.textView_bilibiliUid);
-            holder.tvDelay = (TextView) convertView.findViewById(R.id.textView_bilibiliLiveId);
+            holder.imageView = (ImageView) convertView.findViewById(R.id.imageview);
+            holder.tvFileName = (TextView) convertView.findViewById(R.id.text1);
+            holder.tvDelay = (TextView) convertView.findViewById(R.id.text2);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();

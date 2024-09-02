@@ -1,4 +1,4 @@
-package com.meng.messtool.modules.electronic.usbserial2.msp;
+package com.meng.messtool.modules.fpvtool.serial.msp;
 
 /*
  *package  com.meng.messtool.modules.electronic.usbserial2.msp

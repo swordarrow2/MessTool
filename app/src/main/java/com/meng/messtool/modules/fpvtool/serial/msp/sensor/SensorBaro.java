@@ -1,6 +1,6 @@
-package com.meng.messtool.modules.electronic.usbserial2.msp.sensor;
+package com.meng.messtool.modules.fpvtool.serial.msp.sensor;
 
-import com.meng.messtool.modules.electronic.usbserial2.msp.*;
+import com.meng.messtool.modules.fpvtool.serial.msp.*;
 import com.meng.tools.datapack.*;
 
 /*

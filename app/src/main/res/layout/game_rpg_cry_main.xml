@@ -107,4 +107,9 @@
         ran:default_value="0000000000"
         ran:hint="remain" />
 
+    <Button
+        android:id="@+id/game_rpg_cry_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ok" />
 </LinearLayout>

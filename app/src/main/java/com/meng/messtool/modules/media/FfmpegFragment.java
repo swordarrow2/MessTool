@@ -97,9 +97,9 @@ public class FfmpegFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void generate(File ipt, File opt) throws IOException {
-        //getActivity().getFilesDir().getAbsolutePath() + File.separator + "ffmpeg "+"-re -i /storage/emulated/0/01.flv -c copy -vcodec libx264 -acodec aac -f flv rtmp://live-push.bilivideo.com/live-bvc/?streamname=live_64483321_2582558&key=7776fcf83eb2bb7883733f598285caf7&schedule=rtmp"
         String name = ipt.getName() + " → " + opt.getName();
         tvLog = (TextView) mainView.findViewById(R.id.ffmpeg_mainTextView_log);
+        //getActivity().getFilesDir().getAbsolutePath() + File.separator + "ffmpeg "+"-re -i /storage/emulated/0/01.flv -c copy -vcodec libx264 -acodec aac -f flv rtmp://live-push.bilivideo.com/live-bvc/?streamname=live_64483321_2582558&key=7776fcf83eb2bb7883733f598285caf7&schedule=rtmp"
         new FFmpegBackTask(Runtime.getRuntime().exec(etCommand.getString()), name, tvLog).setTitle(name).start();
     }
 

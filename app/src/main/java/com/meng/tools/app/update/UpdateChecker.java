@@ -68,22 +68,6 @@ public class UpdateChecker {
     }
 
     public void checkUpdate() {
-        MediaCodecList list = new MediaCodecList(0);
-        MediaCodec mAudioEncoder;
-        String AUDIO_MIME = "audio/mp4a-latm";
-        StringBuilder builder = new StringBuilder();
-        for (MediaCodecInfo c : list.getCodecInfos()) {
-            builder.append(c.getName()).append(Arrays.asList(c.getSupportedTypes()));
-        }
-        activity.showToast(builder.toString());
-//        try {
-//            mAudioEncoder = MediaCodec.createByCodecName()
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return;
-//        }
-//        MediaCodecInfo codecInfo = mAudioEncoder.getCodecInfo();
-//        activity.showToast(Arrays.asList(codecInfo.getSupportedTypes()).toString());
         final String lastVersion = getLastVersion();
         if (lastVersion == null) {
             return;

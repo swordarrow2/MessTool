@@ -46,41 +46,53 @@ public class MenuManager {
         }
         if (SharedPreferenceHelper.isShowGroupName()) {
             for (Map.Entry<FunctionGroup, LinkedList<FunctionName>> entry : menuEntry.entrySet()) {
-                FunctionGroup key = entry.getKey();
-                SubMenu subMenu = menu.addSubMenu(0, key.ordinal(), 0, key.getName());
-                for (FunctionName fn : entry.getValue()) {
-                    MenuItem item = subMenu.add(0, fn.ordinal(), 0, fn.getName());
-                    switch (key) {
-                        case GROUP_DEVELOPING:
-                            item.setIcon(R.drawable.ic_edit);
-                            break;
-                        case GROUP_DEPRECATED:
-                            item.setIcon(R.drawable.ic_close);
-                            break;
-                        case GROUP_SYSTEM:
-                            item.setIcon(R.drawable.ic_progress);
-                            break;
-                        case GROUP_BOX_ARRAY:
-                        case GROUP_MEDIA:
-                            item.setIcon(android.R.drawable.ic_menu_gallery);
-                            break;
-                        case GROUP_ELECTRONIC:
-                        case GROUP_DEFAULT:
-                        case GROUP_TOY:
-                        case GROUP_LONG_TIME_NO_USE:
-                            item.setIcon(R.drawable.ic_menu);
-                    }
-                    Debuger.addLog(TAG, "add function", fn.getName());
+                FunctionGroup functionGroup = entry.getKey();
+                SubMenu subMenu = menu.addSubMenu(0, functionGroup.ordinal(), 0, functionGroup.getName());
+                for (FunctionName functionName : entry.getValue()) {
+                    Debuger.addLog(TAG, "add function", functionName.getName());
+                    MenuItem item = subMenu.add(0, functionName.ordinal(), 0, functionName.getName());
+                    setIcon(functionName, item, functionGroup);
                 }
             }
         } else {
             for (Map.Entry<FunctionGroup, LinkedList<FunctionName>> entry : menuEntry.entrySet()) {
-                for (FunctionName fn : entry.getValue()) {
-                    MenuItem item = menu.add(fn.getGroup().ordinal(), fn.ordinal(), 0, fn.getName());
-                    item.setIcon(R.drawable.ic_menu);
-                    Debuger.addLog(TAG, "add function", fn.getName());
+                for (FunctionName functionName : entry.getValue()) {
+                    MenuItem item = menu.add(functionName.getGroup().ordinal(), functionName.ordinal(), 0, functionName.getName());
+                    Debuger.addLog(TAG, "add function", functionName.getName());
+                    setIcon(functionName, item, entry.getKey());
                 }
             }
+        }
+    }
+
+    private void setIcon(FunctionName functionName, MenuItem item, FunctionGroup key) {
+        if (functionName.getIconId() != -1) {
+            item.setIcon(functionName.getIconId());
+            return;
+        }
+        switch (key) {
+            case GROUP_DEVELOPING:
+                item.setIcon(R.drawable.ic_dev_to);
+                break;
+            case GROUP_DEPRECATED:
+                item.setIcon(R.drawable.ic_close);
+                break;
+            case GROUP_SYSTEM:
+                item.setIcon(R.drawable.ic_information_outline);
+                break;
+            case GROUP_BOX_ARRAY:
+            case GROUP_MEDIA:
+                item.setIcon(android.R.drawable.ic_menu_gallery);
+                break;
+            case GROUP_ELECTRONIC:
+                item.setIcon(R.drawable.ic_developer_board);
+                break;
+            case GROUP_TOY:
+                item.setIcon(R.drawable.ic_menu);
+                break;
+            case GROUP_DEFAULT:
+            case GROUP_LONG_TIME_NO_USE:
+                item.setIcon(R.drawable.ic_menu);
         }
     }
 }

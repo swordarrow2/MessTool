@@ -1,0 +1,83 @@
+package com.meng.messtool.modules.media.pixiv_2;
+
+import android.app.*;
+import android.view.*;
+import android.widget.*;
+
+import com.meng.messtool.*;
+import com.meng.messtool.modules.media.pixiv_2.pojo.*;
+import com.meng.messtool.system.*;
+import com.meng.tools.*;
+import com.meng.tools.app.*;
+
+import java.io.*;
+
+class PixivProgressBar extends LinearLayout {
+    public Activity context;
+    private TextView tvTitle;
+    private TextView tvStatus;
+    private TextView tvProgress;
+    private ProgressBar progressBar;
+
+    public PixivProgressBar(Activity context) {
+        super(context);
+        this.context = context;
+        LayoutInflater.from(context).inflate(R.layout.system_background_task_list_item, this);
+        tvTitle = (TextView) findViewById(R.id.main_list_item_textview_title);
+        tvStatus = (TextView) findViewById(R.id.main_list_item_textview_statu);
+        tvProgress = (TextView) findViewById(R.id.main_list_item_textview_statu_progress_text);
+        progressBar = (ProgressBar) findViewById(R.id.main_list_item_progressbar);
+    }
+
+    public void bindingPixivDownload(ListView listView, PojoPainting pojoPainting, String picUrl) {
+        String fileAbsolutePath = "";
+        String extendName = picUrl.substring(picUrl.lastIndexOf(".") + 1, picUrl.length()).toLowerCase();
+        String fileName = picUrl.substring(picUrl.lastIndexOf("/") + 1, picUrl.lastIndexOf("."));
+        if (extendName.equalsIgnoreCase("zip")) {
+            fileAbsolutePath = FileTool.getAppFile(FileSavePath.PIXIV_ZIP, fileName, FileTool.FileType.zip).getAbsolutePath();
+        } else if (pojoPainting.staticPicJavaBean.body.size() > 1) {
+
+            fileAbsolutePath = FileTool.getAppFile(FileSavePath.PIXIV_DYNAMIC, pojoPainting.id + "/" + fileName, extendName).getAbsolutePath();
+            File folder = new File(fileAbsolutePath).getParentFile();
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+        } else {
+            fileAbsolutePath = FileTool.getAppFile(FileSavePath.PIXIV_DYNAMIC, fileName, extendName).getAbsolutePath();
+        }
+        MFragmentManager.getInstance().getFragment(PixivDownloadMainV2.class).threadPool.execute(new DownloadRunnable(this, picUrl, fileAbsolutePath, listView, pojoPainting));
+    }
+
+    public void setProgress(int progress) {
+        progressBar.setProgress(progress);
+    }
+
+    public int getProgress() {
+        return progressBar.getProgress();
+    }
+
+    public void setStatusText(String statusText) {
+        tvStatus.setText(statusText);
+    }
+
+    public String getStatusText() {
+        return tvStatus.getText().toString();
+    }
+
+    public void setProgressText(String progressText) {
+        tvProgress.setText(progressText);
+    }
+
+    public String getProgressText() {
+        return tvProgress.getText().toString();
+    }
+
+    public void setTitle(String title) {
+        tvTitle.setText(title);
+    }
+
+    public String getTitle() {
+        return tvTitle.getText().toString();
+    }
+
+}

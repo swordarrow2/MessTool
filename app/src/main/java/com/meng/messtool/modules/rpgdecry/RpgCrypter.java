@@ -7,6 +7,7 @@ import android.widget.*;
 import com.meng.messtool.*;
 import com.meng.messtool.customview.MaterialDesign.*;
 import com.meng.messtool.system.base.*;
+import com.meng.messtool.system.task.*;
 
 
 /*
@@ -26,7 +27,21 @@ public class RpgCrypter extends BaseFragment implements CompoundButton.OnChecked
     private MDEditText etHeaderLen;
     private MDEditText etSignature;
     private MDEditText etVersion;
-    private MDEditText etRemain;    private CheckBox cbMv;
+    private MDEditText etRemain;
+    private CheckBox cbMv;
+    private Button btnStart;
+
+
+    private String key = null;
+    private boolean verifyDir = false;
+    private boolean ignoreFakeHeader = true;
+    private int headerLen = Decrypter.DEFAULT_HEADER_LEN;
+    private String signature = Decrypter.DEFAULT_SIGNATURE;
+    private String version = Decrypter.DEFAULT_VERSION;
+    private String remain = Decrypter.DEFAULT_REMAIN;
+
+    // Encrypter options
+    private boolean toMV = true;
 
 
     @Override
@@ -62,11 +77,60 @@ public class RpgCrypter extends BaseFragment implements CompoundButton.OnChecked
         etVersion = (MDEditText) view.findViewById(R.id.game_rpg_cry_main_et_version);
         etRemain = (MDEditText) view.findViewById(R.id.game_rpg_cry_main_et_remain);
         cbMv = (CheckBox) view.findViewById(R.id.game_rpg_cry_main_cb_mv);
+        btnStart = (Button) view.findViewById(R.id.game_rpg_cry_button);
 
 
         rbEncry.setOnCheckedChangeListener(this);
         rbDecry.setOnCheckedChangeListener(this);
-        welcome();
+        btnStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (rbDecry.isChecked()) {
+
+                    BackgroundTask bt = new BackgroundTask() {
+                        @Override
+                        public void run() {
+                            try {
+                                RPG_Project rpgProject = new RPG_Project(getProjectPath(), isVerifyDir());
+                                Decrypter decrypter = new Decrypter(getKey());
+                                rpgProject.setOutputPath(getOutputPath());
+                                decrypter.setIgnoreFakeHeader(isIgnoreFakeHeader());
+                                decrypter.setHeaderLen(getHeaderLen());
+                                decrypter.setSignature(getSignature());
+                                decrypter.setVersion(getVersion());
+                                decrypter.setRemain(getRemain());
+                                rpgProject.decryptFilesCmd(decrypter);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    };
+                    bt.start();
+                } else if (rbEncry.isChecked()) {
+                    BackgroundTask bt = new BackgroundTask() {
+                        @Override
+                        public void run() {
+                            try {
+                                RPG_Project rpgProject = new RPG_Project(getProjectPath(), false);
+                                Decrypter encrypter = new Decrypter(getKey());
+                                rpgProject.setOutputPath(getOutputPath());
+                                rpgProject.setMV(isToMV());
+                                encrypter.setHeaderLen(getHeaderLen());
+                                encrypter.setSignature(getSignature());
+                                encrypter.setVersion(getVersion());
+                                encrypter.setRemain(getRemain());
+                                rpgProject.encryptFilesCmd(encrypter);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    };
+                    bt.start();
+                } else {
+                    showToast("功能选择错误");
+                }
+            }
+        });
     }
 
     @Override
@@ -85,6 +149,46 @@ public class RpgCrypter extends BaseFragment implements CompoundButton.OnChecked
         }
     }
 
-    private void welcome() {
+    public String getProjectPath() {
+        return etPathToProject.getString();
+    }
+
+
+    public String getOutputPath() {
+        return etOutputDir.getString();
+    }
+
+
+    public String getKey() {
+        return etKey.getString();
+    }
+
+    public boolean isVerifyDir() {
+        return cbVerifyDir.isChecked();
+    }
+
+    public boolean isIgnoreFakeHeader() {
+        return cbIgnoreFakeHeader.isChecked();
+    }
+
+    public int getHeaderLen() {
+        return etHeaderLen.getInt();
+    }
+
+    public String getSignature() {
+        return etSignature.getString();
+    }
+
+    public String getVersion() {
+        return etVersion.getString();
+    }
+
+    public String getRemain() {
+        return etRemain.getString();
+    }
+
+    public boolean isToMV() {
+        return cbMv.isChecked();
     }
 }
+

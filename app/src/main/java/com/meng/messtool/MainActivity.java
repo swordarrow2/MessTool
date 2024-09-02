@@ -150,9 +150,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         closeDrawer();
-//        new TestTask()
-//                .setTitle("goto genshin")
-//                .setStatus("自动下载原神中").start();
+        new TestTask()
+                .setTitle("goto genshin")
+                .setStatus("自动下载原神中").start();
         FunctionName functionName = FunctionName.values()[item.getItemId()];
         setTitle(functionName.getName());
         Debuger.addLog(TAG, "menu click:" + functionName.getName());

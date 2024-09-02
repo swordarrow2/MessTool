@@ -26,7 +26,7 @@ public class DatabaseTestFragment extends BaseFragment {
         ThreadPool.execute(new Runnable() {
             @Override
             public void run() {
-                new App().start();
+//                new App().start();
             }
         });
         ThreadPool.execute(new Runnable() {

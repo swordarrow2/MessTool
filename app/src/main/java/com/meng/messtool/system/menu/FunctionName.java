@@ -5,7 +5,6 @@ import android.view.*;
 import android.widget.*;
 
 import com.meng.messtool.*;
-import com.meng.messtool.modules.media.*;
 import com.meng.messtool.modules.chat.editor.*;
 import com.meng.messtool.modules.chat.simulator.*;
 import com.meng.messtool.modules.electronic.*;
@@ -14,12 +13,14 @@ import com.meng.messtool.modules.electronic.elementbox.*;
 import com.meng.messtool.modules.electronic.usbserial.*;
 import com.meng.messtool.modules.electronic.usbserial2.*;
 import com.meng.messtool.modules.fpvtool.*;
+import com.meng.messtool.modules.media.*;
 import com.meng.messtool.modules.media.barcode.*;
 import com.meng.messtool.modules.media.gif.*;
 import com.meng.messtool.modules.media.pixiv.*;
+import com.meng.messtool.modules.media.pixiv_2.*;
 import com.meng.messtool.modules.media.saucenao.*;
-import com.meng.messtool.modules.rpgdecry.*;
 import com.meng.messtool.modules.media.wallpaper.*;
+import com.meng.messtool.modules.rpgdecry.*;
 import com.meng.messtool.system.*;
 import com.meng.messtool.system.base.*;
 import com.meng.messtool.system.tester.*;
@@ -81,7 +82,7 @@ public enum FunctionName {
     FUNCTION_PICTURE_CRYPT("加密", FunctionGroup.GROUP_MEDIA, PictureCrypt.class),
     FUNCTION_PICTURE_GRAY("灰度图", FunctionGroup.GROUP_MEDIA, GrayImage.class),
     FUNCTION_PICTURE_ENCODE_GIF("合成GIF", FunctionGroup.GROUP_MEDIA, GIFCreator.class),
-    FUNCTION_PICTURE_PIXIV_DOWNLOAD("PIXIV下载", FunctionGroup.GROUP_LONG_TIME_NO_USE, PixivDownloadMain.class),
+    FUNCTION_PICTURE_PIXIV_DOWNLOAD_V2("PIXIV下载V2", FunctionGroup.GROUP_MEDIA, PixivDownloadMainV2.class),
     FUNCTION_PICTURE_SAUCENAO("SauceNAO搜图", FunctionGroup.GROUP_MEDIA, SauceNaoMain.class),
 
     FUNCTION_VIDEO_FORMAT_CONVERT("视频格式转换", FunctionGroup.GROUP_DEVELOPING, FfmpegFragment.class),
@@ -93,7 +94,7 @@ public enum FunctionName {
 
     /********************FPV*********************/
 
-    FUNCTION_FC_CONFIG("fc config", FunctionGroup.GROUP_DEVELOPING, FcConfig.class),
+    FUNCTION_FC_CONFIG("fc config", R.drawable.ic_quadcopter, FunctionGroup.GROUP_DEVELOPING, FcConfig.class),
     FUNCTION_PID_SIMULATOR("pid simulator", FunctionGroup.GROUP_DEVELOPING, PIDSimulator.class),
 
 
@@ -112,7 +113,11 @@ public enum FunctionName {
 
     FUNCTION_TOY_CHAT_SIMULATOR("聊天模拟器", FunctionGroup.GROUP_TOY, ChatSimulator.class),
     FUNCTION_TOY_CHAT_SCRIPT_EDITOR("聊天脚本编辑器", FunctionGroup.GROUP_TOY, ChatEditor.class),
-    FUNCTION_TOY_RPG_CRYPT("RPG文件解密", FunctionGroup.GROUP_TOY, RpgCrypter.class),
+    FUNCTION_TOY_RPG_CRYPT("RPG文件解密", FunctionGroup.GROUP_DEVELOPING, RpgCrypter.class),
+
+    /********************GROUP_LONG_TIME_NO_USE*********************/
+
+    FUNCTION_PICTURE_PIXIV_DOWNLOAD("PIXIV下载", FunctionGroup.GROUP_LONG_TIME_NO_USE, PixivDownloadMain.class),
 
     /********************DEPRCATED*********************/
 
@@ -150,6 +155,7 @@ public enum FunctionName {
     private FunctionGroup group = FunctionGroup.GROUP_DEFAULT;
     private Runnable runnable = null;
     private Class<? extends BaseFragment> clazz = null;
+    private int iconId = -1;
 
     FunctionName(String name, FunctionGroup group, Runnable runnable) {
         this.name = name;
@@ -161,6 +167,17 @@ public enum FunctionName {
         this.name = name;
         this.group = group;
         this.clazz = clazz;
+    }
+
+    FunctionName(String name, int iconResourceId, FunctionGroup group, Class<? extends BaseFragment> clazz) {
+        this.name = name;
+        this.group = group;
+        this.clazz = clazz;
+        iconId = iconResourceId;
+    }
+
+    public int getIconId() {
+        return iconId;
     }
 
     public String getName() {

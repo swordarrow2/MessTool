@@ -14,22 +14,13 @@ public class FFmpeg {
 
     public void init(Context context) throws IOException {
         File ffmpegFile = new File(context.getApplicationContext().getFilesDir().getAbsolutePath() + File.separator + "ffmpeg");
-        if (ffmpegFile.exists()) {
+        if (!ffmpegFile.exists()) {
+            FileTool.copyAssetsToData(context, "ffmpeg");
+        }
+        if (ffmpegFile.canExecute() || ffmpegFile.setExecutable(true)) {
+            showToast("FFmpeg初始化成功");
             return;
         }
-        FileTool.copyAssetsToData(context, "ffmpeg");
-        //   if (isFileCopied) {
-        if (ffmpegFile.canExecute()) {
-            return;
-        }
-        showToast("FFmpeg is not executable, trying to make it executable ...");
-        if (ffmpegFile.setExecutable(true)) {
-            return;
-        }
-        //   } else {
-        //      MainActivity.instance.showToast("FFmpeg executable ...");
-        //       return true;
-        //    }      
         throw new IllegalStateException("ffmpeg init failed!");
     }
 

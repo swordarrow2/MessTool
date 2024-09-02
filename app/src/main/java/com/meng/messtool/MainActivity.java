@@ -203,7 +203,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         if (SharedPreferenceHelper.isExit0()) {
             System.exit(0);
         } else {
-            finish();
+            super.finish();
         }
     }
 }

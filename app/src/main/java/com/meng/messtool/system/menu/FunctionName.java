@@ -95,9 +95,9 @@ public enum FunctionName {
 
     /********************FPV*********************/
 
-    FUNCTION_FC_CONFIG("fc config", R.drawable.ic_quadcopter, FunctionGroup.GROUP_DEVELOPING, FcConfig.class),
+    FUNCTION_FC_CONFIG("fc config", FunctionGroup.GROUP_DEVELOPING, FcConfig.class),
     FUNCTION_PID_SIMULATOR("pid simulator", FunctionGroup.GROUP_DEVELOPING, PIDSimulator.class),
-    FUNCTION_FPV_CONFIG("Clear Flight", FunctionGroup.GROUP_DEVELOPING, FpvDevicesFragment.class),
+    FUNCTION_FPV_CONFIG("飞控配置器", R.drawable.ic_quadcopter, FunctionGroup.GROUP_DEVELOPING, FpvTerminalFragment.class),
 
 
     /********************ELECTRONIC*********************/

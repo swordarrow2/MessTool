@@ -13,6 +13,7 @@ import android.view.*;
 import android.widget.*;
 
 import com.meng.messtool.modules.electronic.usbserial2.*;
+import com.meng.messtool.modules.fpvtool.serial.*;
 import com.meng.messtool.system.*;
 import com.meng.messtool.system.base.*;
 import com.meng.messtool.system.debug.*;
@@ -122,7 +123,26 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    MFragmentManager.getInstance().showFragment(DevicesFragment.class);
+
+                                    new AlertDialog.Builder(MainActivity.this)
+                                            .setTitle("选择串口类型")
+                                            .setSingleChoiceItems(new String[]{
+                                                    "普通串口通信",
+                                                    "飞控配置器"}, -1, new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+
+                                                    dialog.dismiss();
+                                                    switch (which) {
+                                                        case 0:
+                                                            MFragmentManager.getInstance().showFragment(DevicesFragment.class);
+                                                            break;
+                                                        case 1:
+                                                            MFragmentManager.getInstance().showFragment(FpvTerminalFragment.class);
+                                                            break;
+                                                    }
+                                                }
+                                            }).create().show();
                                 }
                             });
                         }

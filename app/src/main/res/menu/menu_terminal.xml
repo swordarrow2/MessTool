@@ -2,12 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/new_client"
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="@string/new_connection"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/clear"
         android:icon="@drawable/ic_delete_white_24dp"
-        android:title="Clear"
-        app:showAsAction="always" />
+        android:title="@string/clear"
+        app:showAsAction="ifRoom" />
     <item
+        android:icon="@drawable/ic_close"
         android:id="@+id/send_break"
-        android:title="Send BREAK"
-        app:showAsAction="never" />
+        android:title="@string/send_break"
+        app:showAsAction="ifRoom" />
 </menu>

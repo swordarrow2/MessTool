@@ -10,7 +10,6 @@ import android.widget.*;
 
 import com.hoho.android.usbserial.driver.*;
 import com.meng.messtool.*;
-import com.meng.messtool.modules.fpvtool.serial.msp.*;
 import com.meng.messtool.system.*;
 import com.meng.messtool.system.base.*;
 
@@ -21,23 +20,21 @@ public class FpvDevicesFragment extends BaseFragment {
     private final ArrayList<ListItem> listItems = new ArrayList<>();
     private ArrayAdapter<ListItem> listAdapter;
     private int baudRate = 115200;
-    private boolean withIoManager = true;
     private PendingIntent mPrtPermissionIntent;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.list_fragment, null);
+        return inflater.inflate(R.layout.fpv_device_list, null);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ListView listView = (ListView) view.findViewById(R.id.list);
-        setHasOptionsMenu(true);
+        ListView listView = (ListView) view.findViewById(R.id.fpv_device_list_list);
         listAdapter = new FpvDeviceAdapter(getActivity(), listItems);
         listView.setAdapter(listAdapter);
-        listView.addHeaderView(getActivity().getLayoutInflater().inflate(R.layout.electronic_usbserial2_device_list_header, null, false), null, false);
+        listView.addHeaderView(getActivity().getLayoutInflater().inflate(R.layout.fpv_device_list_header, null, false), null, false);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -49,49 +46,11 @@ public class FpvDevicesFragment extends BaseFragment {
                     args.putInt("device", item.device.getDeviceId());
                     args.putInt("port", item.port);
                     args.putInt("baud", baudRate);
-                    args.putBoolean("withIoManager", withIoManager);
 
+                    FpvTerminalFragment terminalFragment = MFragmentManager.getInstance().getFragment(FpvTerminalFragment.class);
+                    terminalFragment.setArguments(args);
+                    MFragmentManager.getInstance().showFragment(FpvTerminalFragment.class);
 
-                    ListView lv = new ListView(ApplicationHolder.getActivity());
-                    final AlertDialog ad = new AlertDialog.Builder(ApplicationHolder.getActivity()).setTitle("选择操作").setView(lv).show();
-                    lv.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, new String[]{
-                            "普通串口通信",
-                            "MSP V1协议串口通信",
-                            "MSP V2协议串口通信",
-                            "MSP虚拟传感器"}));
-                    lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                        @Override
-                        public void onItemClick(AdapterView<?> p1, View p2, int p3, long p4) {
-                            ad.dismiss();
-                            switch (p3) {
-                                case 0:
-                                    FpvTerminalFragment terminalFragment = new FpvTerminalFragment();
-                                    terminalFragment.setArguments(args);
-                                    MFragmentManager.getInstance().registFragment(terminalFragment);
-                                    MFragmentManager.getInstance().showFragment(FpvTerminalFragment.class);
-                                    break;
-                                case 1:
-                                    MspV1TestFragment v1TestFragment = new MspV1TestFragment();
-                                    v1TestFragment.setArguments(args);
-                                    MFragmentManager.getInstance().registFragment(v1TestFragment);
-                                    MFragmentManager.getInstance().showFragment(MspV1TestFragment.class);
-                                    break;
-                                case 2:
-                                    MspV2TestFragment v2TestFragment = new MspV2TestFragment();
-                                    v2TestFragment.setArguments(args);
-                                    MFragmentManager.getInstance().registFragment(v2TestFragment);
-                                    MFragmentManager.getInstance().showFragment(MspV2TestFragment.class);
-                                    break;
-                                case 3:
-                                    MspSensorTestFragment sensorTestFragment = new MspSensorTestFragment();
-                                    sensorTestFragment.setArguments(args);
-                                    MFragmentManager.getInstance().registFragment(sensorTestFragment);
-                                    MFragmentManager.getInstance().showFragment(MspSensorTestFragment.class);
-                                    break;
-                            }
-                        }
-                    });
                 }
             }
         });
@@ -122,10 +81,6 @@ public class FpvDevicesFragment extends BaseFragment {
                 refresh();
                 return;
             }
-            if (!Constant.USB_PERMISSION.equals(action)) {
-
-//                return;
-            }
             synchronized (this) {
                 if (!intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
                     showToast("usb permission granted fail.");
@@ -136,14 +91,13 @@ public class FpvDevicesFragment extends BaseFragment {
                     return;
                 }
                 showToast("after request dev permission and granted pemission , connect printer by usb.");
-//                            getUsbInfo(mUsbSerialPort.getDriver().getDevice());
             }
         }
     };
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_devices, menu);
+        inflater.inflate(R.menu.menu_fpv_devices, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -163,22 +117,6 @@ public class FpvDevicesFragment extends BaseFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         baudRate = Integer.parseInt(values[which]);
-                        dialog.dismiss();
-                    }
-                });
-                builder.create().show();
-                return true;
-            }
-            case R.id.read_mode: {
-                final String[] values = getResources().getStringArray(R.array.read_modes);
-                int pos = withIoManager ? 0 : 1; // read_modes[0]=event/io-manager, read_modes[1]=direct
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("Read mode");
-                builder.setSingleChoiceItems(values, pos, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        withIoManager = (which == 0);
                         dialog.dismiss();
                     }
                 });

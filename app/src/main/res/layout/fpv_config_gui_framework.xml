@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ran="http://schemas.android.com/apk/res-auto"
+    android:id="@android:id/tabhost"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="1">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- TabWidget组件id值不可变-->
+        <TabWidget
+            android:id="@android:id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true" />
+
+        <LinearLayout
+            android:id="@+id/dcdc_boost_calculate_result_linearlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@android:id/tabs"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/boost_calculateTextViewResult"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <!-- FrameLayout布局，id值不可变-->
+        <FrameLayout
+            android:id="@android:id/tabcontent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/dcdc_calculateButton_go"
+            android:layout_below="@+id/dcdc_boost_calculate_result_linearlayout">
+
+            <!-- 第一个tab的布局 -->
+            <LinearLayout
+                android:id="@+id/boost_inductor_select"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
+
+                <com.meng.messtool.customview.MaterialDesign.MDEditText
+                    android:id="@+id/boost_inductor_select_vi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    ran:default_value="0"
+                    ran:hint="输入电压(V)" />
+
+
+            </LinearLayout>
+
+
+            <!-- 第二个tab的布局 -->
+            <LinearLayout
+                android:id="@+id/boost_inductor_current"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
+
+
+
+                <com.meng.messtool.customview.MaterialDesign.MDEditText
+                    android:id="@+id/boost_inductor_current_l"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    ran:default_value="0"
+                    ran:hint="电感感值(uH)" />
+
+            </LinearLayout>
+
+
+
+            
+        </FrameLayout>
+
+        <Button
+            android:id="@+id/dcdc_calculateButton_go"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="@string/start_calculate" />
+
+    </RelativeLayout>
+</TabHost>
+

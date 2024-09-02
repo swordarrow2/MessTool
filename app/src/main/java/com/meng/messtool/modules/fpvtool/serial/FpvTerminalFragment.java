@@ -12,11 +12,11 @@ import android.widget.*;
 import com.hoho.android.usbserial.driver.*;
 import com.hoho.android.usbserial.util.*;
 import com.meng.messtool.*;
+import com.meng.messtool.system.*;
 import com.meng.messtool.system.base.*;
 
 import java.io.*;
 import java.nio.charset.*;
-import java.util.*;
 
 import static com.meng.messtool.Constant.*;
 
@@ -24,21 +24,24 @@ public class FpvTerminalFragment extends BaseFragment implements SerialInputOutp
 
     private enum UsbPermission {Unknown, Requested, Granted, Denied}
 
+    private boolean onRecord = false;
+
     private static final int WRITE_WAIT_MILLIS = 2000;
-    private static final int READ_WAIT_MILLIS = 2000;
 
     private int deviceId, portNum, baudRate;
-    private boolean withIoManager;
+
+    private TextView tvFcName;
 
     private final BroadcastReceiver broadcastReceiver;
     private final Handler mainLooper;
     private SerialReceiveAdapter adptReceivedText;
-    private ControlLines controlLines;
 
     private SerialInputOutputManager usbIoManager;
     private UsbSerialPort usbSerialPort;
     private UsbPermission usbPermission = UsbPermission.Unknown;
     private boolean connected = false;
+    private WatchDog watchDog;
+    private ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
     public FpvTerminalFragment() {
         broadcastReceiver = new BroadcastReceiver() {
@@ -55,46 +58,12 @@ public class FpvTerminalFragment extends BaseFragment implements SerialInputOutp
     }
 
     /*
-     * Lifecycle
-     */
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-        setRetainInstance(true);
-        deviceId = getArguments().getInt("device");
-        portNum = getArguments().getInt("port");
-        baudRate = getArguments().getInt("baud");
-        withIoManager = getArguments().getBoolean("withIoManager");
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        getActivity().registerReceiver(broadcastReceiver, new IntentFilter(INTENT_ACTION_GRANT_USB));
-    }
-
-    @Override
-    public void onStop() {
-        getActivity().unregisterReceiver(broadcastReceiver);
-        super.onStop();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (connected) {
-            status("disconnected");
-            disconnect();
-        }
-    }
-
-    /*
      * UI
      */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.electronic_usbserial2_fragment_terminal, container, false);
+        View view = inflater.inflate(R.layout.fpv_terminal, container, false);
+        tvFcName = (TextView) view.findViewById(R.id.fpv_terminal_textview_fc_name);
         ListView lvReceiveText = (ListView) view.findViewById(R.id.function_electronic_usbserial2_terminal_list);
         adptReceivedText = new SerialReceiveAdapter(getActivity());
         lvReceiveText.setAdapter(adptReceivedText);
@@ -103,32 +72,29 @@ public class FpvTerminalFragment extends BaseFragment implements SerialInputOutp
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FpvTerminalFragment.this.send(sendText.getText().toString());
+                send(sendText.getText().toString());
             }
         });
-        View receiveBtn = view.findViewById(R.id.receive_btn);
-        controlLines = new ControlLines(view);
-        if (withIoManager) {
-            receiveBtn.setVisibility(View.GONE);
-        } else {
-            receiveBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FpvTerminalFragment.this.read();
-                }
-            });
-        }
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        watchDog = new WatchDog(100, new Runnable() {
+            @Override
+            public void run() {
+                processData(byteArrayOutputStream.toByteArray());
+                byteArrayOutputStream.reset();
+            }
+        });
+        watchDog.start();
         if (!connected && (usbPermission == UsbPermission.Unknown || usbPermission == UsbPermission.Granted))
             mainLooper.post(new Runnable() {
                 @Override
                 public void run() {
-                    FpvTerminalFragment.this.connect();
+                    connect();
+                    onRecord = true;
                 }
             });
     }
@@ -162,6 +128,9 @@ public class FpvTerminalFragment extends BaseFragment implements SerialInputOutp
                 }
             }
             return true;
+        } else if (id == R.id.new_client) {
+            MFragmentManager.getInstance().showFragment(FpvDevicesFragment.class);
+            return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
@@ -170,12 +139,23 @@ public class FpvTerminalFragment extends BaseFragment implements SerialInputOutp
     /*
      * Serial
      */
+
     @Override
-    public void onNewData(final byte[] data) {
+    public void onNewData(byte[] data) {
+        watchDog.feedDog();
+        byteArrayOutputStream.write(data, 0, data.length);
+    }
+
+    public void processData(final byte[] data) {
+        if (data.length == 0) {
+            return;
+        }
         mainLooper.post(new Runnable() {
             @Override
             public void run() {
-                FpvTerminalFragment.this.receive(data);
+                adptReceivedText.add("receive " + data.length + " bytes: " + new String(data, StandardCharsets.US_ASCII), HexDump.toHexString(data));
+                adptReceivedText.notifyDataSetChanged();
+
             }
         });
     }
@@ -185,8 +165,8 @@ public class FpvTerminalFragment extends BaseFragment implements SerialInputOutp
         mainLooper.post(new Runnable() {
             @Override
             public void run() {
-                FpvTerminalFragment.this.status("connection lost: " + e.getMessage());
-                FpvTerminalFragment.this.disconnect();
+                status("connection lost: " + e.getMessage());
+                disconnect();
             }
         });
     }
@@ -208,6 +188,7 @@ public class FpvTerminalFragment extends BaseFragment implements SerialInputOutp
             status("connection failed: device not found");
             return;
         }
+        tvFcName.setText(String.format("%s : %s", device.getManufacturerName(), device.getProductName()));
         UsbSerialDriver driver = UsbSerialProber.getDefaultProber().probeDevice(device);
 
         if (driver == null) {
@@ -240,16 +221,14 @@ public class FpvTerminalFragment extends BaseFragment implements SerialInputOutp
             usbSerialPort.open(usbConnection);
             try {
                 usbSerialPort.setParameters(baudRate, 8, 1, UsbSerialPort.PARITY_NONE);
+
             } catch (UnsupportedOperationException e) {
                 status("unsupport setparameters");
             }
-            if (withIoManager) {
-                usbIoManager = new SerialInputOutputManager(usbSerialPort, this);
-                usbIoManager.start();
-            }
+            usbIoManager = new SerialInputOutputManager(usbSerialPort, this);
+            usbIoManager.start();
             status("connected");
             connected = true;
-            controlLines.start();
         } catch (Exception e) {
             status("connection failed: " + e.getMessage());
             disconnect();
@@ -258,7 +237,6 @@ public class FpvTerminalFragment extends BaseFragment implements SerialInputOutp
 
     private void disconnect() {
         connected = false;
-        controlLines.stop();
         if (usbIoManager != null) {
             usbIoManager.setListener(null);
             usbIoManager.stop();
@@ -286,157 +264,57 @@ public class FpvTerminalFragment extends BaseFragment implements SerialInputOutp
         }
     }
 
-    private void read() {
-        if (!connected) {
-            Toast.makeText(getActivity(), "not connected", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        try {
-            byte[] buffer = new byte[8192];
-            int len = usbSerialPort.read(buffer, READ_WAIT_MILLIS);
-            receive(Arrays.copyOf(buffer, len));
-        } catch (IOException e) {
-            // when using read with timeout, USB bulkTransfer returns -1 on timeout _and_ errors
-            // like connection loss, so there is typically no exception thrown here on error
-            status("connection lost: " + e.getMessage());
-            disconnect();
-        }
-    }
-
-    private void receive(byte[] data) {
-        adptReceivedText.add("receive " + data.length + " bytes: " + new String(data, StandardCharsets.US_ASCII), HexDump.toHexString(data));
-        adptReceivedText.notifyDataSetChanged();
-    }
-
     void status(String str) {
-        adptReceivedText.add(str);
-        adptReceivedText.notifyDataSetChanged();
-    }
-
-    class ControlLines {
-        private static final int refreshInterval = 200; // msec
-
-        private final Runnable runnable;
-        private final ToggleButton rtsBtn, ctsBtn, dtrBtn, dsrBtn, cdBtn, riBtn;
-
-        ControlLines(View view) {
-            runnable = new Runnable() {
-
-                @Override
-                public void run() {
-                    ControlLines.this.run();
-                }
-            };
-            rtsBtn = (ToggleButton) view.findViewById(R.id.controlLineRts);
-            ctsBtn = (ToggleButton) view.findViewById(R.id.controlLineCts);
-            dtrBtn = (ToggleButton) view.findViewById(R.id.controlLineDtr);
-            dsrBtn = (ToggleButton) view.findViewById(R.id.controlLineDsr);
-            cdBtn = (ToggleButton) view.findViewById(R.id.controlLineCd);
-            riBtn = (ToggleButton) view.findViewById(R.id.controlLineRi);
-            rtsBtn.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View p1) {
-                    toggle(p1);
-                }
-            });
-            dtrBtn.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View p1) {
-                    toggle(p1);
-                }
-            });
-        }
-
-        private void toggle(View v) {
-            ToggleButton btn = (ToggleButton) v;
-            if (!connected) {
-                btn.setChecked(!btn.isChecked());
-                Toast.makeText(getActivity(), "not connected", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            String ctrl = "";
-            try {
-                if (btn.equals(rtsBtn)) {
-                    ctrl = "RTS";
-                    usbSerialPort.setRTS(btn.isChecked());
-                }
-                if (btn.equals(dtrBtn)) {
-                    ctrl = "DTR";
-                    usbSerialPort.setDTR(btn.isChecked());
-                }
-            } catch (IOException e) {
-                status("set" + ctrl + "() failed: " + e.getMessage());
-            }
-        }
-
-        private void run() {
-            if (!connected)
-                return;
-            try {
-                EnumSet<UsbSerialPort.ControlLine> controlLines = usbSerialPort.getControlLines();
-                rtsBtn.setChecked(controlLines.contains(UsbSerialPort.ControlLine.RTS));
-                ctsBtn.setChecked(controlLines.contains(UsbSerialPort.ControlLine.CTS));
-                dtrBtn.setChecked(controlLines.contains(UsbSerialPort.ControlLine.DTR));
-                dsrBtn.setChecked(controlLines.contains(UsbSerialPort.ControlLine.DSR));
-                cdBtn.setChecked(controlLines.contains(UsbSerialPort.ControlLine.CD));
-                riBtn.setChecked(controlLines.contains(UsbSerialPort.ControlLine.RI));
-                mainLooper.postDelayed(runnable, refreshInterval);
-            } catch (Exception e) {
-                status("getControlLines() failed: " + e.getMessage() + " -> stopped control line refresh");
-            }
-        }
-
-        void start() {
-            if (!connected)
-                return;
-            try {
-                EnumSet<UsbSerialPort.ControlLine> controlLines = usbSerialPort.getSupportedControlLines();
-                if (!controlLines.contains(UsbSerialPort.ControlLine.RTS)) {
-                    rtsBtn.setEnabled(false);
-                }
-                if (!controlLines.contains(UsbSerialPort.ControlLine.CTS)) {
-                    ctsBtn.setEnabled(false);
-                }
-                if (!controlLines.contains(UsbSerialPort.ControlLine.DTR)) {
-                    dtrBtn.setEnabled(false);
-                }
-                if (!controlLines.contains(UsbSerialPort.ControlLine.DSR)) {
-                    dsrBtn.setEnabled(false);
-                }
-                if (!controlLines.contains(UsbSerialPort.ControlLine.CD)) {
-                    cdBtn.setEnabled(false);
-                }
-                if (!controlLines.contains(UsbSerialPort.ControlLine.RI)) {
-                    riBtn.setEnabled(false);
-                }
-                run();
-            } catch (Exception e) {
-                Toast.makeText(getActivity(), "getSupportedControlLines() failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                rtsBtn.setEnabled(false);
-                ctsBtn.setEnabled(false);
-                dtrBtn.setEnabled(false);
-                dsrBtn.setEnabled(false);
-                cdBtn.setEnabled(false);
-                riBtn.setEnabled(false);
-            }
-        }
-
-        void stop() {
-            mainLooper.removeCallbacks(runnable);
-            rtsBtn.setChecked(false);
-            ctsBtn.setChecked(false);
-            dtrBtn.setChecked(false);
-            dsrBtn.setChecked(false);
-            cdBtn.setChecked(false);
-            riBtn.setChecked(false);
+        if (onRecord) {
+            adptReceivedText.add(str);
+            adptReceivedText.notifyDataSetChanged();
         }
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+        setRetainInstance(true);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getActivity().registerReceiver(broadcastReceiver, new IntentFilter(INTENT_ACTION_GRANT_USB));
+    }
+
+    @Override
+    public void onStop() {
+        getActivity().unregisterReceiver(broadcastReceiver);
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (connected) {
+            status("disconnected");
+            disconnect();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Bundle bundle = getArguments();
+        if (bundle == null) {
+            return;
+        }
+        deviceId = getArguments().getInt("device");
+        portNum = getArguments().getInt("port");
+        baudRate = getArguments().getInt("baud");
+        connect();
+    }
+
+    @Override
     public String getTitle() {
-        return "USB串口通信";
+        return "飞控参数配置器";
     }
 
     @Override
@@ -446,6 +324,6 @@ public class FpvTerminalFragment extends BaseFragment implements SerialInputOutp
 
     @Override
     public CharSequence getDescribe() {
-        return "USB串口界面";
+        return "飞控参数配置器，用于BetaFlight和INAV";
     }
 }

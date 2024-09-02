@@ -81,5 +81,11 @@
     <string name="length">长度</string>
     <string name="noice">情感起伏</string>
     <string name="noicew">音素长度</string>
+    <string name="refresh_devices">Refresh devices</string>
+    <string name="baud_rate">Baud rate</string>
+    <string name="fpv_devices">FPV Devices</string>
+    <string name="new_connection">New Connection</string>
+    <string name="clear">Clear</string>
+    <string name="send_break">Send BREAK</string>
 
 </resources>

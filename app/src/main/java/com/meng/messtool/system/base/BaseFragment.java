@@ -34,7 +34,8 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         MenuItem item = menu.add(0, Constant.FUNCTION_NOTE_MENU_ID, 0, "功能说明");
-        item.setIcon(R.drawable.ic_menu);
+        item.setIcon(R.drawable.ic_information_outline);
+        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
     }
 
     @Override

@@ -51,47 +51,44 @@ public class DevicesFragment extends BaseFragment {
                     args.putInt("baud", baudRate);
                     args.putBoolean("withIoManager", withIoManager);
 
-
-                    ListView lv = new ListView(ApplicationHolder.getActivity());
-                    final AlertDialog ad = new AlertDialog.Builder(ApplicationHolder.getActivity()).setTitle("选择操作").setView(lv).show();
-                    lv.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, new String[]{
-                            "普通串口通信",
-                            "MSP V1协议串口通信",
-                            "MSP V2协议串口通信",
-                            "MSP虚拟传感器"}));
-                    lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                        @Override
-                        public void onItemClick(AdapterView<?> p1, View p2, int p3, long p4) {
-                            ad.dismiss();
-                            switch (p3) {
-                                case 0:
-                                    TerminalFragment terminalFragment = new TerminalFragment();
-                                    terminalFragment.setArguments(args);
-                                    MFragmentManager.getInstance().registFragment(terminalFragment);
-                                    MFragmentManager.getInstance().showFragment(TerminalFragment.class);
-                                    break;
-                                case 1:
-                                    MspV1TestFragment v1TestFragment = new MspV1TestFragment();
-                                    v1TestFragment.setArguments(args);
-                                    MFragmentManager.getInstance().registFragment(v1TestFragment);
-                                    MFragmentManager.getInstance().showFragment(MspV1TestFragment.class);
-                                    break;
-                                case 2:
-                                    MspV2TestFragment v2TestFragment = new MspV2TestFragment();
-                                    v2TestFragment.setArguments(args);
-                                    MFragmentManager.getInstance().registFragment(v2TestFragment);
-                                    MFragmentManager.getInstance().showFragment(MspV2TestFragment.class);
-                                    break;
-                                case 3:
-                                    MspSensorTestFragment sensorTestFragment = new MspSensorTestFragment();
-                                    sensorTestFragment.setArguments(args);
-                                    MFragmentManager.getInstance().registFragment(sensorTestFragment);
-                                    MFragmentManager.getInstance().showFragment(MspSensorTestFragment.class);
-                                    break;
-                            }
-                        }
-                    });
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle("Baud rate")
+                            .setSingleChoiceItems(new String[]{
+                                    "普通串口通信",
+                                    "MSP V1协议串口通信",
+                                    "MSP V2协议串口通信",
+                                    "MSP虚拟传感器"}, -1, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    switch (which) {
+                                        case 0:
+                                            TerminalFragment terminalFragment = new TerminalFragment();
+                                            terminalFragment.setArguments(args);
+                                            MFragmentManager.getInstance().registFragment(terminalFragment);
+                                            MFragmentManager.getInstance().showFragment(TerminalFragment.class);
+                                            break;
+                                        case 1:
+                                            MspV1TestFragment v1TestFragment = new MspV1TestFragment();
+                                            v1TestFragment.setArguments(args);
+                                            MFragmentManager.getInstance().registFragment(v1TestFragment);
+                                            MFragmentManager.getInstance().showFragment(MspV1TestFragment.class);
+                                            break;
+                                        case 2:
+                                            MspV2TestFragment v2TestFragment = new MspV2TestFragment();
+                                            v2TestFragment.setArguments(args);
+                                            MFragmentManager.getInstance().registFragment(v2TestFragment);
+                                            MFragmentManager.getInstance().showFragment(MspV2TestFragment.class);
+                                            break;
+                                        case 3:
+                                            MspSensorTestFragment sensorTestFragment = new MspSensorTestFragment();
+                                            sensorTestFragment.setArguments(args);
+                                            MFragmentManager.getInstance().registFragment(sensorTestFragment);
+                                            MFragmentManager.getInstance().showFragment(MspSensorTestFragment.class);
+                                            break;
+                                    }
+                                }
+                            }).create().show();
                 }
             }
         });

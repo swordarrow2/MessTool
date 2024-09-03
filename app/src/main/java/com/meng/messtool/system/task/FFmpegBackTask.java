@@ -81,7 +81,7 @@ public class FFmpegBackTask extends BackgroundTask {
 
     private int getSeconed(String time) {
         //00:11:22.33
-//        if(Build.VERSION.SDK_INT> 26){//android oreo
+//        if(Build.version.SDK_INT> 26){//android oreo
 //            return LocalTime.parse(time).getSecond();
 //        }else{
         return Integer.parseInt(time.substring(time.lastIndexOf(":"), time.indexOf(".")));

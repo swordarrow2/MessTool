@@ -17,38 +17,38 @@ public class MspV2DataPack {
     public byte[] payload;
     public byte checksum;
 
-    private int payloadPointer = 0;
 
-    public boolean tryDecode(final byte[] data) {
+    public static boolean tryDecode(final byte[] data) {
+        MspV2DataPack dataPack = new MspV2DataPack();
         if (data[0] != '$' || data[1] != 'X' || data[2] != '>') {
             return false;
         }
-        flag = data[3];
+        dataPack.flag = data[3];
         byte cmd1 = data[4];
         byte cmd2 = data[5];
-        cmd = (short) (cmd1 | (cmd2 << 8));
+        dataPack.cmd = (short) (cmd1 | (cmd2 << 8));
 
         byte payLength1 = data[6];
         byte payLength2 = data[7];
-        payloadLength = (short) (payLength1 | (payLength2 << 8));
+        dataPack.payloadLength = (short) (payLength1 | (payLength2 << 8));
 
-        payload = new byte[payloadLength & 0xFFFF];
+        dataPack.payload = new byte[dataPack.payloadLength & 0xFFFF];
 
         CRC8_DVB_S2 hash = CRC8_DVB_S2.getInstance();
         hash.addHash((byte) 0);
-        hash.addHash((byte) cmd);
-        hash.addHash((byte) (cmd >>> 8));
-        hash.addHash((byte) payloadLength);
-        hash.addHash((byte) (payloadLength >>> 8));
+        hash.addHash((byte) dataPack.cmd);
+        hash.addHash((byte) (dataPack.cmd >>> 8));
+        hash.addHash((byte) dataPack.payloadLength);
+        hash.addHash((byte) (dataPack.payloadLength >>> 8));
 
         int pointer = 8;
         for (; pointer < data.length - 1; pointer++) {
             byte b = data[pointer];
-            payload[pointer - 8] = b;
+            dataPack.payload[pointer - 8] = b;
             hash.addHash(b);
         }
-        checksum = hash.getCrc();
-        return data[pointer] == checksum;
+        dataPack.checksum = hash.getCrc();
+        return data[pointer] == dataPack.checksum;
     }
 
 
@@ -76,46 +76,11 @@ public class MspV2DataPack {
     }
 
     public byte[] encode() {
-        byte[] result = new byte[payload.length + 9];
-        result[0] = (byte) '$';
-        result[1] = (byte) 'X';
-        result[2] = (byte) '<';
-        result[3] = (byte) 0;
-        result[4] = (byte) cmd;
-        result[5] = (byte) (cmd >>> 8);
-        result[6] = (byte) payloadLength;
-        result[7] = (byte) (payloadLength >>> 8);
-
-        CRC8_DVB_S2 hash = CRC8_DVB_S2.getInstance();
-
-        hash.addHash((byte) 0);
-        hash.addHash((byte) cmd);
-        hash.addHash((byte) (cmd >>> 8));
-        hash.addHash((byte) payloadLength);
-        hash.addHash((byte) (payloadLength >>> 8));
-
-        int pointer = 8;
-        for (; pointer < payload.length + 8; pointer++) {
-            byte b = payload[pointer - 8];
-            result[pointer] = b;
-            hash.addHash(b);
-        }
-        result[pointer] = hash.getCrc();
-
-        return result;
+        return encode(MspV2Cmd.getCmd(cmd), payload);
     }
 
     public void setCmd(short cmd) {
         this.cmd = cmd;
-    }
-
-    public MspV2Cmd getCmdEnum() {
-        for (MspV2Cmd c : MspV2Cmd.values()) {
-            if (c.getCmd() == cmd) {
-                return c;
-            }
-        }
-        return MspV2Cmd.MSP2_NULL;
     }
 
     public void setPayload(byte[] payload) {
@@ -127,30 +92,30 @@ public class MspV2DataPack {
         return payload;
     }
 
-//    public void setFlag(byte flag) {
-//        this.flag = flag;
-//    }
-//
-//    public byte getFlag() {
-//        return flag;
-//    }
-//
-//    public byte getStatu() {
-//        return statu;
-//    }
-//
-//    public short getPayloadLength() {
-//        return payloadLength;
-//    }
-//
-//    public short getCmd() {
-//        return cmd;
-//    }
-//
-//    public byte getChecksum() {
-//        return checksum;
-//    }
-//
+    public void setFlag(byte flag) {
+        this.flag = flag;
+    }
+
+    public byte getFlag() {
+        return flag;
+    }
+
+    public byte getStatu() {
+        return statu;
+    }
+
+    public short getPayloadLength() {
+        return payloadLength;
+    }
+
+    public short getCmd() {
+        return cmd;
+    }
+
+    public byte getChecksum() {
+        return checksum;
+    }
+
 //    public byte readI8() {
 //        return payload[payloadPointer++];
 //    }

@@ -142,6 +142,15 @@ public enum MspV2Cmd {
 
     private short cmd;
 
+    public static MspV2Cmd getCmd(short value) {
+        for (MspV2Cmd cmd : values()) {
+            if (cmd.getCmd() == value) {
+                return cmd;
+            }
+        }
+        return MspV2Cmd.MSP2_NULL;
+    }
+
     public short getCmd() {
         return cmd;
     }

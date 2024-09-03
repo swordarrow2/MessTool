@@ -37,7 +37,7 @@ import java.util.*;
  */
 public final class CameraManager {
 
-    static final int SDK_INT; // Later we can use Build.VERSION.SDK_INT
+    static final int SDK_INT; // Later we can use Build.version.SDK_INT
     private static final String TAG = CameraManager.class.getSimpleName();
     private static final int MIN_FRAME_WIDTH = 240;
     private static final int MIN_FRAME_HEIGHT = 240;
@@ -83,7 +83,7 @@ public final class CameraManager {
         // Camera.setPreviewCallback() on 1.5 and earlier. For Donut and later, we need to use
         // the more efficient one shot callback, as the older one can swamp the system and cause it
         // to run out of memory. We can't use SDK_INT because it was introduced in the Donut SDK.
-        //useOneShotPreviewCallback = Integer.parseInt(Build.VERSION.SDK) > Build.VERSION_CODES.CUPCAKE;
+        //useOneShotPreviewCallback = Integer.parseInt(Build.version.SDK) > Build.VERSION_CODES.CUPCAKE;
         useOneShotPreviewCallback = Integer.parseInt(Build.VERSION.SDK) > 3; // 3 = Cupcake
 
         previewCallback = new PreviewCallback(configManager, useOneShotPreviewCallback);

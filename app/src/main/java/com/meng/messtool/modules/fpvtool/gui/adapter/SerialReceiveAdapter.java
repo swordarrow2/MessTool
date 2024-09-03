@@ -75,11 +75,11 @@ public class SerialReceiveAdapter extends BaseAdapter {
         holder.tvFirt.setText(item.first);
         holder.tvSeconed.setText(item.second);
         if (item.first.startsWith("receive")) {
-            holder.tvFirt.setTextColor(context.getResources().getColor(R.color.colorRecieveText, context.getTheme()));
-            holder.tvSeconed.setTextColor(context.getResources().getColor(R.color.colorRecieveText, context.getTheme()));
+            holder.tvFirt.setTextColor(context.getResources().getColor(R.color.colorPrimary, context.getTheme()));
+            holder.tvSeconed.setTextColor(context.getResources().getColor(R.color.colorPrimary, context.getTheme()));
         } else if (item.first.startsWith("send")) {
-            holder.tvFirt.setTextColor(context.getResources().getColor(R.color.colorSendText, context.getTheme()));
-            holder.tvSeconed.setTextColor(context.getResources().getColor(R.color.colorSendText, context.getTheme()));
+            holder.tvFirt.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark, context.getTheme()));
+            holder.tvSeconed.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark, context.getTheme()));
         } else {
             holder.tvFirt.setTextColor(context.getResources().getColor(R.color.result_view, context.getTheme()));
             holder.tvSeconed.setTextColor(context.getResources().getColor(R.color.result_view, context.getTheme()));

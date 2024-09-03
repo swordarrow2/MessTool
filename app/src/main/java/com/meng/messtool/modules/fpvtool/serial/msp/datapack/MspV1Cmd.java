@@ -233,4 +233,13 @@ public enum MspV1Cmd {
     public byte getCmd() {
         return cmd;
     }
+
+    public static MspV1Cmd getCmd(short value) {
+        for (MspV1Cmd cmd : values()) {
+            if (cmd.getCmd() == value) {
+                return cmd;
+            }
+        }
+        return MspV1Cmd.MSP_NULL;
+    }
 }

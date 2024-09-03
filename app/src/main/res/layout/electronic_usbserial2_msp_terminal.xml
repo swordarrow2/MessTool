@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/top_ll"
+        android:id="@+id/fpv_terminal_top_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -21,10 +21,10 @@
     </LinearLayout>
 
     <View
-        android:id="@+id/top_line"
+        android:id="@+id/fpv_terminal_top_line"
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_below="@+id/top_ll"
+        android:layout_below="@+id/fpv_terminal_top_ll"
         android:background="?android:attr/listDivider" />
 
 
@@ -32,11 +32,11 @@
         android:id="@+id/function_electronic_usbserial2_msp_terminal_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/bottom_ll"
-        android:layout_below="@id/top_line" />
+        android:layout_above="@id/fpv_terminal_bottom_ll"
+        android:layout_below="@id/fpv_terminal_top_line" />
 
     <LinearLayout
-        android:id="@+id/bottom_ll"
+        android:id="@+id/fpv_terminal_bottom_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -54,14 +54,14 @@
 
             <EditText
 
-                android:id="@+id/send_text"
+                android:id="@+id/fpv_terminal_send_text"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:singleLine="true" />
 
             <ImageButton
-                android:id="@+id/send_btn"
+                android:id="@+id/fpv_terminal_send_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/ic_send_white_24dp" />

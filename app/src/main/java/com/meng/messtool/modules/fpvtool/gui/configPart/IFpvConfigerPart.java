@@ -1,4 +1,4 @@
-package com.meng.messtool.modules.fpvtool.serial;
+package com.meng.messtool.modules.fpvtool.gui.configPart;
 
 import android.view.*;
 

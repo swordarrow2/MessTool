@@ -1,4 +1,4 @@
-package com.meng.messtool.modules.fpvtool.serial;
+package com.meng.messtool.modules.fpvtool.gui.adapter;
 
 import android.hardware.usb.*;
 
@@ -22,11 +22,9 @@ public class ListItem {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("ListItem{");
-        sb.append("device=").append(device.toString());
-        sb.append(", port=").append(port);
-        sb.append(", driver=").append(driver.toString());
-        sb.append('}');
-        return sb.toString();
+        return "ListItem{" + "device=" + device.toString() +
+                ", port=" + port +
+                ", driver=" + driver.toString() +
+                '}';
     }
 }

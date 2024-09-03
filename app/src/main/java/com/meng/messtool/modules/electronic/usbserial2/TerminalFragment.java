@@ -94,11 +94,11 @@ public class TerminalFragment extends BaseFragment implements SerialInputOutputM
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.electronic_usbserial2_fragment_terminal, container, false);
-        ListView lvReceiveText = (ListView) view.findViewById(R.id.function_electronic_usbserial2_terminal_list);
+        ListView lvReceiveText = (ListView) view.findViewById(R.id.fpv_terminal_list);
         adptReceivedText = new SerialReceiveAdapter(getActivity());
         lvReceiveText.setAdapter(adptReceivedText);
-        final TextView sendText = (TextView) view.findViewById(R.id.send_text);
-        View sendBtn = view.findViewById(R.id.send_btn);
+        final TextView sendText = (TextView) view.findViewById(R.id.fpv_terminal_send_text);
+        View sendBtn = view.findViewById(R.id.fpv_terminal_send_btn);
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

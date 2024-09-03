@@ -13,7 +13,7 @@ import android.view.*;
 import android.widget.*;
 
 import com.meng.messtool.modules.electronic.usbserial2.*;
-import com.meng.messtool.modules.fpvtool.serial.*;
+import com.meng.messtool.modules.fpvtool.gui.*;
 import com.meng.messtool.system.*;
 import com.meng.messtool.system.base.*;
 import com.meng.messtool.system.debug.*;
@@ -138,7 +138,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                                                             MFragmentManager.getInstance().showFragment(DevicesFragment.class);
                                                             break;
                                                         case 1:
-                                                            MFragmentManager.getInstance().showFragment(FpvConfigGuiFragment.class);
+                                                            MFragmentManager.getInstance().showFragment(FpvConfigMainFragment.class);
                                                             break;
                                                     }
                                                 }

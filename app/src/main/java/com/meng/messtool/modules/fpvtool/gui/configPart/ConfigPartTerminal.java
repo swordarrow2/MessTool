@@ -1,4 +1,4 @@
-package com.meng.messtool.modules.fpvtool.serial;
+package com.meng.messtool.modules.fpvtool.gui.configPart;
 
 
 import android.view.*;
@@ -6,26 +6,28 @@ import android.widget.*;
 
 import com.hoho.android.usbserial.util.*;
 import com.meng.messtool.*;
+import com.meng.messtool.modules.fpvtool.gui.*;
+import com.meng.messtool.modules.fpvtool.gui.adapter.*;
 
 import java.nio.charset.*;
 
-public class FpvConfigGuiTerminal implements IFpvConfigerPart {
+public class ConfigPartTerminal implements IFpvConfigerPart {
 
     private SerialReceiveAdapter adptReceivedText;
 
-    private FpvConfigGuiFragment host;
+    private FpvConfigMainFragment host;
 
-    public FpvConfigGuiTerminal(FpvConfigGuiFragment host) {
+    public ConfigPartTerminal(FpvConfigMainFragment host) {
         this.host = host;
     }
 
     @Override
     public void initView(View view) {
-        ListView lvReceiveText = (ListView) view.findViewById(R.id.function_electronic_usbserial2_terminal_list);
+        ListView lvReceiveText = (ListView) view.findViewById(R.id.fpv_terminal_list);
         adptReceivedText = new SerialReceiveAdapter(host.getActivity());
         lvReceiveText.setAdapter(adptReceivedText);
-        final TextView sendText = (TextView) view.findViewById(R.id.send_text);
-        View sendBtn = view.findViewById(R.id.send_btn);
+        final TextView sendText = (TextView) view.findViewById(R.id.fpv_terminal_send_text);
+        View sendBtn = view.findViewById(R.id.fpv_terminal_send_btn);
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,4 +73,6 @@ public class FpvConfigGuiTerminal implements IFpvConfigerPart {
     public String getName() {
         return "飞控参数配置器";
     }
+
+
 }

@@ -105,8 +105,8 @@ public class MspV1TestFragment extends BaseFragment implements SerialInputOutput
         ListView lvReceiveText = (ListView) view.findViewById(R.id.function_electronic_usbserial2_msp_terminal_list);
         adptReceivedText = new SerialReceiveAdapter(getActivity());
         lvReceiveText.setAdapter(adptReceivedText);
-        final TextView sendText = (TextView) view.findViewById(R.id.send_text);
-        View sendBtn = view.findViewById(R.id.send_btn);
+        final TextView sendText = (TextView) view.findViewById(R.id.fpv_terminal_send_text);
+        View sendBtn = view.findViewById(R.id.fpv_terminal_send_btn);
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

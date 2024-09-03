@@ -1,4 +1,4 @@
-package com.meng.messtool.modules.fpvtool.serial;
+package com.meng.messtool.modules.fpvtool.gui;
 
 import android.app.*;
 import android.content.*;
@@ -10,6 +10,7 @@ import android.widget.*;
 
 import com.hoho.android.usbserial.driver.*;
 import com.meng.messtool.*;
+import com.meng.messtool.modules.fpvtool.gui.adapter.*;
 import com.meng.messtool.system.*;
 import com.meng.messtool.system.base.*;
 
@@ -47,9 +48,9 @@ public class FpvDevicesFragment extends BaseFragment {
                     args.putInt("port", item.port);
                     args.putInt("baud", baudRate);
 
-                    FpvConfigGuiFragment terminalFragment = MFragmentManager.getInstance().getFragment(FpvConfigGuiFragment.class);
+                    FpvConfigMainFragment terminalFragment = MFragmentManager.getInstance().getFragment(FpvConfigMainFragment.class);
                     terminalFragment.setArguments(args);
-                    MFragmentManager.getInstance().showFragment(FpvConfigGuiFragment.class);
+                    MFragmentManager.getInstance().showFragment(FpvConfigMainFragment.class);
 
                 }
             }

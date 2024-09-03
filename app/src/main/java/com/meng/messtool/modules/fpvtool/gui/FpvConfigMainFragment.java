@@ -1,4 +1,4 @@
-package com.meng.messtool.modules.fpvtool.serial;
+package com.meng.messtool.modules.fpvtool.gui;
 
 
 import android.app.*;
@@ -12,6 +12,7 @@ import android.widget.*;
 import com.hoho.android.usbserial.driver.*;
 import com.hoho.android.usbserial.util.*;
 import com.meng.messtool.*;
+import com.meng.messtool.modules.fpvtool.gui.configPart.*;
 import com.meng.messtool.system.*;
 import com.meng.messtool.system.base.*;
 
@@ -19,13 +20,11 @@ import java.io.*;
 
 import static com.meng.messtool.Constant.*;
 
-public class FpvConfigGuiFragment extends BaseFragment implements SerialInputOutputManager.Listener {
+public class FpvConfigMainFragment extends BaseFragment implements SerialInputOutputManager.Listener {
 
     private enum UsbPermission {Unknown, Requested, Granted, Denied}
 
     private TabHost tabHost;
-
-    private boolean onRecord = false;
 
     private static final int WRITE_WAIT_MILLIS = 2000;
 
@@ -49,7 +48,7 @@ public class FpvConfigGuiFragment extends BaseFragment implements SerialInputOut
         return connected;
     }
 
-    public FpvConfigGuiFragment() {
+    public FpvConfigMainFragment() {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -61,7 +60,7 @@ public class FpvConfigGuiFragment extends BaseFragment implements SerialInputOut
             }
         };
         mainLooper = new Handler(Looper.getMainLooper());
-        partTerminal = new FpvConfigGuiTerminal(this);
+        partTerminal = new ConfigPartTerminal(this);
     }
 
     /*
@@ -71,8 +70,8 @@ public class FpvConfigGuiFragment extends BaseFragment implements SerialInputOut
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fpv_config_gui_framework, container, false);
         tvFcName = (TextView) view.findViewById(R.id.fpv_terminal_textview_fc_name);
-        final TextView sendText = (TextView) view.findViewById(R.id.send_text);
-        View sendBtn = view.findViewById(R.id.send_btn);
+        final TextView sendText = (TextView) view.findViewById(R.id.fpv_terminal_send_text);
+        View sendBtn = view.findViewById(R.id.fpv_terminal_send_btn);
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,7 +98,6 @@ public class FpvConfigGuiFragment extends BaseFragment implements SerialInputOut
                 @Override
                 public void run() {
                     connect();
-                    onRecord = true;
                 }
             });
         tabHost = (TabHost) view.findViewById(android.R.id.tabhost);

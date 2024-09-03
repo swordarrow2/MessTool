@@ -1,4 +1,4 @@
-package com.meng.messtool.modules.fpvtool.serial;
+package com.meng.messtool.modules.fpvtool.gui.adapter;
 
 import android.content.*;
 import android.support.annotation.*;
@@ -20,7 +20,7 @@ public class SerialReceiveAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private Context context;
 
-    SerialReceiveAdapter(Context context) {
+    public SerialReceiveAdapter(Context context) {
         this.context = context;
         this.mInflater = LayoutInflater.from(context);
     }

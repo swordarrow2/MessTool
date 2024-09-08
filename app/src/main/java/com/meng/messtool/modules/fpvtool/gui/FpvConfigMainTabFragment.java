@@ -12,21 +12,30 @@ import android.widget.*;
 import com.hoho.android.usbserial.driver.*;
 import com.hoho.android.usbserial.util.*;
 import com.meng.messtool.*;
-import com.meng.messtool.modules.fpvtool.gui.configPart.*;
+import com.meng.messtool.modules.fpvtool.*;
+import com.meng.messtool.modules.fpvtool.gui.pages.*;
+import com.meng.messtool.modules.fpvtool.serial.msp.*;
 import com.meng.messtool.system.*;
 import com.meng.messtool.system.base.*;
+import com.meng.messtool.system.debug.*;
+import com.meng.tools.app.*;
 
 import java.io.*;
+import java.util.*;
+import java.util.concurrent.*;
 
 import static com.meng.messtool.Constant.*;
 
-public class FpvConfigMainFragment extends BaseFragment implements SerialInputOutputManager.Listener {
+public class FpvConfigMainTabFragment extends BaseFragment implements SerialInputOutputManager.Listener {
 
     private enum UsbPermission {Unknown, Requested, Granted, Denied}
 
+    public DroneStatus droneStatus = new DroneStatus();
+    public MspV1Engine mspV1Engine = new MspV1Engine();
+
     private TabHost tabHost;
 
-    private static final int WRITE_WAIT_MILLIS = 2000;
+    private static final int WRITE_WAIT_MILLIS = 1000;
 
     private int deviceId, portNum, baudRate;
 
@@ -42,13 +51,15 @@ public class FpvConfigMainFragment extends BaseFragment implements SerialInputOu
     private WatchDog watchDog;
     private ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
-    private IFpvConfigerPart partTerminal;
+    private IFpvConfigPage[] configerPages;
 
-    public boolean isConnected() {
-        return connected;
+    public int getCurrentTabIndex() {
+        return tabHost.getCurrentTab();
     }
 
-    public FpvConfigMainFragment() {
+    private LinkedList<byte[]> sendBuffer = new LinkedList<>();
+
+    public FpvConfigMainTabFragment() {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -60,7 +71,30 @@ public class FpvConfigMainFragment extends BaseFragment implements SerialInputOu
             }
         };
         mainLooper = new Handler(Looper.getMainLooper());
-        partTerminal = new ConfigPartTerminal(this);
+        configerPages = new IFpvConfigPage[]{
+                new PageTerminal(this, 0),
+                new PageStatus(this, 1),
+                new PageTest(this, 2),
+                new PageServo(this, 3),
+                new PageReciever(this, 4),
+                new PageAttitude(this, 5),
+                new PageMspv1Test(this, 6),
+                new PageMspv2Test(this, 7)
+        };
+        ThreadPool.executeAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                if (sendBuffer.size() > 0 && connected) {
+                    try {
+                        usbSerialPort.write(sendBuffer.removeFirst(), WRITE_WAIT_MILLIS);
+                    } catch (Exception e) {
+                        onRunError(e);
+                    }
+                } else {
+                    sendBuffer.clear();
+                }
+            }
+        }, 50, TimeUnit.MILLISECONDS);
     }
 
     /*
@@ -85,7 +119,7 @@ public class FpvConfigMainFragment extends BaseFragment implements SerialInputOu
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        watchDog = new WatchDog(100, new Runnable() {
+        watchDog = new WatchDog(20, new Runnable() {
             @Override
             public void run() {
                 processData(byteArrayOutputStream.toByteArray());
@@ -93,18 +127,32 @@ public class FpvConfigMainFragment extends BaseFragment implements SerialInputOu
             }
         });
         watchDog.start();
-        if (!connected && (usbPermission == UsbPermission.Unknown || usbPermission == UsbPermission.Granted))
+        if (!connected && (usbPermission == UsbPermission.Unknown || usbPermission == UsbPermission.Granted) && tabHost != null) {
             mainLooper.post(new Runnable() {
                 @Override
                 public void run() {
                     connect();
                 }
             });
+        }
         tabHost = (TabHost) view.findViewById(android.R.id.tabhost);
         tabHost.setup();
-        partTerminal.initView(view);
-        tabHost.addTab(tabHost.newTabSpec(partTerminal.getName()).setIndicator(partTerminal.getName(), null).setContent(partTerminal.getMainView()));
-        tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator("CLI2", null).setContent(R.id.boost_inductor_current));
+
+        FrameLayout tabContentView = tabHost.getTabContentView();
+        for (IFpvConfigPage page : configerPages) {
+            View pageMainView = page.getMainView(tabContentView);
+            if (pageMainView.getId() == View.NO_ID) {
+                if (Debuger.isDebugMode()) {
+                    throw new IllegalArgumentException(page.getName() + ".getId() == View.NO_ID");
+                }
+            } else {
+                if (pageMainView.getParent() == null) {
+                    tabContentView.addView(pageMainView);
+                }
+                tabHost.addTab(tabHost.newTabSpec(page.getName()).setIndicator(page.getName(), null).setContent(pageMainView.getId()));
+            }
+        }
+        MFragmentManager.getInstance().showFragment(FpvDevicesList.class);
     }
 
     @Override
@@ -136,7 +184,7 @@ public class FpvConfigMainFragment extends BaseFragment implements SerialInputOu
             }
             return true;
         } else if (id == R.id.new_client) {
-            MFragmentManager.getInstance().showFragment(FpvDevicesFragment.class);
+            MFragmentManager.getInstance().showFragment(FpvDevicesList.class);
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -157,7 +205,13 @@ public class FpvConfigMainFragment extends BaseFragment implements SerialInputOu
         if (data.length == 0) {
             return;
         }
-        partTerminal.processRecieved(data);
+//        MspV1DataPack dataPack = new MspV1DataPack();
+//        if (dataPack.tryDecode(data)) {
+//            mspV1Engine.onMspMessage(dataPack, droneStatus);
+//        } else {
+//            showToast("decode failed");
+//        }
+        configerPages[tabHost.getCurrentTab()].processRecieved(data);
     }
 
     @Override
@@ -165,7 +219,7 @@ public class FpvConfigMainFragment extends BaseFragment implements SerialInputOu
         mainLooper.post(new Runnable() {
             @Override
             public void run() {
-                status("connection lost: " + e.getMessage());
+                showToast("connection lost: " + e.getMessage());
                 disconnect();
             }
         });
@@ -185,18 +239,17 @@ public class FpvConfigMainFragment extends BaseFragment implements SerialInputOu
             }
         }
         if (device == null) {
-            status("connection failed: device not found");
+            showToast("connection failed: device not found");
             return;
         }
         tvFcName.setText(String.format("%s : %s", device.getManufacturerName(), device.getProductName()));
         UsbSerialDriver driver = UsbSerialProber.getDefaultProber().probeDevice(device);
-
         if (driver == null) {
-            status("connection failed: no driver for device");
+            showToast("connection failed: no driver for device");
             return;
         }
         if (driver.getPorts().size() < portNum) {
-            status("connection failed: not enough ports at device");
+            showToast("connection failed: not enough ports at device");
             return;
         }
         usbSerialPort = driver.getPorts().get(portNum);
@@ -211,9 +264,9 @@ public class FpvConfigMainFragment extends BaseFragment implements SerialInputOu
         }
         if (usbConnection == null) {
             if (!usbManager.hasPermission(driver.getDevice())) {
-                status("connection failed: permission denied");
+                showToast("connection failed: permission denied");
             } else {
-                status("connection failed: open failed");
+                showToast("connection failed: open failed");
             }
             return;
         }
@@ -223,14 +276,14 @@ public class FpvConfigMainFragment extends BaseFragment implements SerialInputOu
                 usbSerialPort.setParameters(baudRate, 8, 1, UsbSerialPort.PARITY_NONE);
 
             } catch (UnsupportedOperationException e) {
-                status("unsupport setparameters");
+                showToast("unsupport setparameters");
             }
             usbIoManager = new SerialInputOutputManager(usbSerialPort, this);
             usbIoManager.start();
-            status("connected");
+            showToast("connected");
             connected = true;
         } catch (Exception e) {
-            status("connection failed: " + e.getMessage());
+            showToast("connection failed: " + e.getMessage());
             disconnect();
         }
     }
@@ -250,32 +303,13 @@ public class FpvConfigMainFragment extends BaseFragment implements SerialInputOu
     }
 
     public void send(String str) {
-        if (!connected) {
-            Toast.makeText(getActivity(), "not connected", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        try {
-            byte[] data = (str + '\n').getBytes();
-            usbSerialPort.write(data, WRITE_WAIT_MILLIS);
-        } catch (Exception e) {
-            onRunError(e);
-        }
+        send((str + '\n').getBytes());
     }
 
     public void send(byte[] data) {
-        if (!connected) {
-            Toast.makeText(getActivity(), "not connected", Toast.LENGTH_SHORT).show();
-            return;
+        if (connected) {
+            sendBuffer.add(data);
         }
-        try {
-            usbSerialPort.write(data, WRITE_WAIT_MILLIS);
-        } catch (Exception e) {
-            onRunError(e);
-        }
-    }
-
-    void status(String str) {
-        showToast(str);
     }
 
     @Override
@@ -301,7 +335,7 @@ public class FpvConfigMainFragment extends BaseFragment implements SerialInputOu
     public void onDestroy() {
         super.onDestroy();
         if (connected) {
-            status("disconnected");
+            showToast("disconnected");
             disconnect();
         }
     }
@@ -310,13 +344,12 @@ public class FpvConfigMainFragment extends BaseFragment implements SerialInputOu
     public void onResume() {
         super.onResume();
         Bundle bundle = getArguments();
-        if (bundle == null) {
-            return;
+        if (bundle != null) {
+            deviceId = getArguments().getInt("device");
+            portNum = getArguments().getInt("port");
+            baudRate = getArguments().getInt("baud");
+            connect();
         }
-        deviceId = getArguments().getInt("device");
-        portNum = getArguments().getInt("port");
-        baudRate = getArguments().getInt("baud");
-        connect();
     }
 
     @Override
@@ -331,6 +364,6 @@ public class FpvConfigMainFragment extends BaseFragment implements SerialInputOu
 
     @Override
     public CharSequence getDescribe() {
-        return "飞控参数配置器，用于BetaFlight和INAV";
+        return "飞控参数配置器，主要用于INAV";
     }
 }

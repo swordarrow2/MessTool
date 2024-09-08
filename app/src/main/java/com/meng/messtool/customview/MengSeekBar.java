@@ -46,6 +46,13 @@ public class MengSeekBar extends LinearLayout {
         }
     }
 
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        textView.setEnabled(false);
+        seekBar.setEnabled(false);
+    }
+
     public void setMax(int max) {
         seekBar.setMax(max);
     }

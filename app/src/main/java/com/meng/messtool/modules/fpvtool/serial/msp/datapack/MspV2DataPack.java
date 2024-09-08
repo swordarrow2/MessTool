@@ -1,6 +1,9 @@
 package com.meng.messtool.modules.fpvtool.serial.msp.datapack;
 
+import com.meng.tools.*;
 import com.meng.tools.hash.*;
+
+import java.util.*;
 
 /*
  *package  com.meng.messtool.modules.electronic.usbserial2.msp
@@ -14,7 +17,7 @@ public class MspV2DataPack {
     public byte flag;
     public short cmd;
     public short payloadLength;
-    public byte[] payload;
+    public byte[] payload = new byte[0];
     public byte checksum;
 
 
@@ -116,60 +119,16 @@ public class MspV2DataPack {
         return checksum;
     }
 
-//    public byte readI8() {
-//        return payload[payloadPointer++];
-//    }
-//
-//    public short readI16() {
-//        payloadPointer += 2;
-//        return BitConverter.getInstanceLittleEndian().toShort(payload, payloadPointer - 2);
-//    }
-//
-//    public int readI32() {
-//        payloadPointer += 4;
-//        return BitConverter.getInstanceLittleEndian().toInt(payload, payloadPointer - 4);
-//    }
-//
-//    public long readI64() {
-//        payloadPointer += 8;
-//        return BitConverter.getInstanceLittleEndian().toLong(payload, payloadPointer - 8);
-//    }
-//
-//    @Override
-//    public String toString() {
-//        final StringBuilder sb = new StringBuilder("MspV2DataPack{");
-//        sb.append("sof=").append((char) sof);
-//        sb.append(", version=").append((char) version);
-//        sb.append(", statu=0x").append(statu);
-//        sb.append(", payloadLength=").append(payloadLength & 0xFFFF);
-//        sb.append(", cmd=0x").append(Integer.toHexString(cmd & 0xFFFF));
-//        if (payload != null) {
-//            sb.append(", payload=").append(HexString.toHexStringWithSpace(payload));
-//        }
-//        if (cmd == 0x2000) {
-//            sb.append(",cycleTime:").append(readI16() & 0xFFFF);
-//            sb.append(",i2cErrorCount:").append(readI16() & 0xFFFF);
-//            int SensorStatus = readI16() & 0xFFFF;
-//            sb.append(",SensorStatus:").append(Integer.toBinaryString(SensorStatus)).append(" hex:").append(Integer.toHexString(SensorStatus));
-//            sb.append(",averageSystemLoadPercent:").append(readI16() & 0xFFFF);
-//            int config = readI8() & 0xFF;
-//            sb.append(",Config:").append(Integer.toBinaryString(config)).append(" hex:").append(Integer.toHexString(config));
-//            int armingFlags = readI32();
-//            sb.append(",armingFlags:").append(Integer.toBinaryString(armingFlags)).append(" hex:").append(Integer.toHexString(armingFlags));
-//            long mode = readI64();
-//            sb.append(",mode:").append(Long.toBinaryString(mode)).append(" hex:").append(Long.toHexString(mode));
-//            if (mode == 1 << 18) {
-//                sb.append(",fs mode");
-//            }
-//            if (mode == 1 << 19) {
-//                sb.append(",BOXNAVWP mode");
-//            }
-//            sb.append(",ConfigMixerProfile:").append(readI8() & 0xFF);
-//        }
-//        sb.append(", checksum=0x").append(Integer.toHexString(checksum & 0xFF));
-//
-//
-//        sb.append('}');
-//        return sb.toString();
-//    }
+    @Override
+    public String toString() {
+        return "MspV2DataPack{" + "sof=" + sof +
+                ", version=" + version +
+                ", statu=" + statu +
+                ", flag=" + flag +
+                ", cmd=" + cmd +
+                ", payloadLength=" + payloadLength +
+                ", payload=" + Arrays.toString(payload) +
+                ", checksum=" + checksum +
+                '}';
+    }
 }

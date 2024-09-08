@@ -1,9 +1,11 @@
 package com.meng.messtool.system.menu;
 
 import android.app.*;
+import android.content.*;
 import android.view.*;
 import android.widget.*;
 
+import com.meng.drawer.*;
 import com.meng.messtool.*;
 import com.meng.messtool.modules.chat.editor.*;
 import com.meng.messtool.modules.chat.simulator.*;
@@ -40,6 +42,12 @@ public enum FunctionName {
 //    FUNCTION_FPV_MSP_SENSOR("msp sensor",FunctionGroup.GROUP_FPV,MspV2TestFragment.class),
 
     /********************MEDIA*********************/
+    FUNCTION_LIBGDX_TEST("libgdx", FunctionGroup.GROUP_DEVELOPING, new Runnable() {
+        @Override
+        public void run() {
+            ApplicationHolder.getActivity().startActivity(new Intent(ApplicationHolder.getActivity(), LibgdxTestActivity.class));
+        }
+    }),
     FUNCTION_PICTURE_BARCODE("条码", FunctionGroup.GROUP_MEDIA, new Runnable() {
 
         @Override
@@ -97,7 +105,7 @@ public enum FunctionName {
 
     FUNCTION_FC_CONFIG("fc config", FunctionGroup.GROUP_DEVELOPING, FcConfig.class),
     FUNCTION_PID_SIMULATOR("pid simulator", FunctionGroup.GROUP_DEVELOPING, PIDSimulator.class),
-    FUNCTION_FPV_CONFIG("飞控配置器", R.drawable.ic_quadcopter, FunctionGroup.GROUP_DEVELOPING, FpvConfigMainFragment.class),
+    FUNCTION_FPV_CONFIG("飞控配置器", R.drawable.ic_quadcopter, FunctionGroup.GROUP_DEVELOPING, FpvConfigMainTabFragment.class),
 
 
     /********************ELECTRONIC*********************/

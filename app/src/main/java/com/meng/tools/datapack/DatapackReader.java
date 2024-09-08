@@ -1,5 +1,7 @@
 package com.meng.tools.datapack;
 
+import com.meng.messtool.system.debug.*;
+
 /*
  *package  com.meng.tools.datapack
  *@author  清梦
@@ -123,5 +125,25 @@ public class DatapackReader {
                 ((data[pointer - 2] & 0xFFL) << 48) |
                 ((data[pointer - 1] & 0xFFL) << 56));
 
+    }
+
+    public String readCppString(int length) {//cpp string length without '\0'
+        pointer += length + 1;
+        return new String(data, pointer - length - 1, length);
+    }
+
+    public String readCppString() {
+        int index = pointer;
+        while (data[pointer++] != 0) {
+        }
+        return new String(data, index, pointer - index - 1);//will cut out '\0'
+    }
+
+    public void checkFinish() {
+        if (Debuger.isDebugMode()) {
+            if (pointer != data.length) {
+                throw new IllegalStateException("data package not read finish");
+            }
+        }
     }
 }

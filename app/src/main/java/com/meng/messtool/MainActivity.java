@@ -35,6 +35,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public ListView rightList;
     private boolean firstOpened = false;
     private ActionBarDrawerToggle toggle;
+    private IntentFilter usbIntentFilter;
 
     public void openLeftDrawer() {
         mDrawerLayout.openDrawer(Gravity.START);
@@ -92,12 +93,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 closeDrawer();
             }
         }
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
-        intentFilter.addAction(UsbManager.ACTION_USB_ACCESSORY_ATTACHED);
-        intentFilter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
-        intentFilter.addAction(Constant.USB_PERMISSION);
-        registerReceiver(usbReceiver, intentFilter);//注册receiver
+        usbIntentFilter = new IntentFilter();
+        usbIntentFilter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
+        usbIntentFilter.addAction(UsbManager.ACTION_USB_ACCESSORY_ATTACHED);
+        usbIntentFilter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
+        usbIntentFilter.addAction(Constant.USB_PERMISSION);
+        registerReceiver(usbReceiver, usbIntentFilter);//注册receiver
         ThreadPool.execute(new Runnable() {
 
             @Override
@@ -138,7 +139,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                                                             MFragmentManager.getInstance().showFragment(DevicesFragment.class);
                                                             break;
                                                         case 1:
-                                                            MFragmentManager.getInstance().showFragment(FpvConfigMainFragment.class);
+                                                            MFragmentManager.getInstance().showFragment(FpvConfigMainTabFragment.class);
                                                             break;
                                                     }
                                                 }
@@ -170,10 +171,18 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         closeDrawer();
-        new TestTask()
-                .setTitle("goto genshin")
-                .setStatus("自动下载原神中").start();
+        if (Debuger.isDebugMode()) {
+            new TestTask()
+                    .setTitle("goto genshin")
+                    .setStatus("自动下载原神中").start();
+        }
         FunctionName functionName = FunctionName.values()[item.getItemId()];
+        if (MFragmentManager.getInstance().getCurrent().getClass() == DevicesFragment.class ||
+                MFragmentManager.getInstance().getCurrent().getClass() == FpvConfigMainTabFragment.class) {
+            unregisterReceiver(usbReceiver);
+        } else {
+            registerReceiver(usbReceiver, usbIntentFilter);
+        }
         setTitle(functionName.getName());
         Debuger.addLog(TAG, "menu click:" + functionName.getName());
 

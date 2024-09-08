@@ -132,7 +132,6 @@ public class TtsFragment extends BaseFragment implements OnClickListener, TextTo
     //实现TTS初始化接口
     @Override
     public void onInit(int status) {
-// TODO Auto-generated method stub
         if (status == TextToSpeech.SUCCESS) {
             int result = mTts.setLanguage(Locale.CHINA);
 //设置发音语言

@@ -43,7 +43,6 @@ public class DcdcBuckCalculateFragment extends BaseFragment implements View.OnCl
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        // TODO: Implement this method
         super.onViewCreated(view, savedInstanceState);
         tabHost = (TabHost) view.findViewById(android.R.id.tabhost);
         tabHost.setup();
@@ -143,6 +142,6 @@ public class DcdcBuckCalculateFragment extends BaseFragment implements View.OnCl
         tab4fr = (MDEditText) view.findViewById(R.id.buck_output_capcitor_freq);
         tab4l = (MDEditText) view.findViewById(R.id.buck_output_capcitor_l);
 
-        btn = (Button) view.findViewById(R.id.dcdc_calculateButton_go);
+        btn = (Button) view.findViewById(R.id.fpv_config_content_framelayout);
     }
 }

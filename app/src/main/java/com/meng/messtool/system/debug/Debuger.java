@@ -16,6 +16,16 @@ public class Debuger {
         DebugDataBase.getInstance().addOperate("debug logger init");
     }
 
+    public static boolean isDebugMode() {
+        return SharedPreferenceHelper.isDebugMode();
+    }
+
+    public static void checkDebugMode() {
+        if (!isDebugMode()) {
+            throw new IllegalStateException("only for debug mode");
+        }
+    }
+
     public static void addLog(String s) {
         if (SharedPreferenceHelper.isDebugMode()) {
             DebugDataBase.getInstance().addOperate(s);

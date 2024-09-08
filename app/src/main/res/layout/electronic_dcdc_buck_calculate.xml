@@ -37,7 +37,7 @@
             android:id="@android:id/tabcontent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/dcdc_calculateButton_go"
+            android:layout_above="@+id/fpv_config_content_framelayout"
             android:layout_below="@+id/dcdc_buck_calculate_result_linearlayout">
 
             <!-- 第一个tab的布局 -->
@@ -262,7 +262,7 @@
         </FrameLayout>
 
         <Button
-            android:id="@+id/dcdc_calculateButton_go"
+            android:id="@+id/fpv_config_content_framelayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

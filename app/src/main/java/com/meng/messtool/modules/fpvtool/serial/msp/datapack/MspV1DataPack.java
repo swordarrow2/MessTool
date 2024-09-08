@@ -13,7 +13,7 @@ public class MspV1DataPack {
     public byte statu;//'<' '>' '!'
     public byte payloadLength;
     public byte cmd;
-    public byte[] payload;
+    public byte[] payload = new byte[0];
     public byte checksum;
 
     private int payloadPointer = 0;
@@ -61,6 +61,10 @@ public class MspV1DataPack {
         this.cmd = cmd;
     }
 
+    public void setCmd(MspV1Cmd cmd) {
+        this.cmd = cmd.getCmd();
+    }
+
     public MspV1Cmd getCmdEnum() {
         for (MspV1Cmd c : MspV1Cmd.values()) {
             if (c.getCmd() == cmd) {
@@ -79,6 +83,10 @@ public class MspV1DataPack {
         return statu;
     }
 
+    public byte[] getPayload() {
+        return payload;
+    }
+
     public byte getPayloadLength() {
         return payloadLength;
     }
@@ -91,37 +99,17 @@ public class MspV1DataPack {
         return checksum;
     }
 
-    public byte readI8() {
-        return payload[payloadPointer++];
-    }
-
-    public short readI16() {
-        payloadPointer += 2;
-        return BitConverter.getInstanceLittleEndian().toShort(payload, payloadPointer - 2);
-    }
-
-    public int readI32() {
-        payloadPointer += 4;
-        return BitConverter.getInstanceLittleEndian().toInt(payload, payloadPointer - 4);
-    }
-
-    public long readI64() {
-        payloadPointer += 8;
-        return BitConverter.getInstanceLittleEndian().toLong(payload, payloadPointer - 8);
-    }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("MspV1DataPack{");
-        sb.append("sof=").append(sof);
-        sb.append(", version=").append(version);
-        sb.append(", statu=").append(statu);
-        sb.append(", payloadLength=").append(payloadLength & 0xFF);
-        sb.append(", cmd=").append(cmd);
-        sb.append(", payload=").append(HexString.toHexStringWithSpace(payload));
-        sb.append(", checksum=").append(checksum);
-        sb.append(", payloadPointer=").append(payloadPointer);
-        sb.append('}');
-        return sb.toString();
+        return "MspV1DataPack{" + "sof=" + sof +
+                ", version=" + version +
+                ", statu=" + statu +
+                ", payloadLength=" + (payloadLength & 0xFF) +
+                ", cmd=" + cmd +
+                ", payload=" + HexString.toHexStringWithSpace(payload) +
+                ", checksum=" + checksum +
+                ", payloadPointer=" + payloadPointer +
+                '}';
     }
 }

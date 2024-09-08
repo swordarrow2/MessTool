@@ -132,8 +132,6 @@ public final class CameraManager {
             }
             configManager.setDesiredCameraParameters(camera);
 
-            //FIXME
-
             FlashlightManager.enableFlashlight();
         }
     }

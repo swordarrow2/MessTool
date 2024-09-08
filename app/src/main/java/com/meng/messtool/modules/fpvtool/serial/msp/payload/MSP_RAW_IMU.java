@@ -1,31 +1,53 @@
 package com.meng.messtool.modules.fpvtool.serial.msp.payload;
 
+import com.meng.messtool.modules.fpvtool.serial.msp.*;
+import com.meng.tools.datapack.*;
+
+import java.util.*;
+
 /*
  *package  com.meng.messtool.modules.fpvtool.serial.msp.payload
  *@author  清梦
  *@date    2024/9/3 17:18
  */
-public class MSP_RAW_IMU {
+public class MSP_RAW_IMU implements IDecodeable {
 
-    public int accADCf1;
-    public int accADCf2;
-    public int accADCf3;
-    public int gyroRateDps1;
-    public int gyroRateDps2;
-    public int gyroRateDps3;
-    public int magADC1;
-    public int magADC2;
-    public int magADC3;
+    private static final String TAG = "MSP_RAW_IMU";
 
-    public MSP_RAW_IMU(int accADCf1, int accADCf2, int accADCf3, int gyroRateDps1, int gyroRateDps2, int gyroRateDps3, int magADC1, int magADC2, int magADC3) {
-        this.accADCf1 = accADCf1;
-        this.accADCf2 = accADCf2;
-        this.accADCf3 = accADCf3;
-        this.gyroRateDps1 = gyroRateDps1;
-        this.gyroRateDps2 = gyroRateDps2;
-        this.gyroRateDps3 = gyroRateDps3;
-        this.magADC1 = magADC1;
-        this.magADC2 = magADC2;
-        this.magADC3 = magADC3;
+    public int[] accADC = new int[3];
+    public int[] gyroRateDps = new int[3];
+    public int[] magADC = new int[3];
+
+    public MSP_RAW_IMU(int[] accADC, int[] gyroRateDps, int[] magADC) {
+        this.accADC = accADC;
+        this.gyroRateDps = gyroRateDps;
+        this.magADC = magADC;
+    }
+
+    public MSP_RAW_IMU(byte[] data) {
+        decode(data);
+    }
+
+    @Override
+    public void decode(byte[] data) {
+        DatapackReader reader = new DatapackReader(data, true);
+        for (int i = 0; i < accADC.length; i++) {
+            accADC[i] = reader.readInt16();
+        }
+        for (int i = 0; i < gyroRateDps.length; i++) {
+            gyroRateDps[i] = reader.readInt16();
+        }
+        for (int i = 0; i < magADC.length; i++) {
+            magADC[i] = reader.readUint16();
+        }
+        reader.checkFinish();
+    }
+
+    @Override
+    public String toString() {
+        return "MSP_RAW_IMU{" + "accADC=" + Arrays.toString(accADC) +
+                ", gyroRateDps=" + Arrays.toString(gyroRateDps) +
+                ", magADC=" + Arrays.toString(magADC) +
+                '}';
     }
 }

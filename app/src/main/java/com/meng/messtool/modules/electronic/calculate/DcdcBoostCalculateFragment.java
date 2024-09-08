@@ -43,7 +43,6 @@ public class DcdcBoostCalculateFragment extends BaseFragment implements View.OnC
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        // TODO: Implement this method
         super.onViewCreated(view, savedInstanceState);
         tabHost = (TabHost) view.findViewById(android.R.id.tabhost);
         tabHost.setup();
@@ -145,6 +144,6 @@ public class DcdcBoostCalculateFragment extends BaseFragment implements View.OnC
         tab4fr = (MDEditText) view.findViewById(R.id.boost_output_capcitor_freq);
         tab4l = (MDEditText) view.findViewById(R.id.boost_output_capcitor_l);
 
-        btn = (Button) view.findViewById(R.id.dcdc_calculateButton_go);
+        btn = (Button) view.findViewById(R.id.fpv_config_content_framelayout);
     }
 }

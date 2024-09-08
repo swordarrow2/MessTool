@@ -1,21 +1,42 @@
 package com.meng.messtool.modules.fpvtool.serial.msp.payload;
 
+import com.meng.messtool.modules.fpvtool.serial.msp.*;
+import com.meng.messtool.system.debug.*;
+import com.meng.tools.datapack.*;
+
+import java.util.*;
+
 /*
  *package  com.meng.messtool.modules.fpvtool.serial.msp.payload
  *@author  清梦
  *@date    2024/9/3 20:58
  */
-public class MSP_DEBUG {
+public class MSP_DEBUG implements IDecodeable {
 
-    public int debug1;
-    public int debug2;
-    public int debug3;
-    public int debug4;
+    private static final String TAG = "MSP_DEBUG";
 
-    public MSP_DEBUG(int debug1, int debug2, int debug3, int debug4) {
-        this.debug1 = debug1;
-        this.debug2 = debug2;
-        this.debug3 = debug3;
-        this.debug4 = debug4;
+    public int[] debug = new int[4];
+
+    public MSP_DEBUG(int[] debug) {
+        Debuger.checkDebugMode();
+        this.debug = debug;
+    }
+
+    public MSP_DEBUG(byte[] data) {
+        decode(data);
+    }
+
+    @Override
+    public void decode(byte[] data) {
+        DatapackReader reader = new DatapackReader(data, true);
+        for (int i = 0; i < debug.length; i++) {
+            debug[i] = reader.readUint16();
+        }
+        reader.checkFinish();
+    }
+
+    @Override
+    public String toString() {
+        return "MSP_DEBUG{" + "debug=" + Arrays.toString(debug) + '}';
     }
 }

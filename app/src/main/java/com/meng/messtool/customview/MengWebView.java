@@ -16,7 +16,7 @@ public class MengWebView extends WebView {
     /**
      * Created by 清梦 on 2018/6/12.
      */
-    public static final String TAG = "MengWebView";   
+    public static final String TAG = "MengWebView";
 
     public MengWebView(Context context) {
         super(context);
@@ -77,7 +77,7 @@ public class MengWebView extends WebView {
                             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                             getContext().startActivity(intent);
                         } catch (ActivityNotFoundException e) {
-                            // TODO: handle exception
+                            ApplicationHolder.showToast("没有可以打开该链接的软件");
                         }
                     }
                     return true;
@@ -105,14 +105,13 @@ public class MengWebView extends WebView {
 
                 @Override
                 public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                    // TODO: Implement this method
-                    if (!lastUrl.equals(url)) {
+//                    if (!lastUrl.equals(url)) {
 //                        try {
 //                            MainActivity.instence.topBar.setUrl(url);
 //                        } catch (Exception e) {
 //                            tool.showToast(view.getContext(), e.toString());
 //                        }
-                    }
+//                    }
                     super.onPageStarted(view, url, favicon);
                 }
 

@@ -16,7 +16,7 @@ import com.meng.messtool.system.base.*;
 
 import java.util.*;
 
-public class FpvDevicesFragment extends BaseFragment {
+public class FpvDevicesList extends BaseFragment {
 
     private final ArrayList<ListItem> listItems = new ArrayList<>();
     private ArrayAdapter<ListItem> listAdapter;
@@ -48,9 +48,9 @@ public class FpvDevicesFragment extends BaseFragment {
                     args.putInt("port", item.port);
                     args.putInt("baud", baudRate);
 
-                    FpvConfigMainFragment terminalFragment = MFragmentManager.getInstance().getFragment(FpvConfigMainFragment.class);
+                    FpvConfigMainTabFragment terminalFragment = MFragmentManager.getInstance().getFragment(FpvConfigMainTabFragment.class);
                     terminalFragment.setArguments(args);
-                    MFragmentManager.getInstance().showFragment(FpvConfigMainFragment.class);
+                    MFragmentManager.getInstance().showFragment(FpvConfigMainTabFragment.class);
 
                 }
             }
